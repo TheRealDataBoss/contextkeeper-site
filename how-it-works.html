@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How contextkeeper Works - From Beginner to Staff Engineer</title>
+  <meta name="description" content="Understand contextkeeper at any level. Non-technical overview, developer quickstart, and staff-engineer deep dive into the DEL-v2 governance protocol.">
+  <link rel="canonical" href="https://contextkeeper.org/how-it-works.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="How contextkeeper Works - From Beginner to Staff Engineer">
+  <meta property="og:description" content="Understand contextkeeper at any level. Non-technical overview, developer quickstart, and staff-engineer deep dive into the DEL-v2 governance protocol.">
+  <meta property="og:url" content="https://contextkeeper.org/how-it-works.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How contextkeeper Works - From Beginner to Staff Engineer">
+  <meta name="twitter:description" content="Understand contextkeeper at any level. Non-technical overview, developer quickstart, and staff-engineer deep dive.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How contextkeeper Works - From Beginner to Staff Engineer",
+    "description": "Understand contextkeeper at any level. Non-technical overview, developer quickstart, and staff-engineer deep dive into the DEL-v2 governance protocol.",
+    "url": "https://contextkeeper.org/how-it-works.html",
+    "author": { "@type": "Organization", "name": "Originami" },
+    "publisher": { "@type": "Organization", "name": "Originami" }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #06080d;
+      --bg-alt: #0c1018;
+      --surface: #111722;
+      --surface-hover: #182030;
+      --border: #1e2a3a;
+      --cyan: #00c8ff;
+      --cyan-dim: #00c8ff22;
+      --purple: #8b5cf6;
+      --green: #34d399;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-bright: #f8fafc;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; color: var(--text-bright); }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+
+    a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #66dbff; }
+    ::selection { background: var(--cyan); color: var(--bg); }
+
+    /* ---- Navbar ---- */
+    .ck-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1050;
+      padding: 1rem 0; transition: all 0.35s ease; background: transparent;
+    }
+    .ck-nav.scrolled {
+      background: rgba(6, 8, 13, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); padding: 0.6rem 0;
+    }
+    .ck-nav .nav-brand { font-weight: 700; font-size: 1.25rem; color: var(--text-bright); letter-spacing: -0.02em; }
+    .ck-nav .nav-brand span { color: var(--cyan); }
+    .ck-nav .navbar-nav .nav-link { color: var(--text-dim); font-size: 0.9rem; font-weight: 400; padding: 0.5rem 0.85rem; transition: color 0.2s; }
+    .ck-nav .navbar-nav .nav-link:hover, .ck-nav .navbar-nav .nav-link.active { color: var(--text-bright); }
+    .ck-nav .dropdown-menu { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.5rem 0; }
+    .ck-nav .dropdown-item { color: var(--text-dim); font-size: 0.88rem; padding: 0.5rem 1.25rem; }
+    .ck-nav .dropdown-item:hover { background: var(--surface-hover); color: var(--text-bright); }
+    .btn-cta { background: var(--cyan); color: var(--bg); font-weight: 600; border: none; border-radius: 6px; padding: 0.5rem 1.25rem; font-size: 0.88rem; transition: all 0.2s; }
+    .btn-cta:hover { background: #33d4ff; color: var(--bg); transform: translateY(-1px); }
+    .navbar-toggler { border: 1px solid var(--border); color: var(--text-dim); }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+
+    /* ---- Shared ---- */
+    .section-padding { padding: 6rem 0; }
+    .section-border { border-bottom: 1px solid var(--border); }
+    .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 0.75rem; }
+    .section-title { font-size: 2.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 1rem; }
+    .section-desc { color: var(--text-dim); font-size: 1.1rem; max-width: 640px; }
+    .centered { margin-left: auto; margin-right: auto; }
+
+    /* ---- Page Hero ---- */
+    .page-hero {
+      padding-top: 8rem; padding-bottom: 4rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem;
+    }
+    .page-hero h1 .accent { color: var(--cyan); }
+    .page-hero .lead { color: var(--text-dim); font-size: 1.15rem; max-width: 600px; margin: 0 auto; }
+
+    /* Tier selectors */
+    .tier-nav {
+      display: flex; gap: 0.75rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 2.5rem;
+    }
+    .tier-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.5rem; color: var(--text-dim);
+      cursor: pointer; transition: all 0.25s; text-align: center;
+      min-width: 200px; font-family: 'Outfit', sans-serif; font-size: 0.95rem;
+    }
+    .tier-btn:hover { border-color: rgba(0,200,255,0.3); color: var(--text-bright); }
+    .tier-btn.active {
+      border-color: var(--cyan); background: rgba(0,200,255,0.06);
+      color: var(--text-bright);
+    }
+    .tier-btn .tier-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+    .tier-btn .tier-label { font-weight: 600; display: block; }
+    .tier-btn .tier-sub { font-size: 0.78rem; color: var(--text-dim); display: block; margin-top: 0.25rem; }
+
+    /* Tier content sections */
+    .tier-section { display: none; }
+    .tier-section.active { display: block; }
+
+    /* Analogy block */
+    .analogy-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2.5rem; max-width: 800px;
+      margin: 2rem auto; position: relative;
+    }
+    .analogy-block::before {
+      content: '\201C'; position: absolute; top: 0.5rem; left: 1.25rem;
+      font-size: 4rem; color: var(--cyan); opacity: 0.25; font-family: Georgia, serif;
+      line-height: 1;
+    }
+    .analogy-block p { font-size: 1.1rem; line-height: 1.75; color: var(--text); margin: 0; padding-left: 1rem; }
+
+    /* Visual flow */
+    .flow-steps {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem; flex-wrap: wrap; margin: 3rem 0;
+    }
+    .flow-step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem 2rem; text-align: center;
+      min-width: 180px; transition: border-color 0.3s;
+    }
+    .flow-step:hover { border-color: rgba(0,200,255,0.3); }
+    .flow-step .flow-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+    .flow-step .flow-label { font-weight: 600; font-size: 1rem; color: var(--text-bright); }
+    .flow-step .flow-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 0.35rem; }
+    .flow-arrow { font-size: 1.5rem; color: var(--cyan); }
+
+    /* Why it matters */
+    .why-grid { max-width: 800px; margin: 2rem auto 0; }
+    .why-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+    }
+    .why-item:last-child { border-bottom: none; }
+    .why-icon { color: var(--green); font-size: 1.25rem; flex-shrink: 0; margin-top: 0.15rem; }
+    .why-item h5 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .why-item p { color: var(--text-dim); font-size: 0.92rem; margin: 0; }
+
+    /* Terminal */
+    .terminal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; line-height: 1.8; margin: 1.5rem 0;
+    }
+    .terminal-bar {
+      display: flex; gap: 6px; padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border); align-items: center;
+    }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: var(--red); }
+    .dot-amber { background: var(--amber); }
+    .dot-green { background: var(--green); }
+    .terminal-title { margin-left: 0.75rem; color: var(--text-dim); font-size: 0.72rem; }
+    .terminal-body { padding: 1rem 1.25rem; overflow-x: auto; }
+    .terminal-body .prompt { color: var(--cyan); }
+    .terminal-body .cmd { color: var(--text-bright); }
+    .terminal-body .output { color: var(--text-dim); }
+    .terminal-body .success { color: var(--green); }
+    .terminal-body .flag { color: var(--purple); }
+    .terminal-body .comment { color: var(--text-dim); opacity: 0.6; }
+
+    /* Install block */
+    .install-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-size: 0.92rem; margin: 1rem 0;
+    }
+    .install-block code { color: var(--green); }
+    .install-block .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; padding: 0.25rem; transition: color 0.2s; font-size: 1.1rem;
+    }
+    .install-block .copy-btn:hover { color: var(--cyan); }
+
+    /* Code block */
+    .code-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin: 1.5rem 0;
+    }
+    .code-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.6rem 1rem; border-bottom: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--text-dim);
+    }
+    .code-header .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; transition: color 0.2s; font-size: 0.95rem;
+    }
+    .code-header .copy-btn:hover { color: var(--cyan); }
+    .code-block pre {
+      margin: 0; padding: 1rem 1.25rem; overflow-x: auto;
+      font-size: 0.82rem; line-height: 1.7; color: var(--text);
+    }
+    .code-block .kw { color: var(--purple); }
+    .code-block .fn { color: var(--cyan); }
+    .code-block .str { color: var(--green); }
+    .code-block .cm { color: var(--text-dim); opacity: 0.6; }
+    .code-block .op { color: var(--amber); }
+
+    /* Breakdown card */
+    .breakdown-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.75rem; height: 100%;
+    }
+    .breakdown-card h5 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .breakdown-card p { color: var(--text-dim); font-size: 0.92rem; margin: 0; }
+    .breakdown-card code { color: var(--cyan); font-size: 0.82rem; }
+
+    /* Directory tree */
+    .dir-tree {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; line-height: 1.9; color: var(--text-dim);
+      max-width: 500px;
+    }
+    .dir-tree .dir { color: var(--cyan); font-weight: 500; }
+    .dir-tree .file { color: var(--text); }
+    .dir-tree .desc { color: var(--text-dim); opacity: 0.6; }
+
+    /* State machine */
+    .state-machine-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; overflow-x: auto; margin: 2rem 0;
+    }
+    .sm-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      min-width: 700px;
+    }
+    .sm-node {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 0.5rem; text-align: center;
+      font-size: 0.72rem; font-weight: 500; transition: border-color 0.3s;
+      position: relative;
+    }
+    .sm-node:hover { border-color: var(--cyan); }
+    .sm-node .sm-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--text-dim); display: block; margin-bottom: 0.25rem;
+    }
+    .sm-node .sm-name { color: var(--text-bright); font-size: 0.78rem; }
+    .sm-node.sm-start { border-color: var(--green); }
+    .sm-node.sm-end { border-color: var(--cyan); }
+    .sm-node.sm-breach { border-color: var(--red); }
+    .sm-node.sm-manual { border-color: var(--amber); }
+
+    .sm-legend {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-top: 1.25rem; font-size: 0.78rem; color: var(--text-dim);
+    }
+    .sm-legend-item { display: flex; align-items: center; gap: 0.4rem; }
+    .sm-legend-dot {
+      width: 10px; height: 10px; border-radius: 3px; border: 2px solid;
+    }
+
+    /* Concept cards */
+    .concept-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem;
+    }
+    .concept-card h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .concept-card p { color: var(--text-dim); font-size: 0.95rem; }
+
+    /* Actor table */
+    .actor-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: 0.88rem; margin: 1.5rem 0;
+    }
+    .actor-table th {
+      background: var(--bg-alt); color: var(--text-bright);
+      padding: 0.75rem 1rem; text-align: left; font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .actor-table th:first-child { border-radius: 8px 0 0 0; }
+    .actor-table th:last-child { border-radius: 0 8px 0 0; }
+    .actor-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--text-dim); vertical-align: top;
+    }
+    .actor-table tr:last-child td { border-bottom: none; }
+    .actor-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .actor-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+    .actor-table td:first-child { color: var(--cyan); font-weight: 500; }
+
+    /* Pipeline list */
+    .pipeline-list {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.5rem; margin: 1rem 0; font-size: 0.88rem;
+    }
+    .pipeline-list .pl-item {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      color: var(--text-dim); padding: 0.35rem 0;
+    }
+    .pipeline-list .pl-num {
+      color: var(--cyan); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+      width: 1.5rem; text-align: right;
+    }
+
+    /* CTA */
+    .cta-section { text-align: center; }
+    .cta-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-dim); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-install {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1.25rem;
+      display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.92rem;
+    }
+    .cta-install code { color: var(--green); }
+    .cta-install .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; transition: color 0.2s; font-size: 1.1rem;
+    }
+    .cta-install .copy-btn:hover { color: var(--cyan); }
+
+    /* Footer */
+    .ck-footer {
+      background: var(--bg-alt); border-top: 1px solid var(--border);
+      padding: 4rem 0 2rem;
+    }
+    .ck-footer h6 { color: var(--text-bright); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .ck-footer ul { list-style: none; padding: 0; margin: 0; }
+    .ck-footer li { margin-bottom: 0.5rem; }
+    .ck-footer li a { color: var(--text-dim); font-size: 0.88rem; }
+    .ck-footer li a:hover { color: var(--text-bright); }
+    .footer-brand { font-weight: 700; font-size: 1.1rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+    .footer-brand span { color: var(--cyan); }
+    .footer-tagline { color: var(--text-dim); font-size: 0.85rem; max-width: 260px; }
+    .footer-bottom {
+      border-top: 1px solid var(--border); margin-top: 3rem;
+      padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.82rem;
+    }
+
+    /* Animations */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .section-title { font-size: 2rem; }
+      .page-hero { padding-top: 7rem; }
+      .sm-grid { grid-template-columns: repeat(3, 1fr); }
+      .pipeline-list { grid-template-columns: 1fr; }
+      .navbar-collapse {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem;
+      }
+    }
+    @media (max-width: 575.98px) {
+      .section-padding { padding: 3.5rem 0; }
+      .section-title { font-size: 1.6rem; }
+      .page-hero h1 { font-size: 1.8rem; }
+      .tier-btn { min-width: 100%; }
+      .flow-steps { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+      .sm-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== NAVBAR ======== -->
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav">
+    <div class="container">
+      <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="how-it-works.html">How It Works</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Use Cases</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li>
+              <li><a class="dropdown-item" href="teams.html">Teams</a></li>
+              <li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li>
+          <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- ======== PAGE HERO ======== -->
+  <section class="page-hero section-border">
+    <div class="container">
+      <div class="section-label">How It Works</div>
+      <h1>Understand contextkeeper <span class="accent">at your level</span></h1>
+      <p class="lead">Choose your depth. Same tool, three explanations.</p>
+      <div class="tier-nav">
+        <button class="tier-btn active" onclick="showTier('nontechnical', this)">
+          <span class="tier-icon"><i class="bi bi-person"></i></span>
+          <span class="tier-label">I'm Non-Technical</span>
+          <span class="tier-sub">The elevator pitch</span>
+        </button>
+        <button class="tier-btn" onclick="showTier('developer', this)">
+          <span class="tier-icon"><i class="bi bi-code-slash"></i></span>
+          <span class="tier-label">I'm a Developer</span>
+          <span class="tier-sub">The quickstart</span>
+        </button>
+        <button class="tier-btn" onclick="showTier('staff', this)">
+          <span class="tier-icon"><i class="bi bi-diagram-3"></i></span>
+          <span class="tier-label">I'm a Staff Engineer</span>
+          <span class="tier-sub">The architecture</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================== -->
+  <!-- TIER 1: NON-TECHNICAL -->
+  <!-- ======================================================================== -->
+  <div class="tier-section active" id="tier-nontechnical">
+
+    <section class="section-padding section-border">
+      <div class="container">
+        <div class="text-center mb-4 fade-up">
+          <div class="section-label">The Elevator Pitch</div>
+          <h2 class="section-title">What contextkeeper does, in plain language</h2>
+        </div>
+
+        <div class="analogy-block fade-up">
+          <p>Imagine you're building a house with 3 different contractors who never talk to each other. Every time one leaves, the next one has to figure out what was done by walking around the house. contextkeeper is the clipboard that records every decision, every measurement, every change - and hands it to the next contractor so they can start working in 60 seconds.</p>
+        </div>
+
+        <div class="flow-steps fade-up">
+          <div class="flow-step">
+            <span class="flow-icon" style="color:var(--cyan)"><i class="bi bi-save"></i></span>
+            <div class="flow-label">Save Context</div>
+            <div class="flow-desc">Capture every decision made</div>
+          </div>
+          <span class="flow-arrow"><i class="bi bi-chevron-right"></i></span>
+          <div class="flow-step">
+            <span class="flow-icon" style="color:var(--purple)"><i class="bi bi-box-arrow-right"></i></span>
+            <div class="flow-label">Hand Off</div>
+            <div class="flow-desc">Package it for the next AI</div>
+          </div>
+          <span class="flow-arrow"><i class="bi bi-chevron-right"></i></span>
+          <div class="flow-step">
+            <span class="flow-icon" style="color:var(--green)"><i class="bi bi-play-circle"></i></span>
+            <div class="flow-label">Continue</div>
+            <div class="flow-desc">New AI starts instantly</div>
+          </div>
+        </div>
+
+        <div class="why-grid fade-up">
+          <h3 class="text-center mb-4" style="font-size:1.3rem; font-weight:600;">Why this matters</h3>
+          <div class="why-item">
+            <span class="why-icon"><i class="bi bi-clock"></i></span>
+            <div>
+              <h5>Saves hours every week</h5>
+              <p>Developers spend 15-30 minutes re-explaining their project every time they start a new AI chat. contextkeeper eliminates that completely.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <span class="why-icon"><i class="bi bi-shield-check"></i></span>
+            <div>
+              <h5>Prevents costly mistakes</h5>
+              <p>When a new AI session doesn't know about prior decisions, it contradicts them. contextkeeper ensures every session respects what came before.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <span class="why-icon"><i class="bi bi-arrows-angle-expand"></i></span>
+            <div>
+              <h5>Works with any AI</h5>
+              <p>Not locked to one vendor. Use Claude today, switch to GPT tomorrow, try Gemini next week. contextkeeper works with all of them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ======================================================================== -->
+  <!-- TIER 2: DEVELOPER -->
+  <!-- ======================================================================== -->
+  <div class="tier-section" id="tier-developer">
+
+    <section class="section-padding section-border">
+      <div class="container">
+        <div class="text-center mb-4 fade-up">
+          <div class="section-label">The Quickstart</div>
+          <h2 class="section-title">Up and running in 5 commands</h2>
+        </div>
+
+        <!-- Install -->
+        <div class="text-center fade-up">
+          <div class="install-block">
+            <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+            <code>pip install contextkeeper</code>
+            <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+
+        <!-- Terminal walkthrough -->
+        <div class="row justify-content-center mt-4">
+          <div class="col-lg-10 fade-up">
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-amber"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">terminal - quickstart</span>
+              </div>
+              <div class="terminal-body">
+                <div><span class="comment"># 1. Initialize in your project</span></div>
+                <div><span class="prompt">$</span> <span class="cmd">contextkeeper init</span></div>
+                <div><span class="output">Initialized contextkeeper in ./my-project</span></div>
+                <div><span class="success">Created STATE_VECTOR.json + .contextkeeper/</span></div>
+                <div>&nbsp;</div>
+                <div><span class="comment"># 2. Sync after an AI session</span></div>
+                <div><span class="prompt">$</span> <span class="cmd">contextkeeper sync</span> <span class="flag">--agent claude</span></div>
+                <div><span class="output">Captured 14 decisions, 3 invariants, 47 files</span></div>
+                <div><span class="success">Session state saved. SHA256: a3f8c2...</span></div>
+                <div>&nbsp;</div>
+                <div><span class="comment"># 3. Check project state</span></div>
+                <div><span class="prompt">$</span> <span class="cmd">contextkeeper status</span></div>
+                <div><span class="output">Project: my-app</span></div>
+                <div><span class="output">Sessions: 14 | Agents: 3 | Decisions: 89</span></div>
+                <div><span class="output">Last sync: 2 minutes ago (claude)</span></div>
+                <div>&nbsp;</div>
+                <div><span class="comment"># 4. Bootstrap a new AI session</span></div>
+                <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent gpt-4</span></div>
+                <div><span class="output">Loading 14 sessions into GPT-4...</span></div>
+                <div><span class="success">0 drift. Ready to continue.</span></div>
+                <div>&nbsp;</div>
+                <div><span class="comment"># 5. Health check</span></div>
+                <div><span class="prompt">$</span> <span class="cmd">contextkeeper doctor</span></div>
+                <div><span class="success">All checks passed (6/6)</span></div>
+                <div><span class="success">STATE_VECTOR: valid | Config: valid | SHA: verified</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What just happened -->
+        <div class="row g-4 mt-4 justify-content-center">
+          <div class="col-lg-10">
+            <h3 class="text-center mb-4 fade-up" style="font-size:1.3rem; font-weight:600;">What just happened</h3>
+            <div class="row g-3">
+              <div class="col-md-4 fade-up">
+                <div class="breakdown-card">
+                  <h5><code>init</code></h5>
+                  <p>Created <code>STATE_VECTOR.json</code> (the core state file) and the <code>.contextkeeper/</code> config directory in your project root.</p>
+                </div>
+              </div>
+              <div class="col-md-4 fade-up">
+                <div class="breakdown-card">
+                  <h5><code>sync</code></h5>
+                  <p>Captured your current AI session state: decisions made, files touched, invariants established, and tagged it with the agent name.</p>
+                </div>
+              </div>
+              <div class="col-md-4 fade-up">
+                <div class="breakdown-card">
+                  <h5><code>bootstrap</code></h5>
+                  <p>Loaded the full project state into a new AI session. The new agent knows every decision, every file, every constraint.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Python SDK -->
+        <div class="row justify-content-center mt-5">
+          <div class="col-lg-10 fade-up">
+            <h3 class="text-center mb-3" style="font-size:1.3rem; font-weight:600;">Python SDK usage</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span>session_example.py</span>
+                <button class="copy-btn" onclick="copyCodeBlock(this)" title="Copy"><i class="bi bi-clipboard"></i></button>
+              </div>
+              <pre><span class="kw">from</span> contextkeeper <span class="kw">import</span> Session, Decision
+
+<span class="cm"># Create a session</span>
+session <span class="op">=</span> Session.<span class="fn">create</span>(<span class="str">"my-project"</span>, agent<span class="op">=</span><span class="str">"claude"</span>)
+
+<span class="cm"># Record a decision</span>
+session.<span class="fn">add_decision</span>(Decision(
+    title<span class="op">=</span><span class="str">"Use Redux Toolkit for state management"</span>,
+    rationale<span class="op">=</span><span class="str">"Simpler than raw Redux, built-in immer"</span>,
+    alternatives_rejected<span class="op">=</span>[<span class="str">"Zustand"</span>, <span class="str">"MobX"</span>, <span class="str">"Jotai"</span>]
+))
+
+<span class="cm"># Sync state</span>
+session.<span class="fn">sync</span>()
+
+<span class="cm"># Later: bootstrap into a new agent</span>
+state <span class="op">=</span> Session.<span class="fn">bootstrap</span>(<span class="str">"my-project"</span>, agent<span class="op">=</span><span class="str">"gpt-4"</span>)
+<span class="kw">print</span>(state.decisions)  <span class="cm"># All decisions from all sessions</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Where files live -->
+        <div class="row justify-content-center mt-5">
+          <div class="col-lg-10 fade-up">
+            <h3 class="text-center mb-3" style="font-size:1.3rem; font-weight:600;">Where files live</h3>
+            <div class="d-flex justify-content-center">
+              <div class="dir-tree">
+                <div><span class="dir">my-project/</span></div>
+                <div>&nbsp;&nbsp;<span class="file">STATE_VECTOR.json</span> <span class="desc">- core project state</span></div>
+                <div>&nbsp;&nbsp;<span class="dir">.contextkeeper/</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">config.json</span> <span class="desc">- project settings</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">sessions/</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">001-claude.json</span> <span class="desc">- session snapshots</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">002-gpt4.json</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">bundles/</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">handoff-v3.zip</span> <span class="desc">- portable bundle</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">decision_log.json</span> <span class="desc">- all decisions</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ======================================================================== -->
+  <!-- TIER 3: STAFF ENGINEER -->
+  <!-- ======================================================================== -->
+  <div class="tier-section" id="tier-staff">
+
+    <section class="section-padding section-border">
+      <div class="container">
+        <div class="text-center mb-4 fade-up">
+          <div class="section-label">The Architecture</div>
+          <h2 class="section-title">DEL-v2 governance protocol deep dive</h2>
+          <p class="section-desc centered">The formal state machine, dual-SHA integrity, invariant registry, and multi-agent coordination model.</p>
+        </div>
+
+        <!-- State Machine -->
+        <div class="fade-up">
+          <h3 style="font-size:1.2rem; font-weight:600; margin-bottom:1rem;">DEL-v2 state machine (10 states)</h3>
+          <div class="state-machine-wrap">
+            <div class="sm-grid">
+              <div class="sm-node sm-start">
+                <span class="sm-num">S0</span>
+                <span class="sm-name">UNINITIATED</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S1</span>
+                <span class="sm-name">INITIATED</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S2</span>
+                <span class="sm-name">PLANNING</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S3</span>
+                <span class="sm-name">EXECUTING</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S4</span>
+                <span class="sm-name">GATE_CHECK</span>
+              </div>
+              <div class="sm-node sm-manual">
+                <span class="sm-num">S5</span>
+                <span class="sm-name">AWAITING_MANUAL_VALIDATION</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S6</span>
+                <span class="sm-name">VALIDATED</span>
+              </div>
+              <div class="sm-node">
+                <span class="sm-num">S7</span>
+                <span class="sm-name">BUNDLING</span>
+              </div>
+              <div class="sm-node sm-end">
+                <span class="sm-num">S8</span>
+                <span class="sm-name">SEALED</span>
+              </div>
+              <div class="sm-node sm-breach">
+                <span class="sm-num">S9</span>
+                <span class="sm-name">PROTOCOL_BREACH</span>
+              </div>
+            </div>
+            <div class="sm-legend">
+              <div class="sm-legend-item"><span class="sm-legend-dot" style="border-color:var(--green)"></span> Start</div>
+              <div class="sm-legend-item"><span class="sm-legend-dot" style="border-color:var(--cyan)"></span> Terminal</div>
+              <div class="sm-legend-item"><span class="sm-legend-dot" style="border-color:var(--amber)"></span> Human required</div>
+              <div class="sm-legend-item"><span class="sm-legend-dot" style="border-color:var(--red)"></span> Breach (halt)</div>
+            </div>
+          </div>
+          <p class="mt-3" style="color:var(--text-dim); font-size:0.92rem;">Transitions are strictly enforced. Illegal state jumps (e.g., EXECUTING to SEALED without passing GATE_CHECK) trigger an automatic transition to PROTOCOL_BREACH, halting all operations until human recovery.</p>
+        </div>
+
+        <!-- Dual-SHA -->
+        <div class="concept-card fade-up mt-5">
+          <h4><i class="bi bi-fingerprint" style="color:var(--cyan); margin-right:0.5rem;"></i>Dual-SHA commit tracking</h4>
+          <p>Every sync captures two SHA256 hashes: the <strong>authority hash</strong> (content of authoritative files at sync time) and the <strong>repo hash</strong> (git HEAD at sync time). On bootstrap, both are verified. If either has diverged without a recorded transition, the system flags a potential integrity violation.</p>
+          <div class="terminal" style="margin-top:1rem;">
+            <div class="terminal-bar">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-amber"></span>
+              <span class="terminal-dot dot-green"></span>
+              <span class="terminal-title">dual-SHA example</span>
+            </div>
+            <div class="terminal-body">
+              <div><span class="comment"># Before sync</span></div>
+              <div><span class="output">authority_sha: e4a1b2c3d4...</span></div>
+              <div><span class="output">repo_sha:      f5b2c3d4e5...</span></div>
+              <div>&nbsp;</div>
+              <div><span class="comment"># After sync (both updated atomically)</span></div>
+              <div><span class="output">authority_sha: <span class="success">7c8d9e0f1a...</span></span></div>
+              <div><span class="output">repo_sha:      <span class="success">8d9e0f1a2b...</span></span></div>
+              <div><span class="success">Integrity verified. Chain unbroken.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invariant Registry -->
+        <div class="concept-card fade-up">
+          <h4><i class="bi bi-shield-lock" style="color:var(--purple); margin-right:0.5rem;"></i>Invariant registry</h4>
+          <p>Named formal properties that must hold across all sessions. Each invariant is a human-readable assertion with an optional machine-checkable expression. If a session produces output violating a registered invariant, the gate check fails and the task cannot proceed to VALIDATED.</p>
+          <div class="code-block" style="margin-top:1rem;">
+            <div class="code-header"><span>invariants.json (excerpt)</span></div>
+            <pre>{
+  <span class="str">"INV-001"</span>: {
+    <span class="str">"name"</span>: <span class="str">"API response time under 200ms"</span>,
+    <span class="str">"assertion"</span>: <span class="str">"p99_latency_ms &lt; 200"</span>,
+    <span class="str">"scope"</span>: <span class="str">"all endpoints"</span>,
+    <span class="str">"established_by"</span>: <span class="str">"session-003-claude"</span>
+  },
+  <span class="str">"INV-002"</span>: {
+    <span class="str">"name"</span>: <span class="str">"No direct DOM manipulation in React components"</span>,
+    <span class="str">"assertion"</span>: <span class="str">"grep -r 'document.getElementById' src/ == 0"</span>,
+    <span class="str">"scope"</span>: <span class="str">"src/**/*.tsx"</span>,
+    <span class="str">"established_by"</span>: <span class="str">"session-001-claude"</span>
+  }
+}</pre>
+          </div>
+        </div>
+
+        <!-- Bundle pipeline -->
+        <div class="concept-card fade-up">
+          <h4><i class="bi bi-box-seam" style="color:var(--green); margin-right:0.5rem;"></i>Bundle generation pipeline (14 steps)</h4>
+          <p>A deterministic handoff bundle is a self-contained ZIP with full project state, decision history, and SHA256 manifest. The generation pipeline runs in strict order:</p>
+          <div class="pipeline-list">
+            <div class="pl-item"><span class="pl-num">1.</span> Validate current state</div>
+            <div class="pl-item"><span class="pl-num">2.</span> Lock STATE_VECTOR</div>
+            <div class="pl-item"><span class="pl-num">3.</span> Snapshot decision log</div>
+            <div class="pl-item"><span class="pl-num">4.</span> Snapshot invariant registry</div>
+            <div class="pl-item"><span class="pl-num">5.</span> Capture file manifest</div>
+            <div class="pl-item"><span class="pl-num">6.</span> Hash all authoritative files</div>
+            <div class="pl-item"><span class="pl-num">7.</span> Record git HEAD</div>
+            <div class="pl-item"><span class="pl-num">8.</span> Serialize session history</div>
+            <div class="pl-item"><span class="pl-num">9.</span> Collect execution evidence</div>
+            <div class="pl-item"><span class="pl-num">10.</span> Compile gate results</div>
+            <div class="pl-item"><span class="pl-num">11.</span> Generate SHA256 manifest</div>
+            <div class="pl-item"><span class="pl-num">12.</span> Package into ZIP</div>
+            <div class="pl-item"><span class="pl-num">13.</span> Verify package integrity</div>
+            <div class="pl-item"><span class="pl-num">14.</span> Transition to SEALED</div>
+          </div>
+        </div>
+
+        <!-- Protocol breach -->
+        <div class="concept-card fade-up">
+          <h4><i class="bi bi-exclamation-octagon" style="color:var(--red); margin-right:0.5rem;"></i>Protocol breach handling</h4>
+          <p>DEL-v2 is fail-closed. Any of these conditions triggers an immediate transition to PROTOCOL_BREACH: illegal state transition attempt, SHA mismatch on bootstrap, invariant violation during gate check, unauthorized role action (e.g., Executor self-approving), or manual override without human confirmation. Recovery requires explicit human intervention - the system will not auto-recover.</p>
+        </div>
+
+        <!-- Actor model -->
+        <div class="fade-up mt-4">
+          <h3 style="font-size:1.2rem; font-weight:600; margin-bottom:1rem;">Multi-agent coordination model</h3>
+          <div style="overflow-x:auto;">
+            <table class="actor-table">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Responsibilities</th>
+                  <th>Constraints</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Operator</td>
+                  <td>Defines tasks, sets invariants, approves transitions, performs manual validation</td>
+                  <td>Cannot execute implementation. Must be human or human-delegated.</td>
+                </tr>
+                <tr>
+                  <td>Executor</td>
+                  <td>Implements code, runs tests, produces artifacts, reports gate results</td>
+                  <td>Cannot self-approve. Cannot skip gate checks. Cannot transition to SEALED.</td>
+                </tr>
+                <tr>
+                  <td>Auditor</td>
+                  <td>Reviews execution evidence, verifies SHA integrity, validates invariants</td>
+                  <td>Cannot execute. Cannot modify state. Read-only access to all artifacts.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Whitepaper link -->
+        <div class="text-center mt-5 fade-up">
+          <p style="color:var(--text-dim); font-size:0.95rem; margin-bottom:1rem;">Want the complete formal specification?</p>
+          <a href="assets/DEL-v2-Technical-Reference-Manual.pdf" class="btn-cta" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.65rem 1.5rem; font-size:0.95rem; text-decoration:none;">
+            <i class="bi bi-file-earmark-pdf"></i> Download the Technical Reference Manual
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ======== CTA ======== -->
+  <section class="section-padding cta-section">
+    <div class="container fade-up">
+      <h2>Ready to try it?</h2>
+      <p>Install contextkeeper and start every AI session with full context.</p>
+      <div class="cta-install">
+        <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+        <code>pip install contextkeeper</code>
+        <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy"><i class="bi bi-clipboard"></i></button>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="ck-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-brand">context<span>keeper</span></div>
+          <p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Product</h6>
+          <ul>
+            <li><a href="how-it-works.html">How It Works</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Install</h6>
+          <ul>
+            <li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li>
+            <li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li>
+            <li><a href="docs.html#mcp">MCP Registry</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Company</h6>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li>
+            <li><a href="use-cases.html">Use Cases</a></li>
+            <li><a href="enterprise.html">Enterprise</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Originami. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Navbar scroll
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+    // Start scrolled since page loads below fold
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+
+    // Fade-in observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Tier switching
+    function showTier(id, btn) {
+      // Hide all tiers
+      document.querySelectorAll('.tier-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+
+      // Show selected
+      document.getElementById('tier-' + id).classList.add('active');
+      btn.classList.add('active');
+
+      // Re-observe fade-up elements in newly visible tier
+      const tier = document.getElementById('tier-' + id);
+      tier.querySelectorAll('.fade-up').forEach(el => {
+        el.classList.remove('visible');
+        observer.observe(el);
+      });
+
+      // Scroll to content
+      window.scrollTo({ top: tier.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    // Copy text
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+
+    // Copy code block
+    function copyCodeBlock(btn) {
+      const pre = btn.closest('.code-block').querySelector('pre');
+      const text = pre.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

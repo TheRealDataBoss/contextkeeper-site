@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About contextkeeper - Built by Originami</title>
+  <meta name="description" content="The story behind contextkeeper. Built during 18 months of AI-assisted development on a production 3D visualization engine.">
+  <link rel="canonical" href="https://contextkeeper.org/about.html">
+  <meta property="og:title" content="About contextkeeper - Built by Originami">
+  <meta property="og:description" content="Built during 18 months of AI-assisted development on a production 3D visualization engine.">
+  <meta property="og:url" content="https://contextkeeper.org/about.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root{--bg:#06080d;--bg-alt:#0c1018;--surface:#111722;--surface-hover:#182030;--border:#1e2a3a;--cyan:#00c8ff;--cyan-dim:#00c8ff22;--purple:#8b5cf6;--green:#34d399;--amber:#f59e0b;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc}
+    *,*::before,*::after{box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-weight:400;line-height:1.7;overflow-x:hidden}
+    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;color:var(--text-bright)}code,.mono{font-family:'JetBrains Mono',monospace}
+    a{color:var(--cyan);text-decoration:none;transition:color .2s}a:hover{color:#66dbff}::selection{background:var(--cyan);color:var(--bg)}
+    .ck-nav{position:fixed;top:0;left:0;right:0;z-index:1050;padding:1rem 0;transition:all .35s;background:transparent}.ck-nav.scrolled{background:rgba(6,8,13,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.6rem 0}
+    .ck-nav .nav-brand{font-weight:700;font-size:1.25rem;color:var(--text-bright);letter-spacing:-.02em}.ck-nav .nav-brand span{color:var(--cyan)}
+    .ck-nav .navbar-nav .nav-link{color:var(--text-dim);font-size:.9rem;padding:.5rem .85rem;transition:color .2s}.ck-nav .navbar-nav .nav-link:hover,.ck-nav .navbar-nav .nav-link.active{color:var(--text-bright)}
+    .ck-nav .dropdown-menu{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.5rem 0}.ck-nav .dropdown-item{color:var(--text-dim);font-size:.88rem;padding:.5rem 1.25rem}.ck-nav .dropdown-item:hover{background:var(--surface-hover);color:var(--text-bright)}
+    .btn-cta{background:var(--cyan);color:var(--bg);font-weight:600;border:none;border-radius:6px;padding:.5rem 1.25rem;font-size:.88rem;transition:all .2s}.btn-cta:hover{background:#33d4ff;transform:translateY(-1px)}
+    .navbar-toggler{border:1px solid var(--border)}.navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")}
+    .section-padding{padding:5rem 0}.section-border{border-bottom:1px solid var(--border)}.section-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--cyan);margin-bottom:.75rem}
+    .page-hero{padding-top:8rem;padding-bottom:4rem;text-align:center;position:relative;overflow:hidden}.page-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,.06) 0%,transparent 70%);pointer-events:none}
+    .page-hero h1{font-size:clamp(2rem,4.5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem}.page-hero h1 .accent{color:var(--cyan)}.page-hero .lead{color:var(--text-dim);font-size:1.1rem;max-width:600px;margin:0 auto}
+
+    .story-section{max-width:740px;margin:0 auto}
+    .story-section h2{font-size:1.5rem;font-weight:700;margin-bottom:1rem}
+    .story-section p{color:var(--text-dim);font-size:1rem;line-height:1.8;margin-bottom:1.25rem}
+    .story-section strong{color:var(--text-bright)}
+
+    .builder-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem;max-width:600px;margin:0 auto;text-align:center}
+    .builder-avatar{width:80px;height:80px;border-radius:50%;background:var(--cyan-dim);border:2px solid var(--cyan);display:inline-flex;align-items:center;justify-content:center;font-size:2rem;color:var(--cyan);margin-bottom:1.25rem}
+    .builder-name{font-size:1.3rem;font-weight:700;margin-bottom:.25rem}
+    .builder-handle{font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--cyan);margin-bottom:.75rem}
+    .builder-bio{color:var(--text-dim);font-size:.95rem;line-height:1.7;max-width:460px;margin:0 auto 1.5rem}
+    .builder-links{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .builder-links a{display:inline-flex;align-items:center;gap:.4rem;font-size:.88rem;color:var(--text-dim);padding:.4rem .85rem;border:1px solid var(--border);border-radius:6px;transition:all .2s}
+    .builder-links a:hover{border-color:var(--cyan);color:var(--cyan)}
+
+    .mission-block{background:var(--surface);border-left:3px solid var(--cyan);border-radius:0 12px 12px 0;padding:2rem 2.5rem;max-width:700px;margin:0 auto}
+    .mission-block p{font-size:1.15rem;font-style:italic;color:var(--text);margin:0;line-height:1.7}
+
+    .contact-block{text-align:center;max-width:500px;margin:0 auto}
+    .contact-block h2{font-size:1.5rem;font-weight:700;margin-bottom:.75rem}
+    .contact-block p{color:var(--text-dim);font-size:.95rem;margin-bottom:1.5rem}
+    .contact-email{display:inline-flex;align-items:center;gap:.5rem;font-size:1.05rem;font-weight:500;color:var(--cyan);padding:.65rem 1.5rem;border:1px solid rgba(0,200,255,.3);border-radius:8px;transition:all .2s}
+    .contact-email:hover{background:rgba(0,200,255,.06);border-color:var(--cyan)}
+
+    .link-grid{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+    .link-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.5rem;display:flex;align-items:center;gap:.75rem;transition:border-color .3s;min-width:180px}
+    .link-card:hover{border-color:rgba(0,200,255,.25)}
+    .link-card i{font-size:1.25rem;color:var(--cyan)}.link-card span{font-size:.92rem;color:var(--text);font-weight:500}
+
+    .ck-footer{background:var(--bg-alt);border-top:1px solid var(--border);padding:4rem 0 2rem}.ck-footer h6{color:var(--text-bright);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+    .ck-footer ul{list-style:none;padding:0;margin:0}.ck-footer li{margin-bottom:.5rem}.ck-footer li a{color:var(--text-dim);font-size:.88rem}.ck-footer li a:hover{color:var(--text-bright)}
+    .footer-brand{font-weight:700;font-size:1.1rem;color:var(--text-bright);margin-bottom:.5rem}.footer-brand span{color:var(--cyan)}.footer-tagline{color:var(--text-dim);font-size:.85rem;max-width:260px}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:3rem;padding-top:1.5rem;text-align:center;color:var(--text-dim);font-size:.82rem}
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:991.98px){.page-hero{padding-top:7rem}.navbar-collapse{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:1rem;margin-top:.5rem}}
+    @media(max-width:575.98px){.section-padding{padding:3.5rem 0}.page-hero h1{font-size:1.8rem}}
+  </style>
+</head>
+<body>
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav"><div class="container">
+    <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navContent"><ul class="navbar-nav ms-auto align-items-lg-center">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+      <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Use Cases</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li><li><a class="dropdown-item" href="teams.html">Teams</a></li><li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li></ul></li>
+      <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li><li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li><li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li><li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+      <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+    </ul></div></div></nav>
+
+  <main>
+  <section class="page-hero section-border"><div class="container">
+    <div class="section-label">About</div>
+    <h1>Built from <span class="accent">real pain</span></h1>
+    <p class="lead">contextkeeper was born from 18 months of AI-assisted development on a production codebase.</p>
+  </div></section>
+
+  <!-- ORIGIN STORY -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="story-section fade-up">
+      <div class="section-label">The Origin Story</div>
+      <h2>From handoff chaos to a formal protocol</h2>
+      <p>In 2024, I started building <strong>3dpie</strong> - a production 3D data visualization engine using React and Three.js. I used AI assistants heavily: Claude for architecture, GPT for specific implementations, Cursor for quick edits.</p>
+      <p>Within weeks, I hit the wall. Every new session started from zero. Every model switch meant re-explaining decisions. Critical architectural choices were lost between conversations. The AI would contradict decisions made three sessions ago because it had no memory of them.</p>
+      <p>I started writing handoff documents manually. Then I formalized them. Then I built a state vector. Then a decision log. Then an invariant registry. Then a state machine to govern transitions. Then SHA verification to prevent tampering.</p>
+      <p><strong>18 months later, that handoff system became contextkeeper.</strong> It's been tested across 1,099 tests, 244 end-to-end tests, and 29 sealed milestones in production. It works because it was built to solve a problem I hit every single day.</p>
+    </div>
+  </div></section>
+
+  <!-- THE BUILDER -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="fade-up">
+      <div class="builder-card">
+        <div class="builder-avatar"><i class="bi bi-person-fill"></i></div>
+        <div class="builder-name">Steven Wazlavek</div>
+        <div class="builder-handle">@TheRealDataBoss</div>
+        <div class="builder-bio">Senior Data Scientist at Originami. Building at the intersection of AI-assisted development, formal verification, and quantitative analysis.</div>
+        <div class="builder-links">
+          <a href="https://github.com/TheRealDataBoss" target="_blank" rel="noopener"><i class="bi bi-github"></i> GitHub</a>
+          <a href="https://originami.com" target="_blank" rel="noopener"><i class="bi bi-globe"></i> Originami</a>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- THE MISSION -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="text-center mb-4 fade-up"><div class="section-label">The Mission</div></div>
+    <div class="mission-block fade-up">
+      <p>"Make AI-assisted development deterministic, verifiable, and auditable. Every decision tracked. Every handoff verified. Every session continuous."</p>
+    </div>
+  </div></section>
+
+  <!-- CONTACT -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="contact-block fade-up">
+      <h2>Get in touch</h2>
+      <p>Questions about contextkeeper, enterprise deployment, or partnership opportunities.</p>
+      <a href="mailto:masterboss@contextkeeper.org" class="contact-email"><i class="bi bi-envelope"></i> masterboss@contextkeeper.org</a>
+    </div>
+  </div></section>
+
+  <!-- LINKS -->
+  <section class="section-padding"><div class="container">
+    <div class="text-center fade-up">
+      <div class="section-label">Links</div>
+      <div class="link-grid">
+        <a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener" class="link-card"><i class="bi bi-github"></i><span>GitHub</span></a>
+        <a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener" class="link-card"><i class="bi bi-box-seam"></i><span>PyPI</span></a>
+        <a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener" class="link-card"><i class="bi bi-filetype-js"></i><span>npm</span></a>
+        <a href="docs.html#mcp" class="link-card"><i class="bi bi-plug"></i><span>MCP Registry</span></a>
+      </div>
+    </div>
+  </div></section>
+  </main>
+
+  <footer class="ck-footer"><div class="container"><div class="row g-4">
+    <div class="col-lg-3 col-md-6"><div class="footer-brand">context<span>keeper</span></div><p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p></div>
+    <div class="col-lg-3 col-md-6"><h6>Product</h6><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="docs.html">Documentation</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Install</h6><ul><li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li><li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li><li><a href="docs.html#mcp">MCP Registry</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Company</h6><ul><li><a href="about.html">About</a></li><li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li><li><a href="use-cases.html">Use Cases</a></li><li><a href="enterprise.html">Enterprise</a></li></ul></div>
+  </div><div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>const nav=document.getElementById('mainNav');window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)});if(window.scrollY>40)nav.classList.add('scrolled');const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));</script>
+</body>
+</html>

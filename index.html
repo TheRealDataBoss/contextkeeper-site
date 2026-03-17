@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper - Zero Model Drift Between AI Agents</title>
+  <meta name="description" content="Switch AI models mid-project. Your AI picks up exactly where you left off. Zero context loss. Universal session continuity for Claude, GPT, Gemini, and any LLM.">
+  <link rel="canonical" href="https://contextkeeper.org/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="contextkeeper - Zero Model Drift Between AI Agents">
+  <meta property="og:description" content="Switch AI models mid-project. Your AI picks up exactly where you left off. Zero context loss.">
+  <meta property="og:url" content="https://contextkeeper.org/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="contextkeeper">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="contextkeeper - Zero Model Drift Between AI Agents">
+  <meta name="twitter:description" content="Switch AI models mid-project. Your AI picks up exactly where you left off. Zero context loss.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "contextkeeper",
+    "url": "https://contextkeeper.org",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "description": "Zero model drift between AI agents. Universal session continuity for Claude, GPT, Gemini, and any LLM.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #06080d;
+      --bg-alt: #0c1018;
+      --surface: #111722;
+      --surface-hover: #182030;
+      --border: #1e2a3a;
+      --cyan: #00c8ff;
+      --cyan-dim: #00c8ff22;
+      --purple: #8b5cf6;
+      --green: #34d399;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-bright: #f8fafc;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; color: var(--text-bright); }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+
+    a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #66dbff; }
+
+    ::selection { background: var(--cyan); color: var(--bg); }
+
+    /* ---- Navbar ---- */
+    .ck-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1050;
+      padding: 1rem 0;
+      transition: all 0.35s ease;
+      background: transparent;
+    }
+    .ck-nav.scrolled {
+      background: rgba(6, 8, 13, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 0;
+    }
+    .ck-nav .nav-brand {
+      font-weight: 700; font-size: 1.25rem; color: var(--text-bright);
+      letter-spacing: -0.02em;
+    }
+    .ck-nav .nav-brand span { color: var(--cyan); }
+    .ck-nav .navbar-nav .nav-link {
+      color: var(--text-dim); font-size: 0.9rem; font-weight: 400;
+      padding: 0.5rem 0.85rem; transition: color 0.2s;
+    }
+    .ck-nav .navbar-nav .nav-link:hover,
+    .ck-nav .navbar-nav .nav-link.active { color: var(--text-bright); }
+    .ck-nav .dropdown-menu {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0.5rem; padding: 0.5rem 0;
+    }
+    .ck-nav .dropdown-item {
+      color: var(--text-dim); font-size: 0.88rem; padding: 0.5rem 1.25rem;
+    }
+    .ck-nav .dropdown-item:hover {
+      background: var(--surface-hover); color: var(--text-bright);
+    }
+    .btn-cta {
+      background: var(--cyan); color: var(--bg); font-weight: 600;
+      border: none; border-radius: 6px; padding: 0.5rem 1.25rem;
+      font-size: 0.88rem; transition: all 0.2s;
+    }
+    .btn-cta:hover { background: #33d4ff; color: var(--bg); transform: translateY(-1px); }
+    .navbar-toggler { border: 1px solid var(--border); color: var(--text-dim); }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* ---- Sections ---- */
+    .section-padding { padding: 6rem 0; }
+    .section-border { border-bottom: 1px solid var(--border); }
+    .section-label {
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: 2.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 1rem; }
+    .section-desc { color: var(--text-dim); font-size: 1.1rem; max-width: 640px; }
+    .centered { margin-left: auto; margin-right: auto; }
+
+    /* ---- Hero ---- */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: 6rem; padding-bottom: 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -40%; right: -20%;
+      width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--cyan-dim); border: 1px solid rgba(0,200,255,0.2);
+      border-radius: 999px; padding: 0.35rem 1rem; font-size: 0.82rem;
+      color: var(--cyan); margin-bottom: 1.5rem; font-weight: 500;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
+      line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 1.25rem;
+    }
+    .hero h1 .accent { color: var(--cyan); }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--text-dim); max-width: 520px;
+      margin-bottom: 2rem; line-height: 1.65;
+    }
+
+    /* Install block */
+    .install-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      max-width: 420px; margin-bottom: 1.5rem; font-size: 0.92rem;
+    }
+    .install-block code { flex: 1; color: var(--green); }
+    .install-block .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; padding: 0.25rem; transition: color 0.2s; font-size: 1.1rem;
+    }
+    .install-block .copy-btn:hover { color: var(--cyan); }
+
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .btn-outline-cy {
+      background: transparent; color: var(--cyan); font-weight: 500;
+      border: 1px solid rgba(0,200,255,0.3); border-radius: 6px;
+      padding: 0.55rem 1.25rem; font-size: 0.92rem; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-outline-cy:hover {
+      background: rgba(0,200,255,0.08); border-color: var(--cyan); color: var(--cyan);
+    }
+
+    .tech-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tech-pill {
+      font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-dim); font-weight: 500;
+    }
+
+    /* Terminal */
+    .terminal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; line-height: 1.8; width: 100%;
+    }
+    .terminal-bar {
+      display: flex; gap: 6px; padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border); align-items: center;
+    }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: var(--red); }
+    .dot-amber { background: var(--amber); }
+    .dot-green { background: var(--green); }
+    .terminal-title { margin-left: 0.75rem; color: var(--text-dim); font-size: 0.72rem; }
+    .terminal-body { padding: 1rem 1.25rem; }
+    .terminal-body .line { opacity: 0; animation: typeLine 0.3s forwards; }
+    .terminal-body .prompt { color: var(--cyan); }
+    .terminal-body .cmd { color: var(--text-bright); }
+    .terminal-body .output { color: var(--text-dim); }
+    .terminal-body .success { color: var(--green); }
+    .terminal-body .flag { color: var(--purple); }
+
+    @keyframes typeLine {
+      to { opacity: 1; }
+    }
+
+    /* Problem cards */
+    .problem-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; height: 100%;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .problem-card:hover { border-color: var(--cyan-dim); transform: translateY(-3px); }
+    .problem-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1.25rem;
+    }
+    .red-bg { background: rgba(239,68,68,0.12); color: var(--red); }
+    .amber-bg { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .purple-bg { background: rgba(139,92,246,0.12); color: var(--purple); }
+    .cyan-bg { background: rgba(0,200,255,0.12); color: var(--cyan); }
+    .green-bg { background: rgba(52,211,153,0.12); color: var(--green); }
+
+    .problem-card h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .problem-card p { color: var(--text-dim); font-size: 0.95rem; margin: 0; }
+
+    /* Steps */
+    .step-item {
+      text-align: center; padding: 2rem 1.5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; height: 100%;
+      transition: border-color 0.3s;
+    }
+    .step-item:hover { border-color: rgba(0,200,255,0.25); }
+    .step-number {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--cyan); color: var(--bg); font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 1.25rem;
+    }
+    .step-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-item p { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 0.75rem; }
+    .step-item code {
+      display: block; background: var(--bg); padding: 0.5rem 0.75rem;
+      border-radius: 6px; color: var(--green); font-size: 0.82rem;
+    }
+
+    /* Feature cards */
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; height: 100%;
+      transition: all 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(0,200,255,0.25); transform: translateY(-3px); }
+    .feature-card .feat-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1.25rem;
+    }
+    .feature-card h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--text-dim); font-size: 0.92rem; margin: 0; }
+
+    /* Trust bar */
+    .trust-bar {
+      background: var(--bg-alt); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); padding: 2.5rem 0;
+    }
+    .trust-label { color: var(--text-dim); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
+    .trust-logos {
+      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trust-badge {
+      font-size: 0.88rem; font-weight: 500; color: var(--text-dim);
+      padding: 0.4rem 1rem; border: 1px solid var(--border);
+      border-radius: 6px; white-space: nowrap;
+      background: transparent; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: all 0.25s;
+    }
+    .trust-badge:hover {
+      border-color: var(--cyan); color: var(--text-bright);
+      background: rgba(0,200,255,0.06);
+    }
+
+    /* Model modal */
+    .model-modal-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: 1.5rem; opacity: 0; transition: opacity 0.25s;
+    }
+    .model-modal-overlay.open { display: flex; opacity: 1; }
+    .model-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem; max-width: 520px; width: 100%;
+      position: relative; transform: translateY(12px);
+      transition: transform 0.3s; max-height: 90vh; overflow-y: auto;
+    }
+    .model-modal-overlay.open .model-modal { transform: translateY(0); }
+    .model-modal-close {
+      position: absolute; top: 1rem; right: 1.25rem;
+      background: none; border: none; color: var(--text-dim);
+      font-size: 1.5rem; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .model-modal-close:hover { color: var(--text-bright); }
+    .model-modal-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .model-modal-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .model-modal-header h3 { font-size: 1.3rem; font-weight: 700; margin: 0; }
+    .model-modal-desc { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .model-modal-section { margin-bottom: 1.25rem; }
+    .model-modal-section h5 {
+      font-size: 0.82rem; font-weight: 600; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .model-code-block {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    }
+    .model-code-block code {
+      font-size: 0.82rem; color: var(--green);
+      white-space: pre-wrap; word-break: break-all; flex: 1;
+    }
+    .model-code-block .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; transition: color 0.2s; font-size: 1rem; flex-shrink: 0;
+    }
+    .model-code-block .copy-btn:hover { color: var(--cyan); }
+    .model-link {
+      color: var(--cyan); font-size: 0.92rem; display: inline-flex;
+      align-items: center; gap: 0.4rem; transition: color 0.2s;
+    }
+    .model-link:hover { color: #66dbff; }
+
+    /* Stats */
+    .stats-bar { text-align: center; }
+    .stats-bar .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem; max-width: 900px; margin: 0 auto;
+    }
+    .stat-item .stat-num {
+      font-size: 2.25rem; font-weight: 800; color: var(--cyan);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-item .stat-label { color: var(--text-dim); font-size: 0.88rem; margin-top: 0.25rem; }
+
+    /* CTA */
+    .cta-section { text-align: center; }
+    .cta-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-dim); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-install {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1.25rem;
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-size: 0.92rem;
+    }
+    .cta-install code { color: var(--green); }
+    .cta-install .copy-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; transition: color 0.2s; font-size: 1.1rem;
+    }
+    .cta-install .copy-btn:hover { color: var(--cyan); }
+
+    /* Footer */
+    .ck-footer {
+      background: var(--bg-alt); border-top: 1px solid var(--border);
+      padding: 4rem 0 2rem;
+    }
+    .ck-footer h6 {
+      color: var(--text-bright); font-size: 0.82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;
+    }
+    .ck-footer ul { list-style: none; padding: 0; margin: 0; }
+    .ck-footer li { margin-bottom: 0.5rem; }
+    .ck-footer li a { color: var(--text-dim); font-size: 0.88rem; }
+    .ck-footer li a:hover { color: var(--text-bright); }
+    .footer-brand { font-weight: 700; font-size: 1.1rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+    .footer-brand span { color: var(--cyan); }
+    .footer-tagline { color: var(--text-dim); font-size: 0.85rem; max-width: 260px; }
+    .footer-bottom {
+      border-top: 1px solid var(--border); margin-top: 3rem;
+      padding-top: 1.5rem; text-align: center; color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    /* Animations */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .hero { min-height: auto; padding-top: 7rem; padding-bottom: 3rem; }
+      .section-title { font-size: 2rem; }
+      .hero h1 { font-size: 2.2rem; }
+      .terminal { margin-top: 2.5rem; }
+      .navbar-collapse {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem;
+      }
+    }
+    @media (max-width: 575.98px) {
+      .section-padding { padding: 3.5rem 0; }
+      .hero h1 { font-size: 1.8rem; }
+      .section-title { font-size: 1.6rem; }
+      .install-block { flex-direction: column; text-align: center; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== NAVBAR ======== -->
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav">
+    <div class="container">
+      <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Use Cases</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li>
+              <li><a class="dropdown-item" href="teams.html">Teams</a></li>
+              <li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li>
+          <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="#install">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======== HERO ======== -->
+  <section class="hero" id="top">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="hero-badge"><i class="bi bi-tag-fill"></i> v0.6.1 - Stable Release</div>
+          <h1>Zero <span class="accent">model drift</span> between AI agents</h1>
+          <p class="hero-sub">Switch AI models mid-project. Your AI picks up exactly where you left off. Zero context loss. Universal session continuity for Claude, GPT, Gemini, and any LLM.</p>
+          <div class="install-block" id="install">
+            <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+            <code>pip install contextkeeper</code>
+            <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy to clipboard"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="hero-actions">
+            <a href="https://pypi.org/project/contextkeeper/" class="btn-outline-cy" target="_blank" rel="noopener"><i class="bi bi-box-seam"></i> PyPI</a>
+            <a href="https://github.com/TheRealDataBoss/contextkeeper" class="btn-outline-cy" target="_blank" rel="noopener"><i class="bi bi-github"></i> GitHub</a>
+            <a href="connectors.html" class="btn-cta" style="padding:0.55rem 1.25rem;font-size:0.92rem;display:inline-flex;align-items:center;gap:0.5rem;"><i class="bi bi-plug"></i> 95 Connectors</a>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">Python 3.10+</span>
+            <span class="tech-pill">MCP Server</span>
+            <span class="tech-pill">REST API</span>
+            <span class="tech-pill">CLI</span>
+          </div>
+        </div>
+        <div class="col-lg-6 mt-4 mt-lg-0">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-amber"></span>
+              <span class="terminal-dot dot-green"></span>
+              <span class="terminal-title">contextkeeper demo</span>
+            </div>
+            <div class="terminal-body" id="terminalDemo">
+              <div class="line" style="animation-delay:0.2s"><span class="prompt">$</span> <span class="cmd">contextkeeper init</span></div>
+              <div class="line" style="animation-delay:0.5s"><span class="output">Initialized contextkeeper in ./my-project</span></div>
+              <div class="line" style="animation-delay:0.8s"><span class="success">Created STATE_VECTOR.json + .contextkeeper/</span></div>
+              <div class="line" style="animation-delay:1.2s">&nbsp;</div>
+              <div class="line" style="animation-delay:1.4s"><span class="prompt">$</span> <span class="cmd">contextkeeper sync</span> <span class="flag">--agent claude</span></div>
+              <div class="line" style="animation-delay:1.7s"><span class="output">Captured 14 decisions, 3 invariants, 47 files</span></div>
+              <div class="line" style="animation-delay:2.0s"><span class="success">Session state saved. SHA256: a3f8c2...</span></div>
+              <div class="line" style="animation-delay:2.4s">&nbsp;</div>
+              <div class="line" style="animation-delay:2.6s"><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent gpt-4</span></div>
+              <div class="line" style="animation-delay:2.9s"><span class="output">Loading state into GPT-4 session...</span></div>
+              <div class="line" style="animation-delay:3.2s"><span class="success">0 drift. Ready to continue.</span></div>
+              <div class="line" style="animation-delay:3.6s">&nbsp;</div>
+              <div class="line" style="animation-delay:3.8s"><span class="prompt">$</span> <span class="cmd">contextkeeper status</span></div>
+              <div class="line" style="animation-delay:4.1s"><span class="output">Project: my-app | Sessions: 14 | Agents: 3</span></div>
+              <div class="line" style="animation-delay:4.4s"><span class="success">All handoffs verified. Zero context loss.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TRUST BAR ======== -->
+  <section class="trust-bar">
+    <div class="container text-center">
+      <div class="trust-label mb-3">Works with any AI model</div>
+      <div class="trust-logos">
+        <button class="trust-badge" onclick="openModelModal('claude')">Claude</button>
+        <button class="trust-badge" onclick="openModelModal('gpt4')">GPT-4</button>
+        <button class="trust-badge" onclick="openModelModal('gemini')">Gemini</button>
+        <button class="trust-badge" onclick="openModelModal('copilot')">Copilot</button>
+        <button class="trust-badge" onclick="openModelModal('cursor')">Cursor</button>
+        <button class="trust-badge" onclick="openModelModal('aider')">Aider</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== MODEL MODALS ======== -->
+  <div class="model-modal-overlay" id="modelOverlay" onclick="closeModelModal(event)">
+    <div class="model-modal" onclick="event.stopPropagation()">
+      <button class="model-modal-close" onclick="closeModelModal()" aria-label="Close">&times;</button>
+      <div class="model-modal-header">
+        <div class="model-modal-icon" id="modalIcon"></div>
+        <h3 id="modalTitle"></h3>
+      </div>
+      <p class="model-modal-desc" id="modalDesc"></p>
+
+      <div class="model-modal-section">
+        <h5><i class="bi bi-terminal"></i> Quick setup</h5>
+        <div class="model-code-block">
+          <code id="modalSetup"></code>
+          <button class="copy-btn" onclick="copyModalCode()" title="Copy"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+
+      <div class="model-modal-section">
+        <h5><i class="bi bi-book"></i> Deep dive</h5>
+        <a id="modalDocsLink" href="how-it-works.html" class="model-link"><i class="bi bi-arrow-right"></i> Setup guide on How It Works</a>
+      </div>
+
+      <div class="model-modal-section">
+        <h5><i class="bi bi-box-arrow-up-right"></i> Official site</h5>
+        <a id="modalExtLink" href="#" target="_blank" rel="noopener" class="model-link"><i class="bi bi-arrow-right"></i> <span id="modalExtText"></span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PROBLEM ======== -->
+  <section class="section-padding section-border" id="problem">
+    <div class="container">
+      <div class="text-center mb-5 fade-up">
+        <div class="section-label">The Problem</div>
+        <h2 class="section-title">Every model switch costs you context</h2>
+        <p class="section-desc centered">Developers lose hours re-explaining project state every time they switch AI models, start a new chat, or hit a context window limit.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4 fade-up">
+          <div class="problem-card">
+            <div class="problem-icon red-bg"><i class="bi bi-arrow-repeat"></i></div>
+            <h4>Repetitive Re-Explanation</h4>
+            <p>Every new chat session starts from zero. You paste the same context, re-explain architecture decisions, and lose 15 minutes before any real work begins.</p>
+          </div>
+        </div>
+        <div class="col-md-4 fade-up">
+          <div class="problem-card">
+            <div class="problem-icon amber-bg"><i class="bi bi-shuffle"></i></div>
+            <h4>Model Lock-In</h4>
+            <p>Switching from Claude to GPT means rebuilding context from scratch. You stay on one model even when another would be better for the task.</p>
+          </div>
+        </div>
+        <div class="col-md-4 fade-up">
+          <div class="problem-card">
+            <div class="problem-icon purple-bg"><i class="bi bi-clock-history"></i></div>
+            <h4>Context Window Limits</h4>
+            <p>Long sessions degrade. The AI forgets early decisions, contradicts itself, and you have no structured way to carry forward what matters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== HOW IT WORKS ======== -->
+  <section class="section-padding section-border" id="how">
+    <div class="container">
+      <div class="text-center mb-5 fade-up">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Three commands. Zero context loss.</h2>
+        <p class="section-desc centered">contextkeeper captures structured state from one AI session and bootstraps the next. Works with any model.</p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4 fade-up">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>Install</h4>
+            <p>One command. Ready in 30 seconds.</p>
+            <code>pip install contextkeeper</code>
+          </div>
+        </div>
+        <div class="col-md-4 fade-up">
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>Sync</h4>
+            <p>Capture decisions, state, and context.</p>
+            <code>contextkeeper sync --agent claude</code>
+          </div>
+        </div>
+        <div class="col-md-4 fade-up">
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>Bootstrap</h4>
+            <p>Load state into any new session.</p>
+            <code>contextkeeper bootstrap --agent gpt-4</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FEATURES ======== -->
+  <section class="section-padding section-border" id="features">
+    <div class="container">
+      <div class="text-center mb-5 fade-up">
+        <div class="section-label">Feature Highlights</div>
+        <h2 class="section-title">Four ways to integrate</h2>
+        <p class="section-desc centered">Use contextkeeper the way that fits your workflow.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3 fade-up">
+          <a href="features.html" style="text-decoration:none">
+          <div class="feature-card">
+            <div class="feat-icon cyan-bg"><i class="bi bi-terminal"></i></div>
+            <h4>CLI Tool</h4>
+            <p>init, sync, bootstrap, status, doctor. Full project lifecycle from the terminal.</p>
+          </div>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-3 fade-up">
+          <a href="features.html" style="text-decoration:none">
+          <div class="feature-card">
+            <div class="feat-icon purple-bg"><i class="bi bi-braces"></i></div>
+            <h4>Python SDK</h4>
+            <p>Typed models, Pydantic validation, programmatic session management.</p>
+          </div>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-3 fade-up">
+          <a href="features.html" style="text-decoration:none">
+          <div class="feature-card">
+            <div class="feat-icon green-bg"><i class="bi bi-plug"></i></div>
+            <h4>MCP Server</h4>
+            <p>Native Claude integration. Registered on the official MCP registry.</p>
+          </div>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-3 fade-up">
+          <a href="features.html" style="text-decoration:none">
+          <div class="feature-card">
+            <div class="feat-icon amber-bg"><i class="bi bi-hdd-network"></i></div>
+            <h4>REST API</h4>
+            <p>FastAPI-powered. 17 endpoints. OpenAPI spec. API key authentication.</p>
+          </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== STATS ======== -->
+  <section class="section-padding section-border stats-bar" id="stats">
+    <div class="container fade-up">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-num">1,099</div>
+          <div class="stat-label">Tests passing</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">244</div>
+          <div class="stat-label">E2E tests</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">29</div>
+          <div class="stat-label">Sealed milestones</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">18</div>
+          <div class="stat-label">Months in production</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CTA ======== -->
+  <section class="section-padding cta-section" id="cta">
+    <div class="container fade-up">
+      <h2>Stop re-explaining your project</h2>
+      <p>Install contextkeeper and start every AI session with full context.</p>
+      <div class="cta-install">
+        <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+        <code>pip install contextkeeper</code>
+        <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy to clipboard"><i class="bi bi-clipboard"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="ck-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-brand">context<span>keeper</span></div>
+          <p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Product</h6>
+          <ul>
+            <li><a href="how-it-works.html">How It Works</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="connectors.html">Connectors</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Install</h6>
+          <ul>
+            <li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li>
+            <li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li>
+            <li><a href="docs.html#mcp">MCP Registry</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Company</h6>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li>
+            <li><a href="use-cases.html">Use Cases</a></li>
+            <li><a href="enterprise.html">Enterprise</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Originami. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Navbar scroll effect
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll-triggered fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Copy to clipboard
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+
+    // Model modal data
+    const models = {
+      claude: {
+        name: 'Claude',
+        icon: '<i class="bi bi-chat-dots" style="color:var(--cyan)"></i>',
+        iconBg: 'rgba(0,200,255,0.12)',
+        desc: 'Anthropic\'s Claude models. contextkeeper has native MCP server integration, meaning Claude can read and write session state directly.',
+        setup: 'contextkeeper sync --agent claude\ncontextkeeper bootstrap --agent claude',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://www.anthropic.com/claude',
+        extText: 'anthropic.com/claude'
+      },
+      gpt4: {
+        name: 'GPT-4',
+        icon: '<i class="bi bi-stars" style="color:var(--green)"></i>',
+        iconBg: 'rgba(52,211,153,0.12)',
+        desc: 'OpenAI\'s GPT-4 and GPT-4o models. Use contextkeeper to bootstrap full project state into any GPT session via the CLI or Python SDK.',
+        setup: 'contextkeeper sync --agent gpt-4\ncontextkeeper bootstrap --agent gpt-4',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://openai.com',
+        extText: 'openai.com'
+      },
+      gemini: {
+        name: 'Gemini',
+        icon: '<i class="bi bi-gem" style="color:var(--purple)"></i>',
+        iconBg: 'rgba(139,92,246,0.12)',
+        desc: 'Google\'s Gemini models. Sync your project state and bootstrap it into Gemini sessions. Full decision history and invariants carry over.',
+        setup: 'contextkeeper sync --agent gemini\ncontextkeeper bootstrap --agent gemini',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://gemini.google.com',
+        extText: 'gemini.google.com'
+      },
+      copilot: {
+        name: 'GitHub Copilot',
+        icon: '<i class="bi bi-github" style="color:var(--text-bright)"></i>',
+        iconBg: 'rgba(226,232,240,0.12)',
+        desc: 'GitHub Copilot in VS Code or JetBrains. contextkeeper ensures Copilot\'s suggestions respect your documented architectural decisions and invariants.',
+        setup: 'contextkeeper sync --agent copilot\ncontextkeeper bootstrap --agent copilot',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://github.com/features/copilot',
+        extText: 'github.com/features/copilot'
+      },
+      cursor: {
+        name: 'Cursor',
+        icon: '<i class="bi bi-cursor" style="color:var(--amber)"></i>',
+        iconBg: 'rgba(245,158,11,0.12)',
+        desc: 'Cursor AI editor. Sync decisions from Claude Code or GPT sessions and bootstrap them into Cursor so every tool shares the same context.',
+        setup: 'contextkeeper sync --agent cursor\ncontextkeeper bootstrap --agent cursor',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://cursor.sh',
+        extText: 'cursor.sh'
+      },
+      aider: {
+        name: 'Aider',
+        icon: '<i class="bi bi-braces-asterisk" style="color:var(--red)"></i>',
+        iconBg: 'rgba(239,68,68,0.12)',
+        desc: 'Aider CLI coding assistant. contextkeeper bridges Aider sessions with other AI tools so you can switch between them without losing context.',
+        setup: 'contextkeeper sync --agent aider\ncontextkeeper bootstrap --agent aider',
+        docsLink: 'how-it-works.html#tier-developer',
+        extUrl: 'https://aider.chat',
+        extText: 'aider.chat'
+      }
+    };
+
+    function openModelModal(key) {
+      const m = models[key];
+      const overlay = document.getElementById('modelOverlay');
+      document.getElementById('modalIcon').innerHTML = m.icon;
+      document.getElementById('modalIcon').style.background = m.iconBg;
+      document.getElementById('modalTitle').textContent = 'contextkeeper + ' + m.name;
+      document.getElementById('modalDesc').textContent = m.desc;
+      document.getElementById('modalSetup').textContent = m.setup;
+      document.getElementById('modalDocsLink').href = m.docsLink;
+      document.getElementById('modalExtLink').href = m.extUrl;
+      document.getElementById('modalExtText').textContent = m.extText;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModelModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('model-modal-close')) return;
+      document.getElementById('modelOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function copyModalCode() {
+      const code = document.getElementById('modalSetup').textContent;
+      const btn = document.querySelector('.model-code-block .copy-btn');
+      navigator.clipboard.writeText(code).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModelModal();
+    });
+  </script>
+</body>
+</html>

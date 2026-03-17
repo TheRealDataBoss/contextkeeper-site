@@ -1,0 +1,49 @@
+RewriteEngine On
+RewriteBase /app/
+
+# ---- Security: block direct access to sensitive files ----
+<FilesMatch "(config\.php|\.env|composer\.json|composer\.lock)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block access to lib/ and connectors/ directories
+RewriteRule ^lib/ - [F,L]
+RewriteRule ^connectors/ - [F,L]
+RewriteRule ^vendor/ - [F,L]
+RewriteRule ^storage/ - [F,L]
+
+# ---- API routes ----
+# /app/api/v1/anything -> api/v1/index.php?route=anything
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/v1/(.*)$ api/v1/index.php?route=$1 [QSA,L]
+
+# ---- Dashboard routes ----
+# /app/dashboard/anything -> dashboard/index.php?page=anything
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^dashboard/(.*)$ dashboard/index.php?page=$1 [QSA,L]
+
+# ---- Security headers ----
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    # Content Security Policy
+    # 'unsafe-inline' is required because the dashboard uses inline styles,
+    # inline <script> blocks, and onclick handlers throughout. Refactoring
+    # to external scripts is tracked as a future improvement. This CSP still
+    # blocks eval(), data: URIs, object/embed, and third-party domains not
+    # in the allowlist.
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://js.stripe.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: https://*.stripe.com; connect-src 'self' https://cdn.jsdelivr.net https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com https://billing.stripe.com;"
+</IfModule>
+
+# ---- Force HTTPS ----
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ---- Prevent directory listing ----
+Options -Indexes

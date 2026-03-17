@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper for Individual Developers - Real Walkthrough Examples</title>
+  <meta name="description" content="See exactly how contextkeeper saves hours for solo developers. Realistic walkthroughs for React projects, Python ML pipelines, and API development.">
+  <link rel="canonical" href="https://contextkeeper.org/use-cases.html">
+  <meta property="og:title" content="contextkeeper for Individual Developers - Real Walkthrough Examples">
+  <meta property="og:description" content="See exactly how contextkeeper saves hours for solo developers. Realistic walkthroughs for React, ML, and API projects.">
+  <meta property="og:url" content="https://contextkeeper.org/use-cases.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="contextkeeper for Individual Developers - Real Walkthrough Examples">
+  <meta name="twitter:description" content="See exactly how contextkeeper saves hours for solo developers.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "contextkeeper for Individual Developers",
+    "description": "See exactly how contextkeeper saves hours for solo developers. Realistic walkthroughs for React projects, Python ML pipelines, and API development.",
+    "url": "https://contextkeeper.org/use-cases.html",
+    "author": { "@type": "Organization", "name": "Originami" }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #06080d; --bg-alt: #0c1018; --surface: #111722; --surface-hover: #182030;
+      --border: #1e2a3a; --cyan: #00c8ff; --cyan-dim: #00c8ff22; --purple: #8b5cf6;
+      --green: #34d399; --amber: #f59e0b; --red: #ef4444;
+      --text: #e2e8f0; --text-dim: #94a3b8; --text-bright: #f8fafc;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); font-weight: 400; line-height: 1.7; overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; color: var(--text-bright); }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #66dbff; }
+    ::selection { background: var(--cyan); color: var(--bg); }
+
+    /* Navbar */
+    .ck-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1050; padding: 1rem 0; transition: all 0.35s ease; background: transparent; }
+    .ck-nav.scrolled { background: rgba(6,8,13,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0.6rem 0; }
+    .ck-nav .nav-brand { font-weight: 700; font-size: 1.25rem; color: var(--text-bright); letter-spacing: -0.02em; }
+    .ck-nav .nav-brand span { color: var(--cyan); }
+    .ck-nav .navbar-nav .nav-link { color: var(--text-dim); font-size: 0.9rem; font-weight: 400; padding: 0.5rem 0.85rem; transition: color 0.2s; }
+    .ck-nav .navbar-nav .nav-link:hover, .ck-nav .navbar-nav .nav-link.active { color: var(--text-bright); }
+    .ck-nav .dropdown-menu { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.5rem 0; }
+    .ck-nav .dropdown-item { color: var(--text-dim); font-size: 0.88rem; padding: 0.5rem 1.25rem; }
+    .ck-nav .dropdown-item:hover { background: var(--surface-hover); color: var(--text-bright); }
+    .ck-nav .dropdown-item.active-item { color: var(--cyan); }
+    .btn-cta { background: var(--cyan); color: var(--bg); font-weight: 600; border: none; border-radius: 6px; padding: 0.5rem 1.25rem; font-size: 0.88rem; transition: all 0.2s; }
+    .btn-cta:hover { background: #33d4ff; color: var(--bg); transform: translateY(-1px); }
+    .navbar-toggler { border: 1px solid var(--border); color: var(--text-dim); }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+
+    /* Shared */
+    .section-padding { padding: 6rem 0; }
+    .section-border { border-bottom: 1px solid var(--border); }
+    .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 0.75rem; }
+
+    /* Page Hero */
+    .page-hero { padding-top: 8rem; padding-bottom: 4rem; text-align: center; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%); pointer-events: none; }
+    .page-hero h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .page-hero h1 .accent { color: var(--cyan); }
+    .page-hero .lead { color: var(--text-dim); font-size: 1.15rem; max-width: 600px; margin: 0 auto; }
+
+    /* Scenario */
+    .scenario { max-width: 900px; margin: 0 auto; }
+    .scenario-header { margin-bottom: 2rem; }
+    .scenario-num { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.5rem; }
+    .scenario-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .scenario-setup { color: var(--text-dim); font-size: 1rem; line-height: 1.75; max-width: 760px; }
+    .scenario-setup strong { color: var(--text-bright); }
+
+    /* Problem callout */
+    .scenario-problem {
+      background: var(--surface); border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0; color: var(--text-dim); font-size: 0.95rem;
+    }
+    .scenario-problem strong { color: var(--amber); }
+
+    /* Without / With comparison */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+    .compare-card {
+      border-radius: 12px; padding: 1.75rem; border: 1px solid;
+    }
+    .compare-card.without {
+      background: rgba(239,68,68,0.04); border-color: rgba(239,68,68,0.2);
+    }
+    .compare-card.with {
+      background: rgba(52,211,153,0.04); border-color: rgba(52,211,153,0.2);
+    }
+    .compare-label {
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .compare-card.without .compare-label { color: var(--red); }
+    .compare-card.with .compare-label { color: var(--green); }
+    .compare-card ul { list-style: none; padding: 0; margin: 0; }
+    .compare-card li {
+      padding: 0.4rem 0; color: var(--text-dim); font-size: 0.92rem;
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .compare-card.without li::before { content: '\2715'; color: var(--red); font-weight: 700; flex-shrink: 0; }
+    .compare-card.with li::before { content: '\2713'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+    /* Stats callout */
+    .stats-callout {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0;
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; text-align: center;
+    }
+    .sc-item .sc-num { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--cyan); }
+    .sc-item .sc-label { font-size: 0.82rem; color: var(--text-dim); margin-top: 0.15rem; }
+
+    /* Terminal */
+    .terminal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.8; margin: 1.5rem 0; }
+    .terminal-bar { display: flex; gap: 6px; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); align-items: center; }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: var(--red); } .dot-amber { background: var(--amber); } .dot-green { background: var(--green); }
+    .terminal-title { margin-left: 0.75rem; color: var(--text-dim); font-size: 0.72rem; }
+    .terminal-body { padding: 1rem 1.25rem; overflow-x: auto; }
+    .terminal-body .prompt { color: var(--cyan); } .terminal-body .cmd { color: var(--text-bright); }
+    .terminal-body .output { color: var(--text-dim); } .terminal-body .success { color: var(--green); }
+    .terminal-body .flag { color: var(--purple); } .terminal-body .comment { color: var(--text-dim); opacity: 0.6; }
+
+    /* CTA */
+    .cta-section { text-align: center; }
+    .cta-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-dim); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-install { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1.25rem; display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; }
+    .cta-install code { color: var(--green); }
+    .cta-install .copy-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; transition: color 0.2s; font-size: 1.1rem; }
+    .cta-install .copy-btn:hover { color: var(--cyan); }
+
+    /* Footer */
+    .ck-footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 4rem 0 2rem; }
+    .ck-footer h6 { color: var(--text-bright); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .ck-footer ul { list-style: none; padding: 0; margin: 0; }
+    .ck-footer li { margin-bottom: 0.5rem; }
+    .ck-footer li a { color: var(--text-dim); font-size: 0.88rem; }
+    .ck-footer li a:hover { color: var(--text-bright); }
+    .footer-brand { font-weight: 700; font-size: 1.1rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+    .footer-brand span { color: var(--cyan); }
+    .footer-tagline { color: var(--text-dim); font-size: 0.85rem; max-width: 260px; }
+    .footer-bottom { border-top: 1px solid var(--border); margin-top: 3rem; padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.82rem; }
+
+    /* Animations */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .page-hero { padding-top: 7rem; }
+      .navbar-collapse { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem; }
+    }
+    @media (max-width: 767.98px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 575.98px) {
+      .section-padding { padding: 3.5rem 0; }
+      .page-hero h1 { font-size: 1.8rem; }
+      .scenario-title { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav">
+    <div class="container">
+      <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Use Cases</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item active-item" href="use-cases.html">Individual Developer</a></li>
+              <li><a class="dropdown-item" href="teams.html">Teams</a></li>
+              <li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li>
+          <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero section-border">
+    <div class="container">
+      <div class="section-label">Use Cases</div>
+      <h1>See it <span class="accent">in action</span></h1>
+      <p class="lead">Real walkthroughs, not marketing demos. Four scenarios showing exactly how contextkeeper saves you time.</p>
+    </div>
+  </section>
+
+  <!-- SCENARIO 1 -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="scenario fade-up">
+        <div class="scenario-header">
+          <div class="scenario-num">Scenario 01</div>
+          <h2 class="scenario-title">React developer switching from Claude to GPT</h2>
+        </div>
+
+        <p class="scenario-setup"><strong>Day 1:</strong> I'm building a dashboard in React. I've been working with Claude for 3 hours. We've made architectural decisions about state management, established component patterns, and are halfway through the data visualization module.</p>
+
+        <div class="scenario-problem">
+          <strong>The problem:</strong> Claude's context window is full. I need to switch to GPT-4 for the next session.
+        </div>
+
+        <div class="compare-grid">
+          <div class="compare-card without">
+            <div class="compare-label"><i class="bi bi-x-circle-fill"></i> Without contextkeeper</div>
+            <ul>
+              <li>Paste 2 pages of context into GPT-4</li>
+              <li>Miss 3 architectural decisions from early in the session</li>
+              <li>GPT-4 contradicts the Redux Toolkit choice, suggests Zustand</li>
+              <li>Lose 45 minutes debugging a state management conflict</li>
+              <li>Component patterns diverge from what Claude established</li>
+            </ul>
+          </div>
+          <div class="compare-card with">
+            <div class="compare-label"><i class="bi bi-check-circle-fill"></i> With contextkeeper</div>
+            <ul>
+              <li>Run <code style="color:var(--green)">contextkeeper sync --agent claude</code></li>
+              <li>Run <code style="color:var(--green)">contextkeeper bootstrap --agent gpt-4</code></li>
+              <li>GPT-4 immediately knows: Redux Toolkit, component patterns, file structure</li>
+              <li>Picks up exactly where Claude left off</li>
+              <li>Zero contradictions, zero re-explanation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="stats-callout">
+          <div class="sc-item"><div class="sc-num">45 min</div><div class="sc-label">Time saved</div></div>
+          <div class="sc-item"><div class="sc-num">12</div><div class="sc-label">Decisions preserved</div></div>
+          <div class="sc-item"><div class="sc-num">3</div><div class="sc-label">Contradictions prevented</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIO 2 -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="scenario fade-up">
+        <div class="scenario-header">
+          <div class="scenario-num">Scenario 02</div>
+          <h2 class="scenario-title">Data scientist with a long-running ML pipeline</h2>
+        </div>
+
+        <p class="scenario-setup">You're <strong>2 weeks into a feature engineering + model training pipeline.</strong> You've tried 8 model architectures, rejected 5, and the current approach has 14 hyperparameter decisions documented. Your experiment history is everything.</p>
+
+        <div class="scenario-problem">
+          <strong>The problem:</strong> New chat session. Context gone. The AI doesn't know which architectures you rejected or why. It suggests Random Forest again - the one you abandoned on Day 3 because of feature interaction issues.
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span><span class="terminal-dot dot-amber"></span><span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">ML pipeline recovery</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="comment"># Sync after your latest experiment session</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper sync</span> <span class="flag">--agent claude</span></div>
+            <div><span class="output">Captured 14 decisions, 8 experiment logs, 3 invariants</span></div>
+            <div><span class="success">Pipeline state preserved. SHA256: b7d4e1...</span></div>
+            <div>&nbsp;</div>
+            <div><span class="comment"># Next day: bootstrap into a fresh session</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent gpt-4</span></div>
+            <div><span class="output">Loading experiment history...</span></div>
+            <div><span class="output">- 8 architectures evaluated (5 rejected with rationale)</span></div>
+            <div><span class="output">- Current: XGBoost with 14 hyperparameter decisions</span></div>
+            <div><span class="output">- 3 invariants: AUC > 0.85, latency < 50ms, no data leakage</span></div>
+            <div><span class="success">Full pipeline context restored. 0 drift.</span></div>
+          </div>
+        </div>
+
+        <div class="stats-callout">
+          <div class="sc-item"><div class="sc-num">8</div><div class="sc-label">Experiments preserved</div></div>
+          <div class="sc-item"><div class="sc-num">14</div><div class="sc-label">Hyperparameter decisions</div></div>
+          <div class="sc-item"><div class="sc-num">0</div><div class="sc-label">Redundant re-runs</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIO 3 -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="scenario fade-up">
+        <div class="scenario-header">
+          <div class="scenario-num">Scenario 03</div>
+          <h2 class="scenario-title">Full-stack developer on a solo SaaS project</h2>
+        </div>
+
+        <p class="scenario-setup">You're building a <strong>SaaS product alone. Django backend, React frontend, Stripe billing. 47 files across 3 months.</strong> You switch between Claude Code for backend, GPT for frontend, and Cursor for quick edits. Each tool loses context of what the others did.</p>
+
+        <div class="scenario-problem">
+          <strong>The problem:</strong> Cursor doesn't know Claude added a webhook endpoint yesterday. GPT doesn't know about the Django model changes from this morning. Every tool operates in its own silo.
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span><span class="terminal-dot dot-amber"></span><span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">multi-model coordination</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="comment"># After Claude Code backend session</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper sync</span> <span class="flag">--agent claude</span></div>
+            <div><span class="success">Synced: 3 new endpoints, Stripe webhook handler, 2 model changes</span></div>
+            <div>&nbsp;</div>
+            <div><span class="comment"># Switch to GPT for frontend work</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent gpt-4</span></div>
+            <div><span class="output">GPT-4 knows: new API endpoints, webhook shape, model schema</span></div>
+            <div><span class="success">Frontend can target the right API contracts. 0 drift.</span></div>
+            <div>&nbsp;</div>
+            <div><span class="comment"># Quick edit in Cursor</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent cursor</span></div>
+            <div><span class="output">Cursor knows: all 47 files, all decisions from all agents</span></div>
+            <div><span class="success">Complete project awareness across 3 tools.</span></div>
+          </div>
+        </div>
+
+        <div class="stats-callout">
+          <div class="sc-item"><div class="sc-num">3</div><div class="sc-label">AI tools unified</div></div>
+          <div class="sc-item"><div class="sc-num">47</div><div class="sc-label">Files tracked</div></div>
+          <div class="sc-item"><div class="sc-num">0</div><div class="sc-label">API contract mismatches</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIO 4 -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="scenario fade-up">
+        <div class="scenario-header">
+          <div class="scenario-num">Scenario 04</div>
+          <h2 class="scenario-title">Open source maintainer reviewing PRs with AI</h2>
+        </div>
+
+        <p class="scenario-setup">You maintain a library with <strong>200 GitHub stars. Contributors submit PRs.</strong> You use AI to review them - checking for style consistency, architectural alignment, and edge cases. But each review session starts from zero.</p>
+
+        <div class="scenario-problem">
+          <strong>The problem:</strong> The AI doesn't know your project's conventions, past decisions, or why certain patterns exist. It approves code that contradicts established patterns, or flags things that were intentional design choices.
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span><span class="terminal-dot dot-amber"></span><span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">PR review with context</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="comment"># Generate a handoff bundle with full project context</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper bundle</span> <span class="flag">--include-decisions --include-invariants</span></div>
+            <div><span class="output">Bundle: handoff-v12.zip (SHA256: c9e2f3...)</span></div>
+            <div><span class="output">Contains: 34 decisions, 8 invariants, file manifest</span></div>
+            <div>&nbsp;</div>
+            <div><span class="comment"># Bootstrap review session with full context</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent claude --bundle handoff-v12.zip</span></div>
+            <div><span class="success">Claude knows: all conventions, all decisions, all invariants</span></div>
+            <div><span class="success">PR review will respect project history.</span></div>
+          </div>
+        </div>
+
+        <div class="stats-callout">
+          <div class="sc-item"><div class="sc-num">34</div><div class="sc-label">Decisions carried into review</div></div>
+          <div class="sc-item"><div class="sc-num">8</div><div class="sc-label">Invariants enforced</div></div>
+          <div class="sc-item"><div class="sc-num">0</div><div class="sc-label">False positive flags</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding cta-section">
+    <div class="container fade-up">
+      <h2>Your workflow, without the context loss</h2>
+      <p>Install contextkeeper and keep every AI session on the same page.</p>
+      <div class="cta-install">
+        <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+        <code>pip install contextkeeper</code>
+        <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy"><i class="bi bi-clipboard"></i></button>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="ck-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-brand">context<span>keeper</span></div>
+          <p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Product</h6>
+          <ul>
+            <li><a href="how-it-works.html">How It Works</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Install</h6>
+          <ul>
+            <li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li>
+            <li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li>
+            <li><a href="docs.html#mcp">MCP Registry</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Company</h6>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li>
+            <li><a href="use-cases.html">Use Cases</a></li>
+            <li><a href="enterprise.html">Enterprise</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg'; icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

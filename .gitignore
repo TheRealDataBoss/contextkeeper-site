@@ -1,0 +1,36 @@
+# System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error_log
+
+# Environment
+.env
+
+# Sensitive config (contains DB creds, Stripe keys, APP_SECRET)
+app/config.php
+
+# Sensitive config overrides
+config.local.php
+
+# Bundle storage (generated files, not source code)
+app/storage/bundles/*
+!app/storage/bundles/.htaccess
+
+# Storage cache
+app/storage/cache/*
+
+# Keep storage directory structure
+!app/storage/.htaccess
+
+# cPanel artifacts
+cgi-bin/
+images/404error.bmp
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

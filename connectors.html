@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper Connectors - 95 Integrations for Every Data Source</title>
+  <meta name="description" content="Connect contextkeeper to GitHub, S3, Snowflake, Notion, Jira, and 90+ more data sources. Sync project state across every tool in your stack.">
+  <link rel="canonical" href="https://contextkeeper.org/connectors.html">
+  <meta property="og:title" content="contextkeeper Connectors - 95 Integrations for Every Data Source">
+  <meta property="og:description" content="Connect contextkeeper to GitHub, S3, Snowflake, Notion, Jira, and 90+ more data sources.">
+  <meta property="og:url" content="https://contextkeeper.org/connectors.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"contextkeeper Connectors","url":"https://contextkeeper.org/connectors.html","author":{"@type":"Organization","name":"Originami"}}
+  </script>
+
+  <style>
+    :root{--bg:#06080d;--bg-alt:#0c1018;--surface:#111722;--surface-hover:#182030;--border:#1e2a3a;--cyan:#00c8ff;--cyan-dim:#00c8ff22;--purple:#8b5cf6;--green:#34d399;--amber:#f59e0b;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc}
+    *,*::before,*::after{box-sizing:border-box}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-weight:400;line-height:1.7;overflow-x:hidden}
+    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;color:var(--text-bright)}
+    code,pre,.mono{font-family:'JetBrains Mono',monospace}
+    a{color:var(--cyan);text-decoration:none;transition:color .2s}a:hover{color:#66dbff}
+    ::selection{background:var(--cyan);color:var(--bg)}
+
+    /* Navbar */
+    .ck-nav{position:fixed;top:0;left:0;right:0;z-index:1050;padding:1rem 0;transition:all .35s;background:transparent}
+    .ck-nav.scrolled{background:rgba(6,8,13,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.6rem 0}
+    .ck-nav .nav-brand{font-weight:700;font-size:1.25rem;color:var(--text-bright);letter-spacing:-.02em}
+    .ck-nav .nav-brand span{color:var(--cyan)}
+    .ck-nav .navbar-nav .nav-link{color:var(--text-dim);font-size:.9rem;font-weight:400;padding:.5rem .85rem;transition:color .2s}
+    .ck-nav .navbar-nav .nav-link:hover,.ck-nav .navbar-nav .nav-link.active{color:var(--text-bright)}
+    .ck-nav .dropdown-menu{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.5rem 0}
+    .ck-nav .dropdown-item{color:var(--text-dim);font-size:.88rem;padding:.5rem 1.25rem}
+    .ck-nav .dropdown-item:hover{background:var(--surface-hover);color:var(--text-bright)}
+    .btn-cta{background:var(--cyan);color:var(--bg);font-weight:600;border:none;border-radius:6px;padding:.5rem 1.25rem;font-size:.88rem;transition:all .2s}
+    .btn-cta:hover{background:#33d4ff;color:var(--bg);transform:translateY(-1px)}
+    .navbar-toggler{border:1px solid var(--border);color:var(--text-dim)}
+    .navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")}
+
+    /* Page hero */
+    .page-hero{padding:10rem 0 4rem;text-align:center;position:relative;overflow:hidden}
+    .page-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,.05) 0%,transparent 70%);pointer-events:none}
+    .page-hero .section-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--cyan);margin-bottom:.75rem}
+    .page-hero h1{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem}
+    .page-hero h1 .accent{color:var(--cyan)}
+    .page-hero .lead{color:var(--text-dim);font-size:1.15rem;max-width:640px;margin:0 auto}
+
+    /* Stats bar */
+    .stats-bar{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:2.5rem}
+    .stat-item{text-align:center}
+    .stat-num{font-size:2rem;font-weight:700;color:var(--cyan);line-height:1}
+    .stat-label{font-size:.82rem;color:var(--text-dim);margin-top:.25rem}
+
+    /* Filter bar */
+    .filter-bar{padding:1.5rem 0;position:sticky;top:56px;z-index:100;transition:background .3s}
+    .filter-bar.stuck{background:rgba(6,8,13,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .filter-inner{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .filter-search{flex:1;min-width:200px;max-width:360px;position:relative}
+    .filter-search input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.55rem 1rem .55rem 2.5rem;color:var(--text);font-size:.88rem;font-family:'Outfit',sans-serif;transition:border-color .2s;outline:none}
+    .filter-search input:focus{border-color:var(--cyan)}
+    .filter-search input::placeholder{color:var(--text-dim)}
+    .filter-search i{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:.9rem}
+    .filter-pills{display:flex;gap:.4rem;flex-wrap:wrap}
+    .filter-pill{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:.3rem .85rem;font-size:.78rem;color:var(--text-dim);cursor:pointer;transition:all .2s;font-weight:500;white-space:nowrap;user-select:none}
+    .filter-pill:hover{border-color:rgba(0,200,255,.3);color:var(--text)}
+    .filter-pill.active{background:var(--cyan-dim);border-color:rgba(0,200,255,.4);color:var(--cyan)}
+    .filter-count{font-size:.82rem;color:var(--text-dim);margin-left:auto;white-space:nowrap}
+
+    /* Connector grid */
+    .conn-section{padding:2rem 0 6rem}
+    .conn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+
+    /* Connector card */
+    .conn-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .3s,transform .3s;position:relative;display:flex;flex-direction:column;gap:.65rem}
+    .conn-card:hover{border-color:rgba(0,200,255,.25);transform:translateY(-2px)}
+    .conn-card.available:hover{border-color:rgba(0,200,255,.4)}
+    .conn-top{display:flex;align-items:center;gap:.75rem}
+    .conn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .conn-name{font-size:.92rem;font-weight:600;color:var(--text-bright);line-height:1.2}
+    .conn-cat{font-size:.72rem;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+    .conn-desc{font-size:.78rem;color:var(--text-dim);line-height:1.55;flex:1}
+    .conn-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.35rem}
+    .conn-badge{font-size:.65rem;font-weight:600;padding:.2rem .55rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+    .badge-available{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+    .badge-enterprise{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.2)}
+    .badge-coming{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+    .conn-arrow{color:var(--text-dim);font-size:.75rem;transition:color .2s}
+    .conn-card:hover .conn-arrow{color:var(--cyan)}
+
+    /* Lock overlay for enterprise */
+    .conn-card.locked{opacity:.72}
+    .conn-card.locked:hover{opacity:.88;border-color:rgba(139,92,246,.3)}
+    .conn-card.locked .conn-icon{position:relative}
+    .conn-card.locked .conn-icon::after{content:'\F47A';font-family:'bootstrap-icons';position:absolute;bottom:-2px;right:-4px;font-size:.6rem;color:var(--purple);background:var(--surface);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(139,92,246,.3)}
+
+    /* Category color coding */
+    .cat-vcs{background:rgba(226,232,240,.08);color:var(--text-bright)}
+    .cat-cloud{background:rgba(0,200,255,.1);color:var(--cyan)}
+    .cat-database{background:rgba(139,92,246,.1);color:var(--purple)}
+    .cat-productivity{background:rgba(52,211,153,.1);color:var(--green)}
+    .cat-devops{background:rgba(245,158,11,.1);color:var(--amber)}
+    .cat-analytics{background:rgba(239,68,68,.1);color:var(--red)}
+    .cat-communication{background:rgba(56,189,248,.1);color:#38bdf8}
+    .cat-ai{background:rgba(168,85,247,.1);color:#a855f7}
+    .cat-security{background:rgba(251,146,60,.1);color:#fb923c}
+    .cat-design{background:rgba(236,72,153,.1);color:#ec4899}
+
+    /* Enterprise CTA */
+    .ent-cta{background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(0,200,255,.06));border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:3rem;text-align:center;margin-top:4rem}
+    .ent-cta h3{font-size:1.5rem;font-weight:700;margin-bottom:.75rem}
+    .ent-cta p{color:var(--text-dim);max-width:520px;margin:0 auto 1.5rem}
+    .btn-enterprise{background:var(--purple);color:#fff;font-weight:600;border:none;border-radius:6px;padding:.6rem 1.5rem;font-size:.92rem;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-enterprise:hover{background:#9f75f7;color:#fff;transform:translateY(-1px)}
+
+    /* No results */
+    .no-results{text-align:center;padding:4rem 2rem;display:none}
+    .no-results i{font-size:2.5rem;color:var(--text-dim);margin-bottom:1rem}
+    .no-results h4{font-size:1.1rem;margin-bottom:.5rem}
+    .no-results p{color:var(--text-dim);font-size:.9rem}
+
+    /* Connector modal */
+    .conn-card{cursor:pointer}
+    .conn-modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:1.5rem;opacity:0;transition:opacity .25s}
+    .conn-modal-overlay.open{display:flex;opacity:1}
+    .conn-modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem;max-width:440px;width:100%;position:relative;transform:translateY(12px);transition:transform .3s}
+    .conn-modal-overlay.open .conn-modal{transform:translateY(0)}
+    .conn-modal-close{position:absolute;top:1rem;right:1.25rem;background:none;border:none;color:var(--text-dim);font-size:1.5rem;cursor:pointer;line-height:1;transition:color .2s}
+    .conn-modal-close:hover{color:var(--text-bright)}
+    .conn-modal-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1.25rem}
+    .conn-modal-name{text-align:center;font-size:1.25rem;font-weight:700;margin-bottom:.25rem}
+    .conn-modal-cat{text-align:center;font-size:.78rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
+    .conn-modal-desc{text-align:center;color:var(--text-dim);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem}
+    .conn-modal-divider{border:none;border-top:1px solid var(--border);margin:0 0 1.5rem}
+    .conn-modal-prompt{text-align:center;font-size:.92rem;color:var(--text);margin-bottom:1.25rem;font-weight:500}
+    .conn-modal-actions{display:flex;flex-direction:column;gap:.65rem;align-items:center}
+    .btn-signup{background:var(--cyan);color:var(--bg);font-weight:600;border:none;border-radius:8px;padding:.7rem 1.5rem;font-size:.92rem;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;width:100%;justify-content:center}
+    .btn-signup:hover{background:#33d4ff;color:var(--bg);transform:translateY(-1px)}
+    .conn-modal-login{font-size:.85rem;color:var(--text-dim)}
+    .conn-modal-login a{color:var(--cyan);font-weight:500}
+    .conn-modal-enterprise{background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);border-radius:8px;padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:.65rem;font-size:.82rem;color:var(--text-dim);line-height:1.5}
+    .conn-modal-enterprise i{color:var(--purple);font-size:1rem;flex-shrink:0;margin-top:.1rem}
+    .conn-modal-enterprise a{color:var(--purple);font-weight:500}
+
+    /* Fade-in */
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+    .fade-up.visible{opacity:1;transform:translateY(0)}
+
+    /* CTA + Footer */
+    .section-padding{padding:6rem 0}
+    .cta-section{text-align:center}
+    .cta-section h2{font-size:2rem;font-weight:700;margin-bottom:1rem}
+    .cta-section p{color:var(--text-dim);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto}
+    .cta-install{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.25rem;display:inline-flex;align-items:center;gap:.75rem;font-size:.92rem}
+    .cta-install code{color:var(--green)}.cta-install .copy-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;transition:color .2s;font-size:1.1rem}.cta-install .copy-btn:hover{color:var(--cyan)}
+    .ck-footer{background:var(--bg-alt);border-top:1px solid var(--border);padding:4rem 0 2rem}
+    .ck-footer h6{color:var(--text-bright);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+    .ck-footer ul{list-style:none;padding:0;margin:0}.ck-footer li{margin-bottom:.5rem}.ck-footer li a{color:var(--text-dim);font-size:.88rem}.ck-footer li a:hover{color:var(--text-bright)}
+    .footer-brand{font-weight:700;font-size:1.1rem;color:var(--text-bright);margin-bottom:.5rem}.footer-brand span{color:var(--cyan)}
+    .footer-tagline{color:var(--text-dim);font-size:.85rem}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:3rem;padding-top:1.5rem;text-align:center;color:var(--text-dim);font-size:.8rem}
+
+    @media(max-width:767px){
+      .stats-bar{gap:1.5rem}
+      .conn-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
+      .filter-inner{flex-direction:column;align-items:stretch}
+      .filter-search{max-width:none}
+      .filter-count{margin-left:0}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== NAVBAR ======== -->
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav">
+    <div class="container">
+      <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Use Cases</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li>
+              <li><a class="dropdown-item" href="teams.html">Teams</a></li>
+              <li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link active" href="connectors.html">Connectors</a></li>
+          <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="#install">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======== PAGE HERO ======== -->
+  <section class="page-hero">
+    <div class="container fade-up">
+      <div class="section-label">Integrations</div>
+      <h1>95 Connectors. <span class="accent">One Context.</span></h1>
+      <p class="lead">Sync project state from every tool in your stack. contextkeeper reads and writes to version control, cloud storage, databases, project management, and more.</p>
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num">20</div><div class="stat-label">Available Now</div></div>
+        <div class="stat-item"><div class="stat-num">75</div><div class="stat-label">Enterprise</div></div>
+        <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Categories</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FILTER BAR ======== -->
+  <div class="filter-bar" id="filterBar">
+    <div class="container">
+      <div class="filter-inner">
+        <div class="filter-search">
+          <i class="bi bi-search"></i>
+          <input type="text" id="searchInput" placeholder="Search connectors..." autocomplete="off">
+        </div>
+        <div class="filter-pills" id="filterPills">
+          <span class="filter-pill active" data-cat="all">All</span>
+          <span class="filter-pill" data-cat="vcs">Version Control</span>
+          <span class="filter-pill" data-cat="cloud">Cloud Storage</span>
+          <span class="filter-pill" data-cat="database">Databases</span>
+          <span class="filter-pill" data-cat="productivity">Productivity</span>
+          <span class="filter-pill" data-cat="devops">DevOps</span>
+          <span class="filter-pill" data-cat="communication">Communication</span>
+          <span class="filter-pill" data-cat="analytics">Analytics</span>
+          <span class="filter-pill" data-cat="ai">AI / ML</span>
+          <span class="filter-pill" data-cat="security">Security</span>
+          <span class="filter-pill" data-cat="design">Design</span>
+        </div>
+        <div class="filter-count" id="filterCount">95 connectors</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== CONNECTOR GRID ======== -->
+  <section class="conn-section">
+    <div class="container">
+      <div class="conn-grid" id="connGrid"></div>
+      <div class="no-results" id="noResults">
+        <i class="bi bi-search"></i>
+        <h4>No connectors found</h4>
+        <p>Try a different search term or category filter.</p>
+      </div>
+
+      <!-- Enterprise CTA -->
+      <div class="ent-cta fade-up">
+        <h3>Need all 95 connectors?</h3>
+        <p>Enterprise plans unlock every connector with unlimited instances, priority support, and custom integrations on request.</p>
+        <a href="enterprise.html" class="btn-enterprise"><i class="bi bi-building"></i> Explore Enterprise</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CTA ======== -->
+  <section class="section-padding cta-section" id="install">
+    <div class="container fade-up">
+      <h2>Start syncing your project state</h2>
+      <p>Install contextkeeper and connect your first data source in under two minutes.</p>
+      <div class="cta-install">
+        <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+        <code>pip install contextkeeper</code>
+        <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy to clipboard"><i class="bi bi-clipboard"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CONNECTOR MODAL ======== -->
+  <div class="conn-modal-overlay" id="connModalOverlay" onclick="closeConnModal(event)">
+    <div class="conn-modal" onclick="event.stopPropagation()">
+      <button class="conn-modal-close" onclick="closeConnModal()" aria-label="Close">&times;</button>
+      <div class="conn-modal-icon" id="cmIcon"></div>
+      <div class="conn-modal-name" id="cmName"></div>
+      <div class="conn-modal-cat" id="cmCat"></div>
+      <p class="conn-modal-desc" id="cmDesc"></p>
+      <div class="conn-modal-enterprise" id="cmEntNotice" style="display:none">
+        <i class="bi bi-lock"></i>
+        <span>This connector requires an <a href="enterprise.html">Enterprise plan</a>. Sign up free now and upgrade when you are ready.</span>
+      </div>
+      <hr class="conn-modal-divider">
+      <p class="conn-modal-prompt" id="cmPrompt">Create a free account to connect this source.</p>
+      <div class="conn-modal-actions">
+        <a href="/app/auth/register.php" class="btn-signup"><i class="bi bi-person-plus"></i> Sign Up Free</a>
+        <div class="conn-modal-login">Already have an account? <a href="/app/auth/login.php">Log in</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="ck-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6"><div class="footer-brand">context<span>keeper</span></div><p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p></div>
+        <div class="col-lg-3 col-md-6"><h6>Product</h6><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="features.html">Features</a></li><li><a href="connectors.html">Connectors</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="docs.html">Documentation</a></li></ul></div>
+        <div class="col-lg-3 col-md-6"><h6>Install</h6><ul><li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li><li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li><li><a href="docs.html#mcp">MCP Registry</a></li></ul></div>
+        <div class="col-lg-3 col-md-6"><h6>Company</h6><ul><li><a href="about.html">About</a></li><li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li><li><a href="use-cases.html">Use Cases</a></li><li><a href="enterprise.html">Enterprise</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ---- Connector Data (67 total) ----
+    const connectors = [
+      // === VERSION CONTROL (7) ===
+      { id:'github', name:'GitHub', cat:'vcs', icon:'bi-github', tier:'available', desc:'Sync repositories, branches, pull requests, and full commit history. Supports GitHub Apps and fine-grained personal access tokens.' },
+      { id:'gitlab', name:'GitLab', cat:'vcs', icon:'bi-git', tier:'available', desc:'Full GitLab project sync including merge requests, CI pipeline status, and protected branch rules. Self-hosted and SaaS.' },
+      { id:'bitbucket', name:'Bitbucket', cat:'vcs', icon:'bi-bucket', tier:'available', desc:'Atlassian Bitbucket Cloud and Server. Sync repos, pull requests, branch permissions, and Pipelines build status.' },
+      { id:'azure_devops', name:'Azure DevOps', cat:'vcs', icon:'bi-microsoft', tier:'enterprise', desc:'Azure Repos, Boards, and Pipelines integration. Sync work items, Git repos, and release definitions across your org.' },
+      { id:'gitea', name:'Gitea', cat:'vcs', icon:'bi-git', tier:'enterprise', desc:'Connect to self-hosted Gitea instances. Full repo, issue, and webhook sync with token-based authentication.' },
+      { id:'sourcehut', name:'SourceHut', cat:'vcs', icon:'bi-braces', tier:'enterprise', desc:'SourceHut Git and Mercurial repos. Sync build manifests, mailing lists, and ticket trackers from sr.ht.' },
+      { id:'perforce', name:'Perforce Helix', cat:'vcs', icon:'bi-hdd-rack', tier:'enterprise', desc:'Enterprise Perforce Helix Core depot sync. Supports changelists, workspace mappings, and stream-based branching.' },
+
+      // === CLOUD STORAGE (8) ===
+      { id:'s3', name:'AWS S3', cat:'cloud', icon:'bi-cloud', tier:'available', desc:'Amazon S3 bucket sync with IAM role and access key support. Handles versioned objects, lifecycle policies, and cross-region replication.' },
+      { id:'google_drive', name:'Google Drive', cat:'cloud', icon:'bi-google', tier:'available', desc:'Sync files and folders from Google Drive. Supports shared drives, service accounts, and OAuth tokens for team workspaces.' },
+      { id:'dropbox', name:'Dropbox', cat:'cloud', icon:'bi-dropbox', tier:'available', desc:'Dropbox file and folder synchronization with selective sync. Handles shared folders, team spaces, and file revision history.' },
+      { id:'onedrive', name:'OneDrive', cat:'cloud', icon:'bi-cloud-upload', tier:'available', desc:'Microsoft OneDrive and SharePoint document libraries. Sync personal and organizational files with Microsoft Graph API.' },
+      { id:'azure_blob', name:'Azure Blob', cat:'cloud', icon:'bi-microsoft', tier:'available', desc:'Azure Blob Storage containers with SAS token and connection string auth. Supports hot, cool, and archive tiers.' },
+      { id:'cloudflare_r2', name:'Cloudflare R2', cat:'cloud', icon:'bi-cloud-haze2', tier:'available', desc:'S3-compatible Cloudflare R2 buckets with zero egress fees. Uses the same access key and secret key auth as S3.' },
+      { id:'minio', name:'MinIO', cat:'cloud', icon:'bi-hdd-stack', tier:'enterprise', desc:'Self-hosted MinIO S3-compatible object storage. Ideal for air-gapped or on-prem environments needing local data sovereignty.' },
+      { id:'backblaze_b2', name:'Backblaze B2', cat:'cloud', icon:'bi-cloud-arrow-up', tier:'enterprise', desc:'Backblaze B2 cloud storage with S3-compatible and native APIs. Cost-effective archival and backup sync for large datasets.' },
+
+      // === DATABASES (12) ===
+      { id:'postgresql', name:'PostgreSQL', cat:'database', icon:'bi-database', tier:'available', desc:'PostgreSQL databases with full schema introspection. Sync table structures, views, functions, and row-level metadata.' },
+      { id:'mongodb', name:'MongoDB', cat:'database', icon:'bi-database-gear', tier:'available', desc:'MongoDB Atlas and self-hosted clusters. Sync collections, aggregation pipelines, indexes, and change stream state.' },
+      { id:'redis', name:'Redis', cat:'database', icon:'bi-lightning', tier:'available', desc:'Redis key-value store with pub/sub and Streams support. Track keyspace structure, TTLs, and memory usage patterns.' },
+      { id:'bigquery', name:'BigQuery', cat:'database', icon:'bi-bar-chart-steps', tier:'available', desc:'Google BigQuery datasets, tables, and scheduled queries. Sync schema metadata, partitioning config, and query history.' },
+      { id:'snowflake', name:'Snowflake', cat:'database', icon:'bi-snow2', tier:'available', desc:'Snowflake data warehouses, schemas, stages, and pipes. Supports key-pair auth and role-based access across accounts.' },
+      { id:'supabase', name:'Supabase', cat:'database', icon:'bi-database-add', tier:'available', desc:'Supabase Postgres with realtime subscriptions, Row Level Security policies, Edge Functions, and built-in auth state.' },
+      { id:'mysql', name:'MySQL', cat:'database', icon:'bi-database', tier:'enterprise', desc:'MySQL and MariaDB with replication-aware syncing. Introspects schemas, stored procedures, triggers, and user grants.' },
+      { id:'sqlite', name:'SQLite', cat:'database', icon:'bi-file-earmark-binary', tier:'enterprise', desc:'Local SQLite database file sync. Reads schema, table definitions, and index structures from .db and .sqlite files.' },
+      { id:'dynamodb', name:'DynamoDB', cat:'database', icon:'bi-table', tier:'enterprise', desc:'AWS DynamoDB tables with global secondary indexes, provisioned throughput settings, and TTL configuration sync.' },
+      { id:'cassandra', name:'Cassandra', cat:'database', icon:'bi-diagram-3', tier:'enterprise', desc:'Apache Cassandra distributed database. Sync keyspaces, column families, replication strategies, and compaction settings.' },
+      { id:'elasticsearch', name:'Elasticsearch', cat:'database', icon:'bi-search', tier:'enterprise', desc:'Elasticsearch and OpenSearch indices. Sync mappings, index templates, aliases, and ingest pipeline configurations.' },
+      { id:'neo4j', name:'Neo4j', cat:'database', icon:'bi-diagram-2', tier:'enterprise', desc:'Neo4j graph database with Cypher query support. Sync node labels, relationship types, constraints, and graph schema.' },
+
+      // === PRODUCTIVITY (10) ===
+      { id:'notion', name:'Notion', cat:'productivity', icon:'bi-journal-text', tier:'available', desc:'Notion pages, databases, and workspace structure. Sync page trees, database schemas, relations, and rollup properties.' },
+      { id:'jira', name:'Jira', cat:'productivity', icon:'bi-kanban', tier:'available', desc:'Jira Cloud and Server. Sync issues, sprints, board configurations, custom fields, and workflow transition states.' },
+      { id:'linear', name:'Linear', cat:'productivity', icon:'bi-lightning-charge', tier:'enterprise', desc:'Linear issues, projects, cycles, and roadmap items. Sync team workflows, labels, and automated triage rules.' },
+      { id:'asana', name:'Asana', cat:'productivity', icon:'bi-check2-circle', tier:'enterprise', desc:'Asana tasks, projects, sections, and timeline milestones. Sync custom fields, forms, and portfolio-level status.' },
+      { id:'trello', name:'Trello', cat:'productivity', icon:'bi-columns-gap', tier:'enterprise', desc:'Trello boards, lists, cards, and Power-Up configurations. Sync checklists, labels, due dates, and member assignments.' },
+      { id:'monday', name:'Monday.com', cat:'productivity', icon:'bi-calendar-week', tier:'enterprise', desc:'Monday.com boards, groups, items, and automation recipes. Sync column types, status labels, and dashboard widgets.' },
+      { id:'clickup', name:'ClickUp', cat:'productivity', icon:'bi-check-circle', tier:'enterprise', desc:'ClickUp spaces, folders, lists, and task details. Sync custom statuses, time tracking, dependencies, and goals.' },
+      { id:'airtable', name:'Airtable', cat:'productivity', icon:'bi-grid-3x3', tier:'enterprise', desc:'Airtable bases, tables, views, and linked records. Sync field configurations, automations, and interface designer layouts.' },
+      { id:'confluence', name:'Confluence', cat:'productivity', icon:'bi-file-richtext', tier:'enterprise', desc:'Atlassian Confluence spaces, pages, and blog posts. Sync page hierarchies, labels, macros, and comment threads.' },
+      { id:'basecamp', name:'Basecamp', cat:'productivity', icon:'bi-house-door', tier:'enterprise', desc:'Basecamp projects, to-do lists, message boards, and campfire chats. Sync schedules, check-ins, and document storage.' },
+
+      // === DEVOPS (8) ===
+      { id:'docker_hub', name:'Docker Hub', cat:'devops', icon:'bi-box-seam', tier:'enterprise', desc:'Docker Hub image repositories, tags, and vulnerability scan results. Track image layers, pull counts, and automated builds.' },
+      { id:'kubernetes', name:'Kubernetes', cat:'devops', icon:'bi-gear-wide-connected', tier:'enterprise', desc:'Kubernetes cluster state including deployments, services, ConfigMaps, and secrets. Supports kubeconfig auth contexts.' },
+      { id:'terraform', name:'Terraform Cloud', cat:'devops', icon:'bi-bricks', tier:'enterprise', desc:'Terraform Cloud and Enterprise workspaces. Sync state files, run history, variable sets, and policy check results.' },
+      { id:'jenkins', name:'Jenkins', cat:'devops', icon:'bi-gear', tier:'enterprise', desc:'Jenkins jobs, multibranch pipelines, build history, and plugin configurations. Supports API token and SSO authentication.' },
+      { id:'circleci', name:'CircleCI', cat:'devops', icon:'bi-arrow-repeat', tier:'enterprise', desc:'CircleCI pipelines, workflows, and job artifacts. Sync project settings, environment variables, and orb configurations.' },
+      { id:'github_actions', name:'GitHub Actions', cat:'devops', icon:'bi-play-circle', tier:'enterprise', desc:'GitHub Actions workflow runs, job logs, and artifacts. Sync workflow YAML definitions, secrets, and runner configurations.' },
+      { id:'vercel', name:'Vercel', cat:'devops', icon:'bi-triangle', tier:'enterprise', desc:'Vercel project deployments, custom domains, and environment variables. Track build logs, serverless function usage, and edge config.' },
+      { id:'netlify', name:'Netlify', cat:'devops', icon:'bi-globe2', tier:'enterprise', desc:'Netlify sites, deploy previews, build hooks, and form submissions. Sync DNS settings, split testing, and identity configurations.' },
+
+      // === COMMUNICATION (6) ===
+      { id:'slack', name:'Slack', cat:'communication', icon:'bi-chat-square-text', tier:'available', desc:'Slack workspaces with channel, thread, and message history sync. Supports bot tokens, user tokens, and webhook integrations.' },
+      { id:'discord', name:'Discord', cat:'communication', icon:'bi-discord', tier:'enterprise', desc:'Discord servers, text channels, voice channels, and role structures. Bot integration with message history and audit log sync.' },
+      { id:'teams', name:'Microsoft Teams', cat:'communication', icon:'bi-people', tier:'enterprise', desc:'Microsoft Teams channels, chat threads, meeting notes, and shared files. Uses Microsoft Graph API with delegated permissions.' },
+      { id:'email_imap', name:'Email (IMAP)', cat:'communication', icon:'bi-envelope', tier:'enterprise', desc:'IMAP email with folder hierarchy, thread grouping, and attachment metadata. Supports Gmail, Outlook, and custom mail servers.' },
+      { id:'twilio', name:'Twilio', cat:'communication', icon:'bi-telephone', tier:'enterprise', desc:'Twilio SMS, voice call, and conversation logs. Sync message delivery status, phone number inventory, and usage records.' },
+      { id:'intercom', name:'Intercom', cat:'communication', icon:'bi-chat-dots', tier:'enterprise', desc:'Intercom conversations, contact profiles, and help center articles. Sync tags, segments, custom attributes, and team inboxes.' },
+
+      // === ANALYTICS (5) ===
+      { id:'google_analytics', name:'Google Analytics', cat:'analytics', icon:'bi-graph-up', tier:'enterprise', desc:'GA4 properties, data streams, event definitions, and custom dimensions. Sync audience segments, conversions, and attribution models.' },
+      { id:'mixpanel', name:'Mixpanel', cat:'analytics', icon:'bi-pie-chart', tier:'enterprise', desc:'Mixpanel event schemas, funnel definitions, cohort rules, and JQL queries. Sync user profiles, retention reports, and experiments.' },
+      { id:'amplitude', name:'Amplitude', cat:'analytics', icon:'bi-soundwave', tier:'enterprise', desc:'Amplitude behavioral analytics including event taxonomies, user properties, experiments, and growth discovery charts.' },
+      { id:'segment', name:'Segment', cat:'analytics', icon:'bi-bezier2', tier:'enterprise', desc:'Segment sources, destinations, tracking plans, and data flow configurations. Sync schema violations, warehouses, and protocols.' },
+      { id:'posthog', name:'PostHog', cat:'analytics', icon:'bi-flag', tier:'enterprise', desc:'PostHog product analytics, feature flags, session recordings, and A/B experiments. Sync event definitions and dashboard layouts.' },
+
+      // === AI / ML (5) ===
+      { id:'hugging_face', name:'Hugging Face', cat:'ai', icon:'bi-emoji-smile', tier:'available', desc:'Hugging Face Hub models, datasets, and Spaces. Sync model cards, dataset viewers, inference endpoints, and organization repos.' },
+      { id:'openai_api', name:'OpenAI API', cat:'ai', icon:'bi-stars', tier:'enterprise', desc:'OpenAI fine-tuned models, assistants, vector stores, and file objects. Sync API usage, rate limits, and playground configurations.' },
+      { id:'wandb', name:'Weights & Biases', cat:'ai', icon:'bi-graph-down', tier:'enterprise', desc:'W&B experiment tracking, hyperparameter sweeps, artifact versioning, and model registry. Sync run histories and report dashboards.' },
+      { id:'mlflow', name:'MLflow', cat:'ai', icon:'bi-cpu', tier:'enterprise', desc:'MLflow experiments, registered models, model versions, and artifact stores. Supports local, Databricks, and remote tracking servers.' },
+      { id:'sagemaker', name:'SageMaker', cat:'ai', icon:'bi-motherboard', tier:'enterprise', desc:'AWS SageMaker notebooks, training jobs, endpoints, and pipeline definitions. Sync model packages, feature groups, and experiments.' },
+
+      // === SECURITY (3) ===
+      { id:'vault', name:'HashiCorp Vault', cat:'security', icon:'bi-shield-lock', tier:'enterprise', desc:'HashiCorp Vault secret engines, access policies, and audit device logs. Supports KV, Transit, PKI, and dynamic database credentials.' },
+      { id:'aws_secrets', name:'AWS Secrets Manager', cat:'security', icon:'bi-key', tier:'enterprise', desc:'AWS Secrets Manager with automatic rotation schedules, resource policies, and cross-account sharing. Syncs secret metadata and versions.' },
+      { id:'snyk', name:'Snyk', cat:'security', icon:'bi-shield-check', tier:'enterprise', desc:'Snyk vulnerability scanning across code, open-source dependencies, containers, and IaC. Sync fix PRs, severity ratings, and ignore rules.' },
+
+      // === DESIGN (3) ===
+      { id:'figma', name:'Figma', cat:'design', icon:'bi-vector-pen', tier:'enterprise', desc:'Figma design files, component libraries, and design tokens. Sync version history, comments, branching state, and team projects.' },
+      { id:'storybook', name:'Storybook', cat:'design', icon:'bi-book', tier:'enterprise', desc:'Storybook component library, visual test baselines, and interaction tests. Sync story metadata, addons config, and Chromatic snapshots.' },
+      { id:'local_file', name:'Local Filesystem', cat:'design', icon:'bi-folder2-open', tier:'available', desc:'Direct local file and directory access via the CLI or Python SDK. Read and write project state to any path on your machine.' },
+
+      // === ADDITIONAL DATABASES (7) ===
+      { id:'cockroachdb', name:'CockroachDB', cat:'database', icon:'bi-database-gear', tier:'enterprise', desc:'CockroachDB distributed SQL database. Sync schema definitions, zone configurations, and multi-region topology settings.' },
+      { id:'planetscale', name:'PlanetScale', cat:'database', icon:'bi-globe2', tier:'enterprise', desc:'PlanetScale serverless MySQL with branching. Sync deploy requests, schema diffs, and connection string configurations.' },
+      { id:'neon', name:'Neon', cat:'database', icon:'bi-lightning', tier:'enterprise', desc:'Neon serverless Postgres with branching and autoscaling. Sync project endpoints, branch state, and compute configurations.' },
+      { id:'turso', name:'Turso (LibSQL)', cat:'database', icon:'bi-database-add', tier:'enterprise', desc:'Turso edge-replicated LibSQL databases. Sync database groups, replica locations, and embedded auth tokens.' },
+      { id:'clickhouse', name:'ClickHouse', cat:'database', icon:'bi-speedometer', tier:'enterprise', desc:'ClickHouse columnar analytics database. Sync table engines, materialized views, and cluster topology configurations.' },
+      { id:'duckdb', name:'DuckDB', cat:'database', icon:'bi-file-earmark-binary', tier:'enterprise', desc:'DuckDB in-process analytics engine. Read local .duckdb files, sync table schemas, and extension configurations.' },
+      { id:'redshift', name:'Amazon Redshift', cat:'database', icon:'bi-bar-chart-steps', tier:'enterprise', desc:'Amazon Redshift data warehouse clusters. Sync schemas, external tables, Spectrum configs, and workload management rules.' },
+
+      // === CONTAINER & REGISTRY (2) ===
+      { id:'aws_ecr', name:'AWS ECR', cat:'devops', icon:'bi-box', tier:'enterprise', desc:'AWS Elastic Container Registry. Sync image repositories, lifecycle policies, vulnerability scan findings, and replication rules.' },
+      { id:'gcp_artifact', name:'GCP Artifact Registry', cat:'devops', icon:'bi-archive', tier:'enterprise', desc:'Google Cloud Artifact Registry for Docker, Maven, npm, and Python packages. Sync repository policies and vulnerability data.' },
+
+      // === ML/AI ADDITIONAL (4) ===
+      { id:'neptune', name:'Neptune.ai', cat:'ai', icon:'bi-water', tier:'enterprise', desc:'Neptune.ai experiment tracking for ML teams. Sync run metadata, model artifacts, comparison dashboards, and team workspaces.' },
+      { id:'colab', name:'Google Colab', cat:'ai', icon:'bi-journal-code', tier:'enterprise', desc:'Google Colab notebook sync. Track notebook versions, runtime configurations, connected data sources, and output artifacts.' },
+      { id:'kaggle', name:'Kaggle', cat:'ai', icon:'bi-trophy', tier:'enterprise', desc:'Kaggle datasets, competitions, and notebook kernels. Sync dataset versions, submission history, and leaderboard standings.' },
+      { id:'databricks', name:'Databricks', cat:'ai', icon:'bi-bricks', tier:'enterprise', desc:'Databricks Lakehouse workspaces. Sync notebooks, jobs, clusters, Unity Catalog schemas, and MLflow experiment tracking.' },
+
+      // === MESSAGE QUEUES (3) ===
+      { id:'kafka', name:'Apache Kafka', cat:'devops', icon:'bi-arrow-left-right', tier:'enterprise', desc:'Apache Kafka clusters with topic management. Sync consumer groups, partition assignments, schema registry subjects, and ACLs.' },
+      { id:'rabbitmq', name:'RabbitMQ', cat:'devops', icon:'bi-envelope', tier:'enterprise', desc:'RabbitMQ message broker. Sync exchanges, queues, bindings, virtual hosts, and shovel/federation configurations.' },
+      { id:'sqs', name:'AWS SQS', cat:'devops', icon:'bi-stack', tier:'enterprise', desc:'AWS Simple Queue Service. Sync queue attributes, dead-letter configs, redrive policies, and message throughput metrics.' },
+
+      // === SECRETS & CONFIG (1) ===
+      { id:'doppler', name:'Doppler', cat:'security', icon:'bi-shield-check', tier:'enterprise', desc:'Doppler secrets management platform. Sync project environments, config variables, service tokens, and audit log entries.' },
+
+      // === SERVERLESS (3) ===
+      { id:'aws_lambda', name:'AWS Lambda', cat:'devops', icon:'bi-lightning-charge-fill', tier:'enterprise', desc:'AWS Lambda functions, layers, and event source mappings. Sync runtime configs, environment variables, and alias versions.' },
+      { id:'cloudflare_workers', name:'Cloudflare Workers', cat:'devops', icon:'bi-cpu', tier:'enterprise', desc:'Cloudflare Workers edge functions. Sync worker scripts, KV namespaces, Durable Objects, and cron trigger schedules.' },
+      { id:'gcp_functions', name:'GCP Cloud Functions', cat:'devops', icon:'bi-cloud-lightning', tier:'enterprise', desc:'Google Cloud Functions (1st and 2nd gen). Sync source code references, trigger configs, and IAM policy bindings.' },
+
+      // === MONITORING (4) ===
+      { id:'datadog', name:'Datadog', cat:'analytics', icon:'bi-activity', tier:'enterprise', desc:'Datadog infrastructure monitoring, APM traces, and log management. Sync dashboards, monitors, SLOs, and alert configurations.' },
+      { id:'grafana', name:'Grafana Cloud', cat:'analytics', icon:'bi-speedometer2', tier:'enterprise', desc:'Grafana Cloud dashboards, alerting rules, and data source configs. Sync panel definitions, folder structure, and team permissions.' },
+      { id:'sentry', name:'Sentry', cat:'analytics', icon:'bi-bug', tier:'enterprise', desc:'Sentry error tracking and performance monitoring. Sync issue assignments, alert rules, release tracking, and source map uploads.' },
+      { id:'pagerduty', name:'PagerDuty', cat:'analytics', icon:'bi-bell', tier:'enterprise', desc:'PagerDuty incident management. Sync services, escalation policies, on-call schedules, and incident response automation rules.' },
+
+      // === DOCS ADDITIONAL (3) ===
+      { id:'obsidian', name:'Obsidian Vault', cat:'productivity', icon:'bi-gem', tier:'enterprise', desc:'Obsidian knowledge base vaults. Sync markdown files, folder structures, graph connections, plugin configs, and template libraries.' },
+      { id:'google_docs', name:'Google Docs', cat:'productivity', icon:'bi-file-text', tier:'enterprise', desc:'Google Docs and Sheets via Google Workspace API. Sync document content, comments, sharing permissions, and revision history.' },
+      { id:'coda', name:'Coda', cat:'productivity', icon:'bi-file-earmark-text', tier:'enterprise', desc:'Coda docs, tables, and automations. Sync page layouts, formula columns, cross-doc integrations, and published content.' },
+
+      // === CI/CD ADDITIONAL (1) ===
+      { id:'gitlab_ci', name:'GitLab CI', cat:'devops', icon:'bi-gear-wide-connected', tier:'enterprise', desc:'GitLab CI/CD pipelines, job artifacts, and runner configurations. Sync .gitlab-ci.yml definitions, variables, and environment state.' },
+    ];
+
+    // ---- Render Grid ----
+    const grid = document.getElementById('connGrid');
+    const noResults = document.getElementById('noResults');
+    const filterCount = document.getElementById('filterCount');
+    const searchInput = document.getElementById('searchInput');
+    let activeCategory = 'all';
+
+    function renderGrid(filter = '', category = 'all') {
+      const lowerFilter = filter.toLowerCase();
+      const filtered = connectors.filter(c => {
+        const matchCat = category === 'all' || c.cat === category;
+        const matchSearch = !lowerFilter || c.name.toLowerCase().includes(lowerFilter) || c.desc.toLowerCase().includes(lowerFilter) || c.cat.toLowerCase().includes(lowerFilter) || c.id.toLowerCase().includes(lowerFilter);
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.style.display = 'block';
+        filterCount.textContent = '0 connectors';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      filterCount.textContent = filtered.length + ' connector' + (filtered.length !== 1 ? 's' : '');
+
+      grid.innerHTML = filtered.map(c => {
+        const locked = c.tier === 'enterprise';
+        const badgeClass = c.tier === 'available' ? 'badge-available' : c.tier === 'enterprise' ? 'badge-enterprise' : 'badge-coming';
+        const badgeText = c.tier === 'available' ? 'Available' : c.tier === 'enterprise' ? 'Enterprise' : 'Coming Soon';
+        return `
+          <div class="conn-card ${locked ? 'locked' : 'available'}" data-cat="${c.cat}" data-tier="${c.tier}" data-id="${c.id}">
+            <div class="conn-top">
+              <div class="conn-icon cat-${c.cat}"><i class="bi ${c.icon}"></i></div>
+              <div>
+                <div class="conn-name">${c.name}</div>
+                <div class="conn-cat">${catLabel(c.cat)}</div>
+              </div>
+            </div>
+            <div class="conn-desc">${c.desc}</div>
+            <div class="conn-foot">
+              <span class="conn-badge ${badgeClass}">${badgeText}</span>
+              <span class="conn-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function catLabel(cat) {
+      const labels = { vcs:'Version Control', cloud:'Cloud Storage', database:'Database', productivity:'Productivity', devops:'DevOps', communication:'Communication', analytics:'Analytics', ai:'AI / ML', security:'Security', design:'Design' };
+      return labels[cat] || cat;
+    }
+
+    // ---- Filter Pills ----
+    document.getElementById('filterPills').addEventListener('click', e => {
+      const pill = e.target.closest('.filter-pill');
+      if (!pill) return;
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeCategory = pill.dataset.cat;
+      renderGrid(searchInput.value, activeCategory);
+    });
+
+    // ---- Search ----
+    searchInput.addEventListener('input', () => {
+      renderGrid(searchInput.value, activeCategory);
+    });
+
+    // ---- Sticky filter bar ----
+    const filterBar = document.getElementById('filterBar');
+    const filterObserver = new IntersectionObserver(([entry]) => {
+      filterBar.classList.toggle('stuck', !entry.isIntersecting);
+    }, { threshold: 1, rootMargin: '-57px 0px 0px 0px' });
+    filterObserver.observe(filterBar);
+
+    // ---- Navbar scroll ----
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ---- Fade-in ----
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ---- Copy ----
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg';
+        icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+
+    // ---- Init ----
+    renderGrid();
+
+    // ---- Connector Modal ----
+    const overlay = document.getElementById('connModalOverlay');
+
+    function openConnModal(connId) {
+      const c = connectors.find(x => x.id === connId);
+      if (!c) return;
+
+      const isEnterprise = c.tier === 'enterprise';
+
+      document.getElementById('cmIcon').className = 'conn-modal-icon cat-' + c.cat;
+      document.getElementById('cmIcon').innerHTML = '<i class="bi ' + c.icon + '"></i>';
+      document.getElementById('cmName').textContent = c.name;
+      document.getElementById('cmCat').textContent = catLabel(c.cat);
+      document.getElementById('cmDesc').textContent = c.desc;
+
+      const entNotice = document.getElementById('cmEntNotice');
+      entNotice.style.display = isEnterprise ? 'flex' : 'none';
+
+      document.getElementById('cmPrompt').textContent = isEnterprise
+        ? 'Sign up to explore all available connectors and upgrade to Enterprise for this one.'
+        : 'Create a free account to connect ' + c.name + ' to your projects.';
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeConnModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('conn-modal-close')) return;
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeConnModal();
+    });
+
+    // Delegate clicks on the grid
+    grid.addEventListener('click', e => {
+      const card = e.target.closest('.conn-card');
+      if (!card) return;
+      openConnModal(card.dataset.id);
+    });
+  </script>
+</body>
+</html>

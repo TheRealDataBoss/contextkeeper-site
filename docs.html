@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper Documentation</title>
+  <meta name="description" content="contextkeeper documentation, whitepaper download, API reference, and quick start guide.">
+  <link rel="canonical" href="https://contextkeeper.org/docs.html">
+  <meta property="og:title" content="contextkeeper Documentation">
+  <meta property="og:description" content="Quick start guide, whitepaper, API reference, and configuration docs.">
+  <meta property="og:url" content="https://contextkeeper.org/docs.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root{--bg:#06080d;--bg-alt:#0c1018;--surface:#111722;--surface-hover:#182030;--border:#1e2a3a;--cyan:#00c8ff;--cyan-dim:#00c8ff22;--purple:#8b5cf6;--green:#34d399;--amber:#f59e0b;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc}
+    *,*::before,*::after{box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-weight:400;line-height:1.7;overflow-x:hidden}
+    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;color:var(--text-bright)}code,pre,.mono{font-family:'JetBrains Mono',monospace}
+    a{color:var(--cyan);text-decoration:none;transition:color .2s}a:hover{color:#66dbff}::selection{background:var(--cyan);color:var(--bg)}
+    .ck-nav{position:fixed;top:0;left:0;right:0;z-index:1050;padding:1rem 0;transition:all .35s;background:transparent}.ck-nav.scrolled{background:rgba(6,8,13,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.6rem 0}
+    .ck-nav .nav-brand{font-weight:700;font-size:1.25rem;color:var(--text-bright);letter-spacing:-.02em}.ck-nav .nav-brand span{color:var(--cyan)}
+    .ck-nav .navbar-nav .nav-link{color:var(--text-dim);font-size:.9rem;padding:.5rem .85rem;transition:color .2s}.ck-nav .navbar-nav .nav-link:hover,.ck-nav .navbar-nav .nav-link.active{color:var(--text-bright)}
+    .ck-nav .dropdown-menu{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.5rem 0}.ck-nav .dropdown-item{color:var(--text-dim);font-size:.88rem;padding:.5rem 1.25rem}.ck-nav .dropdown-item:hover{background:var(--surface-hover);color:var(--text-bright)}
+    .btn-cta{background:var(--cyan);color:var(--bg);font-weight:600;border:none;border-radius:6px;padding:.5rem 1.25rem;font-size:.88rem;transition:all .2s}.btn-cta:hover{background:#33d4ff;transform:translateY(-1px)}
+    .navbar-toggler{border:1px solid var(--border)}.navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")}
+    .section-padding{padding:5rem 0}.section-border{border-bottom:1px solid var(--border)}.section-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--cyan);margin-bottom:.75rem}
+    .page-hero{padding-top:8rem;padding-bottom:3rem;text-align:center;position:relative;overflow:hidden}.page-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,.06) 0%,transparent 70%);pointer-events:none}
+    .page-hero h1{font-size:clamp(2rem,4.5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem}.page-hero h1 .accent{color:var(--cyan)}.page-hero .lead{color:var(--text-dim);font-size:1.1rem;max-width:550px;margin:0 auto}
+
+    .doc-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;height:100%;transition:border-color .3s}.doc-card:hover{border-color:rgba(0,200,255,.2)}
+    .doc-card h4{font-size:1.05rem;font-weight:600;margin-bottom:.5rem}.doc-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:1rem}
+    .doc-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.88rem;font-weight:500;color:var(--cyan)}
+
+    .terminal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.8;margin:1.5rem 0}
+    .terminal-bar{display:flex;gap:6px;padding:.75rem 1rem;border-bottom:1px solid var(--border)}.terminal-dot{width:10px;height:10px;border-radius:50%}.dot-red{background:var(--red)}.dot-amber{background:var(--amber)}.dot-green{background:var(--green)}
+    .terminal-title{margin-left:.75rem;color:var(--text-dim);font-size:.72rem}.terminal-body{padding:1rem 1.25rem;overflow-x:auto}
+    .terminal-body .prompt{color:var(--cyan)}.terminal-body .cmd{color:var(--text-bright)}.terminal-body .output{color:var(--text-dim)}.terminal-body .success{color:var(--green)}.terminal-body .flag{color:var(--purple)}.terminal-body .comment{color:var(--text-dim);opacity:.6}
+
+    .api-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.82rem;margin:1rem 0}
+    .api-table th{background:var(--bg-alt);color:var(--text-bright);padding:.55rem .75rem;text-align:left;font-weight:600;border-bottom:1px solid var(--border)}
+    .api-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);color:var(--text-dim)}.api-table tr:last-child td{border-bottom:none}
+    .api-table .method{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.75rem}
+    .api-table .get{color:var(--green)}.api-table .post{color:var(--cyan)}.api-table .put{color:var(--amber)}.api-table .delete{color:var(--red)}
+    .api-table .endpoint{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text)}
+
+    .config-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:1rem 0}
+    .config-header{padding:.6rem 1rem;border-bottom:1px solid var(--border);font-size:.75rem;color:var(--text-dim)}
+    .config-block pre{margin:0;padding:1rem 1.25rem;font-size:.8rem;line-height:1.65;color:var(--text);overflow-x:auto}
+    .config-block .key{color:var(--cyan)}.config-block .val{color:var(--green)}.config-block .cm{color:var(--text-dim);opacity:.6}
+
+    .ck-footer{background:var(--bg-alt);border-top:1px solid var(--border);padding:4rem 0 2rem}.ck-footer h6{color:var(--text-bright);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+    .ck-footer ul{list-style:none;padding:0;margin:0}.ck-footer li{margin-bottom:.5rem}.ck-footer li a{color:var(--text-dim);font-size:.88rem}.ck-footer li a:hover{color:var(--text-bright)}
+    .footer-brand{font-weight:700;font-size:1.1rem;color:var(--text-bright);margin-bottom:.5rem}.footer-brand span{color:var(--cyan)}.footer-tagline{color:var(--text-dim);font-size:.85rem;max-width:260px}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:3rem;padding-top:1.5rem;text-align:center;color:var(--text-dim);font-size:.82rem}
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:991.98px){.page-hero{padding-top:7rem}.navbar-collapse{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:1rem;margin-top:.5rem}}
+    @media(max-width:575.98px){.section-padding{padding:3.5rem 0}.page-hero h1{font-size:1.8rem}}
+  </style>
+</head>
+<body>
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav"><div class="container">
+    <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navContent"><ul class="navbar-nav ms-auto align-items-lg-center">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+      <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Use Cases</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li><li><a class="dropdown-item" href="teams.html">Teams</a></li><li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li></ul></li>
+      <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li><li class="nav-item"><a class="nav-link active" href="docs.html">Docs</a></li><li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+    </ul></div></div></nav>
+
+  <main>
+  <section class="page-hero section-border"><div class="container">
+    <div class="section-label">Documentation</div>
+    <h1><span class="accent">contextkeeper</span> docs</h1>
+    <p class="lead">Quick start, API reference, configuration, and downloads.</p>
+  </div></section>
+
+  <!-- QUICK START -->
+  <section class="section-padding section-border" id="quickstart"><div class="container">
+    <div class="row justify-content-center"><div class="col-lg-10">
+      <div class="section-label fade-up">Quick Start</div>
+      <h2 class="fade-up" style="font-size:1.5rem;font-weight:700;margin-bottom:1.5rem;">Install and run in 60 seconds</h2>
+      <div class="terminal fade-up"><div class="terminal-bar"><span class="terminal-dot dot-red"></span><span class="terminal-dot dot-amber"></span><span class="terminal-dot dot-green"></span><span class="terminal-title">quickstart</span></div>
+      <div class="terminal-body">
+        <div><span class="comment"># Install</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">pip install contextkeeper</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Initialize in your project</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">cd my-project</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">contextkeeper init</span></div>
+        <div><span class="success">Created STATE_VECTOR.json + .contextkeeper/</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># After an AI session, sync state</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">contextkeeper sync</span> <span class="flag">--agent claude</span></div>
+        <div><span class="success">Session state saved. SHA256: a3f8c2...</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Start a new session with a different model</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent gpt-4</span></div>
+        <div><span class="success">0 drift. Ready to continue.</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Verify everything is healthy</span></div>
+        <div><span class="prompt">$</span> <span class="cmd">contextkeeper doctor</span></div>
+        <div><span class="success">All checks passed (6/6)</span></div>
+      </div></div>
+    </div></div>
+  </div></section>
+
+  <!-- DOWNLOADS + LINKS -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card">
+        <h4><i class="bi bi-file-earmark-pdf" style="color:var(--red);margin-right:.4rem"></i> Whitepaper</h4>
+        <p>The DEL-v2 Technical Reference Manual. Complete specification of the governance protocol, state machine, and architecture.</p>
+        <a href="assets/DEL-v2-Technical-Reference-Manual.pdf" class="doc-link"><i class="bi bi-download"></i> Download PDF</a>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card">
+        <h4><i class="bi bi-github" style="color:var(--text-bright);margin-right:.4rem"></i> GitHub</h4>
+        <p>Source code, issues, contributing guidelines, and release notes. Star the repo to stay updated.</p>
+        <a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener" class="doc-link"><i class="bi bi-arrow-up-right"></i> Repository</a>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card" id="mcp">
+        <h4><i class="bi bi-plug" style="color:var(--green);margin-right:.4rem"></i> MCP Registry</h4>
+        <p>contextkeeper is registered on the official Anthropic MCP registry. Claude can use it natively.</p>
+        <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener" class="doc-link"><i class="bi bi-arrow-up-right"></i> MCP Registry</a>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card">
+        <h4><i class="bi bi-box-seam" style="color:var(--cyan);margin-right:.4rem"></i> PyPI</h4>
+        <p>Install via pip. Python 3.10+ required. All dependencies included.</p>
+        <a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener" class="doc-link"><i class="bi bi-arrow-up-right"></i> pypi.org/project/contextkeeper</a>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card">
+        <h4><i class="bi bi-filetype-js" style="color:var(--amber);margin-right:.4rem"></i> npm</h4>
+        <p>Node.js package for JavaScript/TypeScript integration and MCP client usage.</p>
+        <a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener" class="doc-link"><i class="bi bi-arrow-up-right"></i> npmjs.com/package/contextkeeper</a>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="doc-card">
+        <h4><i class="bi bi-bug" style="color:var(--purple);margin-right:.4rem"></i> Issues</h4>
+        <p>Found a bug or want to request a feature? Open an issue on GitHub.</p>
+        <a href="https://github.com/TheRealDataBoss/contextkeeper/issues" target="_blank" rel="noopener" class="doc-link"><i class="bi bi-arrow-up-right"></i> Open an issue</a>
+      </div></div>
+    </div>
+  </div></section>
+
+  <!-- API REFERENCE -->
+  <section class="section-padding section-border" id="api"><div class="container">
+    <div class="row justify-content-center"><div class="col-lg-10">
+      <div class="section-label fade-up">API Reference</div>
+      <h2 class="fade-up" style="font-size:1.5rem;font-weight:700;margin-bottom:1rem;">REST API endpoints (17 total)</h2>
+      <p class="fade-up" style="color:var(--text-dim);font-size:.92rem;margin-bottom:1.5rem;">FastAPI-powered. API key authentication. Full OpenAPI/Swagger spec available at <code>/docs</code> when running the server.</p>
+      <div style="overflow-x:auto" class="fade-up">
+        <table class="api-table">
+          <thead><tr><th style="width:70px">Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/status</td><td>Project status and health</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/sessions</td><td>List all sessions</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/sessions</td><td>Create new session</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/sessions/:id</td><td>Get session details</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/sync</td><td>Sync current session state</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/bootstrap</td><td>Bootstrap into new agent</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/decisions</td><td>List all decisions</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/decisions</td><td>Record a decision</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/invariants</td><td>List invariants</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/invariants</td><td>Register an invariant</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/state-vector</td><td>Get current state vector</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/bundles</td><td>List handoff bundles</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/bundles</td><td>Generate new bundle</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/bundles/:id</td><td>Download bundle</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/governance</td><td>Governance status + transitions</td></tr>
+            <tr><td><span class="method post">POST</span></td><td class="endpoint">/api/v1/approve</td><td>Manual validation approval</td></tr>
+            <tr><td><span class="method get">GET</span></td><td class="endpoint">/api/v1/doctor</td><td>Health check diagnostics</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div></div>
+  </div></section>
+
+  <!-- CONFIGURATION -->
+  <section class="section-padding" id="config"><div class="container">
+    <div class="row justify-content-center"><div class="col-lg-10">
+      <div class="section-label fade-up">Configuration</div>
+      <h2 class="fade-up" style="font-size:1.5rem;font-weight:700;margin-bottom:1rem;">STATE_VECTOR.json schema</h2>
+      <div class="config-block fade-up"><div class="config-header">STATE_VECTOR.json</div>
+      <pre>{
+  <span class="key">"project"</span>: <span class="val">"my-project"</span>,
+  <span class="key">"version"</span>: <span class="val">"0.6.1"</span>,
+  <span class="key">"state"</span>: <span class="val">"EXECUTING"</span>,
+  <span class="key">"sessions"</span>: <span class="val">14</span>,
+  <span class="key">"agents"</span>: [<span class="val">"claude"</span>, <span class="val">"gpt-4"</span>, <span class="val">"cursor"</span>],
+  <span class="key">"decisions"</span>: <span class="val">89</span>,
+  <span class="key">"invariants"</span>: <span class="val">8</span>,
+  <span class="key">"authority_sha"</span>: <span class="val">"7c8d9e0f1a..."</span>,
+  <span class="key">"repo_sha"</span>: <span class="val">"8d9e0f1a2b..."</span>,
+  <span class="key">"last_sync"</span>: <span class="val">"2026-03-15T14:22:01Z"</span>,
+  <span class="key">"last_agent"</span>: <span class="val">"claude"</span>
+}</pre></div>
+    </div></div>
+  </div></section>
+  </main>
+
+  <footer class="ck-footer"><div class="container"><div class="row g-4">
+    <div class="col-lg-3 col-md-6"><div class="footer-brand">context<span>keeper</span></div><p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p></div>
+    <div class="col-lg-3 col-md-6"><h6>Product</h6><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="docs.html">Documentation</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Install</h6><ul><li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li><li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li><li><a href="docs.html#mcp">MCP Registry</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Company</h6><ul><li><a href="about.html">About</a></li><li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li><li><a href="use-cases.html">Use Cases</a></li><li><a href="enterprise.html">Enterprise</a></li></ul></div>
+  </div><div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>const nav=document.getElementById('mainNav');window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)});if(window.scrollY>40)nav.classList.add('scrolled');const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Block all direct access to bundle storage.
+# Bundles are served only through the authenticated API endpoint:
+#   GET /api/v1/bundles/:slug/download/:filename
+#
+# This prevents unauthenticated file enumeration and download.
+
+Order Allow,Deny
+Deny from all

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper for Teams - Multi-Developer AI Coordination</title>
+  <meta name="description" content="How teams use contextkeeper to coordinate AI-assisted development across developers, models, and sessions without context loss.">
+  <link rel="canonical" href="https://contextkeeper.org/teams.html">
+  <meta property="og:title" content="contextkeeper for Teams - Multi-Developer AI Coordination">
+  <meta property="og:description" content="How teams use contextkeeper to coordinate AI-assisted development across developers, models, and sessions without context loss.">
+  <meta property="og:url" content="https://contextkeeper.org/teams.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="contextkeeper for Teams - Multi-Developer AI Coordination">
+  <meta name="twitter:description" content="Every developer, every model, one source of truth.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "contextkeeper for Teams - Multi-Developer AI Coordination",
+    "description": "How teams use contextkeeper to coordinate AI-assisted development across developers, models, and sessions without context loss.",
+    "url": "https://contextkeeper.org/teams.html",
+    "author": { "@type": "Organization", "name": "Originami" }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #06080d; --bg-alt: #0c1018; --surface: #111722; --surface-hover: #182030;
+      --border: #1e2a3a; --cyan: #00c8ff; --cyan-dim: #00c8ff22; --purple: #8b5cf6;
+      --green: #34d399; --amber: #f59e0b; --red: #ef4444;
+      --text: #e2e8f0; --text-dim: #94a3b8; --text-bright: #f8fafc;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); font-weight: 400; line-height: 1.7; overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; color: var(--text-bright); }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #66dbff; }
+    ::selection { background: var(--cyan); color: var(--bg); }
+
+    /* Navbar */
+    .ck-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1050; padding: 1rem 0; transition: all 0.35s ease; background: transparent; }
+    .ck-nav.scrolled { background: rgba(6,8,13,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0.6rem 0; }
+    .ck-nav .nav-brand { font-weight: 700; font-size: 1.25rem; color: var(--text-bright); letter-spacing: -0.02em; }
+    .ck-nav .nav-brand span { color: var(--cyan); }
+    .ck-nav .navbar-nav .nav-link { color: var(--text-dim); font-size: 0.9rem; font-weight: 400; padding: 0.5rem 0.85rem; transition: color 0.2s; }
+    .ck-nav .navbar-nav .nav-link:hover, .ck-nav .navbar-nav .nav-link.active { color: var(--text-bright); }
+    .ck-nav .dropdown-menu { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.5rem 0; }
+    .ck-nav .dropdown-item { color: var(--text-dim); font-size: 0.88rem; padding: 0.5rem 1.25rem; }
+    .ck-nav .dropdown-item:hover { background: var(--surface-hover); color: var(--text-bright); }
+    .ck-nav .dropdown-item.active-item { color: var(--cyan); }
+    .btn-cta { background: var(--cyan); color: var(--bg); font-weight: 600; border: none; border-radius: 6px; padding: 0.5rem 1.25rem; font-size: 0.88rem; transition: all 0.2s; }
+    .btn-cta:hover { background: #33d4ff; color: var(--bg); transform: translateY(-1px); }
+    .navbar-toggler { border: 1px solid var(--border); color: var(--text-dim); }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+
+    /* Shared */
+    .section-padding { padding: 6rem 0; }
+    .section-border { border-bottom: 1px solid var(--border); }
+    .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 0.75rem; }
+
+    /* Page Hero */
+    .page-hero { padding-top: 8rem; padding-bottom: 4rem; text-align: center; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%); pointer-events: none; }
+    .page-hero h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .page-hero h1 .accent { color: var(--cyan); }
+    .page-hero .lead { color: var(--text-dim); font-size: 1.15rem; max-width: 600px; margin: 0 auto; }
+
+    /* Team Problem Visual */
+    .team-visual {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1.5rem; flex-wrap: wrap; margin: 3rem 0;
+    }
+    .dev-node {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem 1.5rem; text-align: center;
+      min-width: 160px; transition: border-color 0.3s;
+    }
+    .dev-node:hover { border-color: rgba(0,200,255,0.3); }
+    .dev-node .dev-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 0.75rem;
+    }
+    .dev-node .dev-name { font-weight: 600; font-size: 0.95rem; color: var(--text-bright); }
+    .dev-node .dev-tool { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem; }
+    .team-arrow { font-size: 1.5rem; color: var(--cyan); }
+    .team-hub {
+      background: var(--cyan-dim); border: 2px solid var(--cyan);
+      border-radius: 12px; padding: 1.25rem 1.5rem; text-align: center;
+      min-width: 180px;
+    }
+    .team-hub .hub-icon { font-size: 1.5rem; color: var(--cyan); display: block; margin-bottom: 0.5rem; }
+    .team-hub .hub-label { font-weight: 700; color: var(--text-bright); font-size: 0.95rem; }
+    .team-hub .hub-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+    /* Sprint timeline */
+    .sprint-timeline { max-width: 800px; margin: 2rem auto; }
+    .sprint-entry {
+      display: flex; gap: 1.5rem; padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border); align-items: flex-start;
+    }
+    .sprint-entry:last-child { border-bottom: none; }
+    .sprint-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .sprint-content { flex: 1; }
+    .sprint-name { font-weight: 600; font-size: 0.95rem; color: var(--text-bright); }
+    .sprint-role { font-size: 0.78rem; color: var(--text-dim); margin-left: 0.5rem; }
+    .sprint-desc { color: var(--text-dim); font-size: 0.92rem; margin-top: 0.35rem; line-height: 1.6; }
+    .sprint-cmd {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.4rem 0.75rem; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; color: var(--green); margin-top: 0.5rem; display: inline-block;
+    }
+
+    /* State Vector highlight */
+    .sv-highlight {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; margin: 2rem auto; max-width: 800px;
+      text-align: center;
+    }
+    .sv-highlight h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .sv-highlight p { color: var(--text-dim); font-size: 0.92rem; max-width: 600px; margin: 0 auto; }
+
+    /* Actor table */
+    .actor-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: 0.88rem; margin: 1.5rem 0;
+    }
+    .actor-table th {
+      background: var(--bg-alt); color: var(--text-bright);
+      padding: 0.75rem 1rem; text-align: left; font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .actor-table th:first-child { border-radius: 8px 0 0 0; }
+    .actor-table th:last-child { border-radius: 0 8px 0 0; }
+    .actor-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--text-dim); vertical-align: top;
+    }
+    .actor-table tr:last-child td { border-bottom: none; }
+    .actor-table td:first-child { color: var(--cyan); font-weight: 500; }
+
+    /* Code Review scenario */
+    .review-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; max-width: 800px; margin: 2rem auto;
+    }
+    .review-card h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .review-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.7; }
+    .review-list { list-style: none; padding: 0; margin: 1rem 0 0; }
+    .review-list li {
+      padding: 0.5rem 0; color: var(--text-dim); font-size: 0.92rem;
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .review-list li i { color: var(--green); flex-shrink: 0; margin-top: 0.15rem; }
+
+    /* Terminal */
+    .terminal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.8; margin: 1.5rem 0; }
+    .terminal-bar { display: flex; gap: 6px; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); align-items: center; }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: var(--red); } .dot-amber { background: var(--amber); } .dot-green { background: var(--green); }
+    .terminal-title { margin-left: 0.75rem; color: var(--text-dim); font-size: 0.72rem; }
+    .terminal-body { padding: 1rem 1.25rem; overflow-x: auto; }
+    .terminal-body .prompt { color: var(--cyan); } .terminal-body .cmd { color: var(--text-bright); }
+    .terminal-body .output { color: var(--text-dim); } .terminal-body .success { color: var(--green); }
+    .terminal-body .flag { color: var(--purple); } .terminal-body .comment { color: var(--text-dim); opacity: 0.6; }
+
+    /* CTA */
+    .cta-section { text-align: center; }
+    .cta-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-dim); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-install { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1.25rem; display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; }
+    .cta-install code { color: var(--green); }
+    .cta-install .copy-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; transition: color 0.2s; font-size: 1.1rem; }
+    .cta-install .copy-btn:hover { color: var(--cyan); }
+
+    /* Footer */
+    .ck-footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 4rem 0 2rem; }
+    .ck-footer h6 { color: var(--text-bright); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .ck-footer ul { list-style: none; padding: 0; margin: 0; }
+    .ck-footer li { margin-bottom: 0.5rem; }
+    .ck-footer li a { color: var(--text-dim); font-size: 0.88rem; }
+    .ck-footer li a:hover { color: var(--text-bright); }
+    .footer-brand { font-weight: 700; font-size: 1.1rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+    .footer-brand span { color: var(--cyan); }
+    .footer-tagline { color: var(--text-dim); font-size: 0.85rem; max-width: 260px; }
+    .footer-bottom { border-top: 1px solid var(--border); margin-top: 3rem; padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.82rem; }
+
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 991.98px) {
+      .page-hero { padding-top: 7rem; }
+      .navbar-collapse { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem; }
+    }
+    @media (max-width: 767.98px) {
+      .team-visual { flex-direction: column; }
+      .team-arrow { transform: rotate(90deg); }
+    }
+    @media (max-width: 575.98px) {
+      .section-padding { padding: 3.5rem 0; }
+      .page-hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav">
+    <div class="container">
+      <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Use Cases</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li>
+              <li><a class="dropdown-item active-item" href="teams.html">Teams</a></li>
+              <li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li>
+          <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero section-border">
+    <div class="container">
+      <div class="section-label">Teams</div>
+      <h1>AI-assisted development <span class="accent">for teams</span></h1>
+      <p class="lead">Every developer, every model, one source of truth.</p>
+    </div>
+  </section>
+
+  <!-- THE TEAM PROBLEM -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="text-center mb-4 fade-up">
+        <div class="section-label">The Problem</div>
+        <h2 style="font-size:2rem; font-weight:700; margin-bottom:1rem;">Three developers. Three AI tools. Zero shared context.</h2>
+        <p style="color:var(--text-dim); font-size:1.05rem; max-width:680px; margin:0 auto;">Developer A uses Claude. Developer B uses GPT. Developer C uses Cursor. They're all working on the same codebase. Nobody knows what AI decisions the others made.</p>
+      </div>
+
+      <div class="team-visual fade-up">
+        <div class="dev-node">
+          <div class="dev-avatar" style="background:rgba(0,200,255,0.12); color:var(--cyan)"><i class="bi bi-person-fill"></i></div>
+          <div class="dev-name">Alice</div>
+          <div class="dev-tool">Claude Code</div>
+        </div>
+        <span class="team-arrow"><i class="bi bi-arrow-right"></i></span>
+        <div class="team-hub">
+          <span class="hub-icon"><i class="bi bi-diagram-3-fill"></i></span>
+          <div class="hub-label">contextkeeper</div>
+          <div class="hub-sub">STATE_VECTOR.json</div>
+        </div>
+        <span class="team-arrow"><i class="bi bi-arrow-left"></i></span>
+        <div class="dev-node">
+          <div class="dev-avatar" style="background:rgba(52,211,153,0.12); color:var(--green)"><i class="bi bi-person-fill"></i></div>
+          <div class="dev-name">Bob</div>
+          <div class="dev-tool">GPT-4</div>
+        </div>
+      </div>
+      <div class="text-center fade-up" style="margin-top:-0.5rem;">
+        <span class="team-arrow" style="display:inline-block; transform:rotate(-90deg); margin-bottom:0.5rem;"><i class="bi bi-arrow-right"></i></span>
+        <div class="dev-node" style="display:inline-block;">
+          <div class="dev-avatar" style="background:rgba(245,158,11,0.12); color:var(--amber)"><i class="bi bi-person-fill"></i></div>
+          <div class="dev-name">Carol</div>
+          <div class="dev-tool">Cursor</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIO: 3-PERSON SPRINT -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="text-center mb-4 fade-up">
+        <div class="section-label">Scenario</div>
+        <h2 style="font-size:1.75rem; font-weight:700; margin-bottom:0.5rem;">3-person startup sprint</h2>
+        <p style="color:var(--text-dim); font-size:1rem; max-width:600px; margin:0 auto;">A 2-week sprint. Three developers. Three AI tools. One shared STATE_VECTOR.json in the repo.</p>
+      </div>
+
+      <div class="sprint-timeline fade-up">
+        <div class="sprint-entry">
+          <div class="sprint-avatar" style="background:rgba(0,200,255,0.12); color:var(--cyan)"><i class="bi bi-person-fill"></i></div>
+          <div class="sprint-content">
+            <span class="sprint-name">Alice</span><span class="sprint-role">Backend - Claude Code</span>
+            <div class="sprint-desc">Builds API endpoints for user authentication and billing. Establishes database schema decisions, error handling patterns, and rate limiting strategy. Syncs after each session.</div>
+            <div class="sprint-cmd">contextkeeper sync --agent claude</div>
+          </div>
+        </div>
+        <div class="sprint-entry">
+          <div class="sprint-avatar" style="background:rgba(52,211,153,0.12); color:var(--green)"><i class="bi bi-person-fill"></i></div>
+          <div class="sprint-content">
+            <span class="sprint-name">Bob</span><span class="sprint-role">Frontend - GPT-4</span>
+            <div class="sprint-desc">Bootstraps Alice's state before starting. GPT-4 immediately knows the API contracts, error shapes, and auth flow. Builds React components that target the exact endpoints Alice created. No guessing, no mismatched types.</div>
+            <div class="sprint-cmd">contextkeeper bootstrap --agent gpt-4</div>
+          </div>
+        </div>
+        <div class="sprint-entry">
+          <div class="sprint-avatar" style="background:rgba(245,158,11,0.12); color:var(--amber)"><i class="bi bi-person-fill"></i></div>
+          <div class="sprint-content">
+            <span class="sprint-name">Carol</span><span class="sprint-role">DevOps - Cursor</span>
+            <div class="sprint-desc">Reads both Alice's and Bob's state vectors. Sets up CI/CD knowing the exact test structure, deployment requirements, and environment variables. Configures GitHub Actions that enforce the invariants Alice defined.</div>
+            <div class="sprint-cmd">contextkeeper bootstrap --agent cursor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sv-highlight fade-up">
+        <h4><i class="bi bi-file-earmark-code" style="color:var(--cyan); margin-right:0.4rem;"></i>STATE_VECTOR.json becomes the team brain</h4>
+        <p>Committed to the shared repo, the state vector captures every architectural decision, every rejected alternative, and every invariant - from every developer, across every AI tool. Pull the repo, bootstrap, and you have full team context in 60 seconds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTOR MODEL -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="text-center mb-4 fade-up">
+        <div class="section-label">Governance</div>
+        <h2 style="font-size:1.75rem; font-weight:700; margin-bottom:0.5rem;">The actor model for teams</h2>
+        <p style="color:var(--text-dim); font-size:1rem; max-width:640px; margin:0 auto;">DEL-v2's Operator/Executor/Auditor roles map directly to how teams already work. The lead developer is the Operator. Individual developers are Executors. Code review is the Auditor role.</p>
+      </div>
+
+      <div class="row justify-content-center fade-up">
+        <div class="col-lg-10">
+          <div style="overflow-x:auto;">
+            <table class="actor-table">
+              <thead>
+                <tr>
+                  <th style="width:140px">Role</th>
+                  <th>Team mapping</th>
+                  <th>What they can do</th>
+                  <th>What they cannot do</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Operator</td>
+                  <td>Tech lead / PM</td>
+                  <td>Define tasks, set invariants, approve state transitions, perform manual validation</td>
+                  <td>Execute implementation directly</td>
+                </tr>
+                <tr>
+                  <td>Executor</td>
+                  <td>Individual developer + their AI</td>
+                  <td>Write code, run tests, produce artifacts, report gate results</td>
+                  <td>Self-approve work, skip gates, seal milestones</td>
+                </tr>
+                <tr>
+                  <td>Auditor</td>
+                  <td>Code reviewer / QA</td>
+                  <td>Review execution evidence, verify SHA integrity, validate invariants</td>
+                  <td>Execute code, modify state</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE REVIEW SCENARIO -->
+  <section class="section-padding section-border">
+    <div class="container">
+      <div class="text-center mb-4 fade-up">
+        <div class="section-label">Scenario</div>
+        <h2 style="font-size:1.75rem; font-weight:700; margin-bottom:0.5rem;">Code review with full context</h2>
+      </div>
+
+      <div class="review-card fade-up">
+        <h4>The reviewer's superpower</h4>
+        <p>A reviewer opens a PR. Instead of reading the diff cold, they load the handoff bundle. They see everything that led to this change:</p>
+        <ul class="review-list">
+          <li><i class="bi bi-check-circle-fill"></i> Every architectural decision that shaped this code</li>
+          <li><i class="bi bi-check-circle-fill"></i> Every alternative that was considered and rejected, with rationale</li>
+          <li><i class="bi bi-check-circle-fill"></i> Every invariant that must hold after this change</li>
+          <li><i class="bi bi-check-circle-fill"></i> The full experiment history (for data/ML PRs)</li>
+          <li><i class="bi bi-check-circle-fill"></i> SHA256 verification that nothing was tampered with</li>
+        </ul>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-10 fade-up">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="terminal-dot dot-red"></span><span class="terminal-dot dot-amber"></span><span class="terminal-dot dot-green"></span>
+              <span class="terminal-title">code review workflow</span>
+            </div>
+            <div class="terminal-body">
+              <div><span class="comment"># Reviewer pulls the branch and loads context</span></div>
+              <div><span class="prompt">$</span> <span class="cmd">git checkout</span> <span class="flag">feature/billing-webhook</span></div>
+              <div><span class="prompt">$</span> <span class="cmd">contextkeeper bootstrap</span> <span class="flag">--agent claude</span></div>
+              <div><span class="output">Loading team state vector...</span></div>
+              <div><span class="output">- 23 decisions from Alice (backend)</span></div>
+              <div><span class="output">- 15 decisions from Bob (frontend)</span></div>
+              <div><span class="output">- 8 invariants active</span></div>
+              <div><span class="success">Full project context loaded. Review with confidence.</span></div>
+              <div>&nbsp;</div>
+              <div><span class="comment"># Claude now knows WHY every line exists</span></div>
+              <div><span class="prompt">$</span> <span class="cmd">contextkeeper status</span></div>
+              <div><span class="output">Review mode: 38 decisions available for context</span></div>
+              <div><span class="success">No contradictions detected in this PR.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding cta-section">
+    <div class="container fade-up">
+      <h2>Bring your team onboard</h2>
+      <p>One install. Shared state. Every developer and every AI on the same page.</p>
+      <div class="cta-install">
+        <i class="bi bi-terminal" style="color:var(--text-dim)"></i>
+        <code>pip install contextkeeper</code>
+        <button class="copy-btn" onclick="copyText('pip install contextkeeper', this)" title="Copy"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <a href="pricing.html" style="color:var(--cyan); font-size:0.92rem; font-weight:500;">See team pricing <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="ck-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-brand">context<span>keeper</span></div>
+          <p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Product</h6>
+          <ul>
+            <li><a href="how-it-works.html">How It Works</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Install</h6>
+          <ul>
+            <li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li>
+            <li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li>
+            <li><a href="docs.html#mcp">MCP Registry</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h6>Company</h6>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li>
+            <li><a href="use-cases.html">Use Cases</a></li>
+            <li><a href="enterprise.html">Enterprise</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = btn.querySelector('i');
+        icon.className = 'bi bi-check-lg'; icon.style.color = 'var(--green)';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

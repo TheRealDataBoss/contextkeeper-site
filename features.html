@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contextkeeper Features - CLI, SDK, MCP, REST API, State Machine</title>
+  <meta name="description" content="Every contextkeeper feature explained. CLI tool, Python SDK, MCP server, REST API, state machine governance, dual-SHA tracking, invariant registry, and more.">
+  <link rel="canonical" href="https://contextkeeper.org/features.html">
+  <meta property="og:title" content="contextkeeper Features - CLI, SDK, MCP, REST API, State Machine">
+  <meta property="og:description" content="Every contextkeeper feature explained. CLI, SDK, MCP, REST API, state machine, and more.">
+  <meta property="og:url" content="https://contextkeeper.org/features.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="contextkeeper">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"contextkeeper Features","url":"https://contextkeeper.org/features.html","author":{"@type":"Organization","name":"Originami"}}
+  </script>
+
+  <style>
+    :root{--bg:#06080d;--bg-alt:#0c1018;--surface:#111722;--surface-hover:#182030;--border:#1e2a3a;--cyan:#00c8ff;--cyan-dim:#00c8ff22;--purple:#8b5cf6;--green:#34d399;--amber:#f59e0b;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc}
+    *,*::before,*::after{box-sizing:border-box}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-weight:400;line-height:1.7;overflow-x:hidden}
+    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;color:var(--text-bright)}
+    code,pre,.mono{font-family:'JetBrains Mono',monospace}
+    a{color:var(--cyan);text-decoration:none;transition:color .2s}a:hover{color:#66dbff}
+    ::selection{background:var(--cyan);color:var(--bg)}
+
+    .ck-nav{position:fixed;top:0;left:0;right:0;z-index:1050;padding:1rem 0;transition:all .35s;background:transparent}
+    .ck-nav.scrolled{background:rgba(6,8,13,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.6rem 0}
+    .ck-nav .nav-brand{font-weight:700;font-size:1.25rem;color:var(--text-bright);letter-spacing:-.02em}
+    .ck-nav .nav-brand span{color:var(--cyan)}
+    .ck-nav .navbar-nav .nav-link{color:var(--text-dim);font-size:.9rem;font-weight:400;padding:.5rem .85rem;transition:color .2s}
+    .ck-nav .navbar-nav .nav-link:hover,.ck-nav .navbar-nav .nav-link.active{color:var(--text-bright)}
+    .ck-nav .dropdown-menu{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.5rem 0}
+    .ck-nav .dropdown-item{color:var(--text-dim);font-size:.88rem;padding:.5rem 1.25rem}
+    .ck-nav .dropdown-item:hover{background:var(--surface-hover);color:var(--text-bright)}
+    .btn-cta{background:var(--cyan);color:var(--bg);font-weight:600;border:none;border-radius:6px;padding:.5rem 1.25rem;font-size:.88rem;transition:all .2s}
+    .btn-cta:hover{background:#33d4ff;color:var(--bg);transform:translateY(-1px)}
+    .navbar-toggler{border:1px solid var(--border);color:var(--text-dim)}
+    .navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")}
+
+    .section-padding{padding:6rem 0}.section-border{border-bottom:1px solid var(--border)}
+    .section-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--cyan);margin-bottom:.75rem}
+
+    .page-hero{padding-top:8rem;padding-bottom:4rem;text-align:center;position:relative;overflow:hidden}
+    .page-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,.06) 0%,transparent 70%);pointer-events:none}
+    .page-hero h1{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem}
+    .page-hero h1 .accent{color:var(--cyan)}
+    .page-hero .lead{color:var(--text-dim);font-size:1.15rem;max-width:600px;margin:0 auto}
+
+    /* Feature grid */
+    .feat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem;height:100%;transition:border-color .3s,transform .3s;cursor:pointer;position:relative;overflow:hidden}
+    .feat-card:hover{border-color:rgba(0,200,255,.25);transform:translateY(-3px)}
+    .feat-card .fc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1rem}
+    .feat-card h4{font-size:1rem;font-weight:600;margin-bottom:.5rem}
+    .feat-card .fc-desc{color:var(--text-dim);font-size:.88rem;margin-bottom:.75rem}
+    .feat-card .fc-detail{color:var(--text-dim);font-size:.82rem;line-height:1.65;display:none}
+    .feat-card.expanded .fc-detail{display:block}
+    .feat-card .fc-toggle{font-size:.78rem;color:var(--cyan);font-weight:500;display:inline-flex;align-items:center;gap:.3rem}
+    .feat-card .fc-toggle i{transition:transform .2s}
+    .feat-card.expanded .fc-toggle i{transform:rotate(180deg)}
+    .feat-card code{font-size:.78rem;color:var(--green);background:var(--bg);padding:.15rem .4rem;border-radius:4px}
+
+    .cyan-bg{background:rgba(0,200,255,.12);color:var(--cyan)}
+    .purple-bg{background:rgba(139,92,246,.12);color:var(--purple)}
+    .green-bg{background:rgba(52,211,153,.12);color:var(--green)}
+    .amber-bg{background:rgba(245,158,11,.12);color:var(--amber)}
+    .red-bg{background:rgba(239,68,68,.12);color:var(--red)}
+    .bright-bg{background:rgba(226,232,240,.1);color:var(--text-bright)}
+
+    /* Comparison table */
+    .cmp-wrap{overflow-x:auto;margin:2rem 0}
+    .cmp-table{width:100%;min-width:800px;border-collapse:separate;border-spacing:0;font-size:.82rem}
+    .cmp-table th{background:var(--bg-alt);color:var(--text-bright);padding:.65rem .75rem;text-align:left;font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap}
+    .cmp-table th:first-child{border-radius:8px 0 0 0;min-width:200px}
+    .cmp-table th:last-child{border-radius:0 8px 0 0}
+    .cmp-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border);color:var(--text-dim);text-align:center;vertical-align:middle}
+    .cmp-table td:first-child{text-align:left;color:var(--text);font-weight:500}
+    .cmp-table tr:last-child td{border-bottom:none}
+    .cmp-table .ck-col{background:rgba(0,200,255,.03)}
+    .cmp-table .ck-col.th-ck{color:var(--cyan)}
+    .check{color:var(--green);font-weight:700}.cross{color:var(--red);opacity:.5}.partial{color:var(--amber)}
+
+    /* CTA + Footer */
+    .cta-section{text-align:center}
+    .cta-section h2{font-size:2rem;font-weight:700;margin-bottom:1rem}
+    .cta-section p{color:var(--text-dim);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto}
+    .cta-install{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.25rem;display:inline-flex;align-items:center;gap:.75rem;font-size:.92rem}
+    .cta-install code{color:var(--green)}.cta-install .copy-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;transition:color .2s;font-size:1.1rem}.cta-install .copy-btn:hover{color:var(--cyan)}
+    .ck-footer{background:var(--bg-alt);border-top:1px solid var(--border);padding:4rem 0 2rem}
+    .ck-footer h6{color:var(--text-bright);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+    .ck-footer ul{list-style:none;padding:0;margin:0}.ck-footer li{margin-bottom:.5rem}.ck-footer li a{color:var(--text-dim);font-size:.88rem}.ck-footer li a:hover{color:var(--text-bright)}
+    .footer-brand{font-weight:700;font-size:1.1rem;color:var(--text-bright);margin-bottom:.5rem}.footer-brand span{color:var(--cyan)}
+    .footer-tagline{color:var(--text-dim);font-size:.85rem;max-width:260px}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:3rem;padding-top:1.5rem;text-align:center;color:var(--text-dim);font-size:.82rem}
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:991.98px){.page-hero{padding-top:7rem}.navbar-collapse{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:1rem;margin-top:.5rem}}
+    @media(max-width:575.98px){.section-padding{padding:3.5rem 0}.page-hero h1{font-size:1.8rem}}
+  </style>
+</head>
+<body>
+  <nav class="ck-nav navbar navbar-expand-lg" id="mainNav"><div class="container">
+    <a class="nav-brand" href="index.html">context<span>keeper</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navContent"><ul class="navbar-nav ms-auto align-items-lg-center">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
+      <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Use Cases</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="use-cases.html">Individual Developer</a></li><li><a class="dropdown-item" href="teams.html">Teams</a></li><li><a class="dropdown-item" href="enterprise.html">Enterprise</a></li></ul></li>
+      <li class="nav-item"><a class="nav-link active" href="features.html">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="connectors.html">Connectors</a></li>
+      <li class="nav-item"><a class="nav-link" href="docs.html">Docs</a></li>
+      <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+      <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <li class="nav-item ms-lg-2"><a class="nav-link" href="/app/auth/login.php" style="color:var(--cyan);font-weight:500;"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-cta" href="index.html#install">Get Started</a></li>
+    </ul></div>
+  </div></nav>
+
+  <main>
+  <section class="page-hero section-border"><div class="container">
+    <div class="section-label">Features</div>
+    <h1>Everything <span class="accent">contextkeeper</span> does</h1>
+    <p class="lead">12 capabilities. One tool. Zero context loss across any AI model.</p>
+  </div></section>
+
+  <!-- FEATURE GRID -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon cyan-bg"><i class="bi bi-terminal"></i></div>
+        <h4>CLI Tool</h4>
+        <div class="fc-desc">Full project lifecycle from the terminal. Five core commands.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br><code>contextkeeper init</code> - Initialize project<br><code>contextkeeper sync</code> - Capture session state<br><code>contextkeeper bootstrap</code> - Load state into new session<br><code>contextkeeper status</code> - View project state<br><code>contextkeeper doctor</code> - Health check + diagnostics</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon purple-bg"><i class="bi bi-braces"></i></div>
+        <h4>Python SDK</h4>
+        <div class="fc-desc">Typed models, Pydantic validation, programmatic session management.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br><code>from contextkeeper import Session</code><br>Full type hints for IDE autocomplete. Pydantic-validated models for state vectors, decisions, and invariants. Async support for high-throughput pipelines.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon green-bg"><i class="bi bi-plug"></i></div>
+        <h4>MCP Server</h4>
+        <div class="fc-desc">Native Claude integration. Registered on the official MCP registry.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Claude can read and write session state directly through the Model Context Protocol. No copy-paste, no CLI - Claude talks to contextkeeper natively. Listed on the official Anthropic MCP registry.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon amber-bg"><i class="bi bi-hdd-network"></i></div>
+        <h4>REST API</h4>
+        <div class="fc-desc">FastAPI-powered. 17 endpoints. OpenAPI spec. API key auth.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>17 RESTful endpoints covering sessions, decisions, invariants, bundles, and status. OpenAPI/Swagger documentation auto-generated. API key authentication with role-based access control.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon red-bg"><i class="bi bi-diagram-3"></i></div>
+        <h4>State Machine Governance</h4>
+        <div class="fc-desc">10 states. Enforced transitions. Protocol breach detection.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>DEL-v2 defines 10 lifecycle states from UNINITIATED to SEALED. Every transition is validated. Illegal jumps trigger PROTOCOL_BREACH, halting all operations. Fail-closed by design. <a href="how-it-works.html">See the full diagram</a>.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon cyan-bg"><i class="bi bi-fingerprint"></i></div>
+        <h4>Dual-SHA Tracking</h4>
+        <div class="fc-desc">Two SHA256 hashes per sync. Authority + repo integrity.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Every sync captures both an authority hash (authoritative file content) and a repo hash (git HEAD). On bootstrap, both are verified. Divergence without a recorded transition flags an integrity violation.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon green-bg"><i class="bi bi-box-seam"></i></div>
+        <h4>Deterministic Handoff Bundles</h4>
+        <div class="fc-desc">Self-contained ZIP with SHA256 manifest and full repo snapshot.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>14-step pipeline generates a portable ZIP containing: state vector, decision log, invariant registry, file manifest, execution evidence, and SHA256 manifest. Hand it to any AI, any developer, any auditor.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon purple-bg"><i class="bi bi-shield-lock"></i></div>
+        <h4>Invariant Registry</h4>
+        <div class="fc-desc">Named formal properties. Machine-checkable assertions.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Define constraints like "p99 latency under 200ms" or "no direct DOM manipulation in React." Each invariant is named, scoped, and traced to the session that established it. Gate checks enforce them.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon amber-bg"><i class="bi bi-people"></i></div>
+        <h4>Multi-Agent Coordination</h4>
+        <div class="fc-desc">Operator / Executor / Auditor role separation.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>No single AI can self-approve. Operators define tasks, Executors implement, Auditors verify. Role separation prevents unauthorized state transitions. <a href="teams.html">See team workflows</a>.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon bright-bg"><i class="bi bi-server"></i></div>
+        <h4>Multiple Backends</h4>
+        <div class="fc-desc">File, SQLite, and PostgreSQL storage backends.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Start with flat-file JSON for simplicity. Scale to SQLite for single-machine performance. Move to PostgreSQL for team/enterprise deployments. Same API, different storage.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon red-bg"><i class="bi bi-exclamation-octagon"></i></div>
+        <h4>Protocol Breach Detection</h4>
+        <div class="fc-desc">Fail-closed. Halt on violation. Require human recovery.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Illegal state transitions, SHA mismatches, invariant violations, and unauthorized role actions all trigger immediate halt. The system will not auto-recover. Human intervention required.</div>
+      </div></div>
+
+      <div class="col-md-6 col-lg-4 fade-up"><div class="feat-card" onclick="this.classList.toggle('expanded')">
+        <div class="fc-icon green-bg"><i class="bi bi-gear-wide-connected"></i></div>
+        <h4>CI/CD Integration</h4>
+        <div class="fc-desc">GitHub Actions. Gate enforcement in your pipeline.</div>
+        <div class="fc-toggle">Details <i class="bi bi-chevron-down"></i></div>
+        <div class="fc-detail"><br>Run <code>contextkeeper doctor</code> in CI to validate state integrity. Enforce gate checks before merge. Block deployments if invariants are violated. Works with GitHub Actions, GitLab CI, or any runner.</div>
+      </div></div>
+
+    </div>
+  </div></section>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section-padding section-border"><div class="container">
+    <div class="text-center mb-5 fade-up">
+      <div class="section-label">Comparison</div>
+      <h2 style="font-size:2rem;font-weight:700;">contextkeeper vs. alternatives</h2>
+    </div>
+    <div class="cmp-wrap fade-up">
+      <table class="cmp-table">
+        <thead><tr>
+          <th>Feature</th>
+          <th class="ck-col th-ck">contextkeeper</th>
+          <th>mem0</th>
+          <th>Letta</th>
+          <th>Aider</th>
+          <th>Claude Memory</th>
+          <th>session-forge</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Cross-model continuity</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="partial">~</span></td></tr>
+          <tr><td>Formal state machine</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>SHA256 integrity verification</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Decision log with rationale</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="partial">~</span></td><td><span class="partial">~</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Invariant registry</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Multi-agent role separation</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="partial">~</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Deterministic handoff bundles</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="partial">~</span></td></tr>
+          <tr><td>MCP server (Claude native)</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="check">&check;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>REST API</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Protocol breach detection</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>CI/CD gate enforcement</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td><td><span class="partial">~</span></td><td><span class="cross">&times;</span></td><td><span class="cross">&times;</span></td></tr>
+          <tr><td>Open source</td><td class="ck-col"><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="cross">&times;</span></td><td><span class="check">&check;</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-center mt-2 fade-up" style="color:var(--text-dim);font-size:.82rem;"><span class="check">&check;</span> Full support &nbsp; <span class="partial">~</span> Partial &nbsp; <span class="cross">&times;</span> Not available</p>
+  </div></section>
+
+  <section class="section-padding cta-section"><div class="container fade-up">
+    <h2>Start building with contextkeeper</h2>
+    <p>One install. Every feature. Free forever for individuals.</p>
+    <div class="cta-install"><i class="bi bi-terminal" style="color:var(--text-dim)"></i><code>pip install contextkeeper</code><button class="copy-btn" onclick="copyText('pip install contextkeeper',this)"><i class="bi bi-clipboard"></i></button></div>
+  </div></section>
+  </main>
+
+  <footer class="ck-footer"><div class="container"><div class="row g-4">
+    <div class="col-lg-3 col-md-6"><div class="footer-brand">context<span>keeper</span></div><p class="footer-tagline">Zero model drift between AI agents. Built by Originami.</p></div>
+    <div class="col-lg-3 col-md-6"><h6>Product</h6><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="docs.html">Documentation</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Install</h6><ul><li><a href="https://pypi.org/project/contextkeeper/" target="_blank" rel="noopener">PyPI</a></li><li><a href="https://github.com/TheRealDataBoss/contextkeeper" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.npmjs.com/package/contextkeeper" target="_blank" rel="noopener">npm</a></li><li><a href="docs.html#mcp">MCP Registry</a></li></ul></div>
+    <div class="col-lg-3 col-md-6"><h6>Company</h6><ul><li><a href="about.html">About</a></li><li><a href="mailto:masterboss@contextkeeper.org">Contact</a></li><li><a href="use-cases.html">Use Cases</a></li><li><a href="enterprise.html">Enterprise</a></li></ul></div>
+  </div><div class="footer-bottom">&copy; 2026 Originami. All rights reserved.</div></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nav=document.getElementById('mainNav');window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)});if(window.scrollY>40)nav.classList.add('scrolled');
+    const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+    function copyText(t,b){navigator.clipboard.writeText(t).then(()=>{const i=b.querySelector('i');i.className='bi bi-check-lg';i.style.color='var(--green)';setTimeout(()=>{i.className='bi bi-clipboard';i.style.color=''},1500)})}
+  </script>
+</body>
+</html>
