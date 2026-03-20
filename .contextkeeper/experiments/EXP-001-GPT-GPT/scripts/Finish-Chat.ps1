@@ -699,3 +699,68 @@ if (-not (Test-Path \)) {
 
 Add-Content \ "\03/20/2026 04:26:00,\,\,\"
 
+
+# ==========================================
+# TIER 6: ADAPTIVE MODEL WEIGHTING SYSTEM
+# ==========================================
+
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "model-weights.csv"
+
+# -------------------------
+# INIT WEIGHTS
+# -------------------------
+if (-not (Test-Path \)) {
+    "model,weight" | Out-File \
+    Add-Content \ "GPT,0.5"
+    Add-Content \ "CLAUDE,0.5"
+}
+
+\ = Import-Csv \
+
+\ = [double](\ | Where-Object { \ .model -eq "GPT" }).weight
+\ = [double](\ | Where-Object { \ .model -eq "CLAUDE" }).weight
+
+# -------------------------
+# SCORE MODELS (from Tier 5)
+# -------------------------
+\ = 1 - (\ / 7)
+\ = 1 - (\ / 7)
+
+# -------------------------
+# ADAPTIVE UPDATE (BOOSTING STYLE)
+# -------------------------
+\ = 0.1
+
+\ = \ + \ * (\ - \)
+\ = \ + \ * (\ - \)
+
+# normalize
+\ = \ + \
+\ = [math]::Round(\ / \, 3)
+\ = [math]::Round(\ / \, 3)
+
+# -------------------------
+# SAVE UPDATED WEIGHTS
+# -------------------------
+"model,weight" | Out-File \
+Add-Content \ "GPT,\"
+Add-Content \ "CLAUDE,\"
+
+# -------------------------
+# WEIGHTED DECISION
+# -------------------------
+if (\ -gt \) {
+    \ = "GPT"
+} else {
+    \ = "CLAUDE"
+}
+
+# -------------------------
+# OUTPUT
+# -------------------------
+Write-Host "UPDATED WEIGHTS:"
+Write-Host "GPT:" \
+Write-Host "CLAUDE:" \
+
+Write-Host "WEIGHTED WINNER:" \ -ForegroundColor Cyan
+
