@@ -1,12 +1,12 @@
 ﻿{
-    "run_id":  "RUN-005",
-    "timestamp_local":  "2026-03-19 21:08:40",
+    "run_id":  "RUN-006",
+    "timestamp_local":  "2026-03-19 22:12:57",
     "transport_condition":  "GITHUB_CONNECTOR_ONLY",
-    "repo_commit_sha":  "1030aa873c1d79dbccbeb088fcc969cbe676a235",
-    "prompt_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-005\\bootstrap-prompt.txt",
+    "repo_commit_sha":  "141ab2ead9bf3c8b82c3cfa6c43caeb5ea3ae5fa",
+    "prompt_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-006\\bootstrap-prompt.txt",
     "current_prompt_path":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\start-new-chat-experiment\\github-connector\\CURRENT-GITHUB-CONNECTOR-PROMPT.txt",
-    "response_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-005\\fresh-chat-response.txt",
-    "upload_list_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-005\\upload-list.txt",
+    "response_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-006\\fresh-chat-response.txt",
+    "upload_list_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-006\\upload-list.txt",
     "upload_packet_root":  "",
     "command_root":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\start-new-chat-experiment\\github-connector",
     "result":  "FAIL",
@@ -16,5 +16,5 @@
     "rule_failures":  "Target response was empty or too short to evaluate",
     "notes":  "Response text too short for controlled bootstrap validation.",
     "classification_confidence":  "HIGH",
-    "completed_timestamp_local":  "2026-03-19 22:12:37"
+    "completed_timestamp_local":  "2026-03-19 22:34:21"
 }

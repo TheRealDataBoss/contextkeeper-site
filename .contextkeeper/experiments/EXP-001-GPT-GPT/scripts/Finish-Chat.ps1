@@ -1,6 +1,5 @@
 ﻿param(
-    [Parameter(Mandatory = $true)]
-    [string]$RunId
+    [string]$RunId = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,6 +8,26 @@ $RepoRoot = "C:\Users\Steven\contextkeeper-site"
 $ExpRoot = Join-Path $RepoRoot ".contextkeeper\experiments\EXP-001-GPT-GPT"
 $RunsRoot = Join-Path $ExpRoot "runs"
 $LedgerPath = Join-Path $ExpRoot "RUN-LEDGER.csv"
+
+if ([string]::IsNullOrWhiteSpace($RunId)) {
+    if (-not (Test-Path $LedgerPath)) {
+        throw "RUN-LEDGER.csv not found: $LedgerPath"
+    }
+
+    $LedgerRows = @(Import-Csv $LedgerPath)
+    $PendingRows = @(
+        $LedgerRows |
+        Where-Object { $_.status -eq "STARTED" -and $_.result -eq "PENDING" } |
+        Sort-Object run_id
+    )
+
+    if ($PendingRows.Count -eq 0) {
+        throw "No active pending run found in $LedgerPath"
+    }
+
+    $RunId = $PendingRows[-1].run_id
+}
+
 $RunRoot = Join-Path $RunsRoot $RunId
 $ResponseFile = Join-Path $RunRoot "fresh-chat-response.txt"
 $MetaFile = Join-Path $RunRoot "run-metadata.json"
@@ -25,8 +44,9 @@ if ([string]::IsNullOrWhiteSpace($ClipboardText)) {
     throw "Clipboard is empty. Copy the full raw target-chat response first."
 }
 
-$Meta = Get-Content $MetaFile -Raw | ConvertFrom-Json
-$Transport = [string]$Meta.transport_condition
+$MetaRaw = Get-Content $MetaFile -Raw
+$MetaObj = $MetaRaw | ConvertFrom-Json
+$Transport = [string]$MetaObj.transport_condition
 
 Set-Content -Path $ResponseFile -Value $ClipboardText -Encoding UTF8
 
@@ -64,7 +84,6 @@ $HasStaleRun004 = $Response -match '\bRUN-004\b'
 $HasRunReference = $Response -match '\bRUN-\d{3}\b'
 $HasRepoVerificationDrift = $Response -match 'enumerate and verify repository presence|repository presence|connector evidence gathered|retrieve direct connector evidence'
 $HasUnsupportedControllerDrift = $Response -match 'controller handoff packet|latest active run|controller state'
-$HasNoRequiredArtifactFound = $Response -match 'required artifact cannot be found|cannot be found'
 $LooksTruncated = ($Response.Length -lt 40)
 
 if ($LooksTruncated) {
@@ -105,21 +124,24 @@ elseif ($Transport -eq "HYBRID" -and $HasRepoVerificationDrift) {
 }
 else {
     $Result = "PASS"
-    $PrimaryFailureClass = ""
-    $SecondaryFailureClass = ""
-    $RuleFailures = ""
     $Notes = "Auto-classified PASS from structural and mode-specific checks."
 }
 
-$Meta.result = $Result
-$Meta.status = "COMPLETED"
-$Meta.primary_failure_class = $PrimaryFailureClass
-$Meta.secondary_failure_class = $SecondaryFailureClass
-$Meta.rule_failures = $RuleFailures
-$Meta.notes = $Notes
-$Meta.classification_confidence = $Confidence
-$Meta.completed_timestamp_local = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$Meta | ConvertTo-Json -Depth 5 | Set-Content -Path $MetaFile -Encoding UTF8
+$MetaHash = [ordered]@{}
+foreach ($Prop in $MetaObj.PSObject.Properties) {
+    $MetaHash[$Prop.Name] = $Prop.Value
+}
+
+$MetaHash["result"] = $Result
+$MetaHash["status"] = "COMPLETED"
+$MetaHash["primary_failure_class"] = $PrimaryFailureClass
+$MetaHash["secondary_failure_class"] = $SecondaryFailureClass
+$MetaHash["rule_failures"] = $RuleFailures
+$MetaHash["notes"] = $Notes
+$MetaHash["classification_confidence"] = $Confidence
+$MetaHash["completed_timestamp_local"] = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+$MetaHash | ConvertTo-Json -Depth 10 | Set-Content -Path $MetaFile -Encoding UTF8
 
 $Rows = @()
 if (Test-Path $LedgerPath) {

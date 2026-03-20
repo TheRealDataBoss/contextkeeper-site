@@ -17,9 +17,8 @@ $ArtifactPath = Join-Path $ExpRoot "ARTIFACT-VERSIONS.csv"
 $WhitepaperPath = Join-Path $RepoRoot "docs\whitepapers\EXP-001-GPT-GPT-Handoff-Reliability-v2.0a.docx"
 $ContinuityPath = Join-Path $OutRoot "START-NEW-CHAT-CONTINUITY.md"
 $InstructionsPath = Join-Path $OutRoot "START-NEW-CHAT-INSTRUCTIONS.md"
-$FinishScriptPath = Join-Path $ScriptsRoot "Finish-Chat.ps1"
 $ControllerScriptPath = Join-Path $ScriptsRoot "Start-New-Chat.ps1"
-$RunScriptPath = Join-Path $ScriptsRoot "Start-New-Chat-Experiment.ps1"
+$FinishChatCommand = "finish-chat"
 
 $LatestRun = Get-ChildItem $RunsRoot -Directory | Sort-Object Name | Select-Object -Last 1
 $LatestRunName = if ($LatestRun) { $LatestRun.Name } else { "NONE" }
@@ -28,30 +27,18 @@ $LatestRunRoot = if ($LatestRun) { $LatestRun.FullName } else { "" }
 $LatestRunMetaPath = if ($LatestRun) { Join-Path $LatestRunRoot "run-metadata.json" } else { "" }
 $LatestRunResponsePath = if ($LatestRun) { Join-Path $LatestRunRoot "fresh-chat-response.txt" } else { "" }
 
-$LatestRunMetaText = if ($LatestRunMetaPath -and (Test-Path $LatestRunMetaPath)) { Get-Content $LatestRunMetaPath -Raw } else { "{}" }
-
-$UploadPacketRoot = ""
-$CommandRoot = ""
-$CurrentBootstrapPrompt = ""
-
-try {
-    if ($LatestRunMetaPath -and (Test-Path $LatestRunMetaPath)) {
-        $MetaObj = Get-Content $LatestRunMetaPath -Raw | ConvertFrom-Json
-        if ($null -ne $MetaObj.upload_packet_root) {
-            $UploadPacketRoot = [string]$MetaObj.upload_packet_root
-        }
-        if ($null -ne $MetaObj.command_root) {
-            $CommandRoot = [string]$MetaObj.command_root
-        }
-        if ($null -ne $MetaObj.current_bootstrap_prompt) {
-            $CurrentBootstrapPrompt = [string]$MetaObj.current_bootstrap_prompt
-        }
-    }
-} catch {
-    $UploadPacketRoot = ""
-    $CommandRoot = ""
-    $CurrentBootstrapPrompt = ""
+$MetaObj = $null
+if ($LatestRunMetaPath -and (Test-Path $LatestRunMetaPath)) {
+    $MetaObj = Get-Content $LatestRunMetaPath -Raw | ConvertFrom-Json
 }
+
+$TransportCondition = if ($MetaObj -and $MetaObj.transport_condition) { [string]$MetaObj.transport_condition } else { "" }
+$CommandRoot = if ($MetaObj -and $MetaObj.command_root) { [string]$MetaObj.command_root } else { "" }
+$UploadPacketRoot = if ($MetaObj -and $MetaObj.upload_packet_root) { [string]$MetaObj.upload_packet_root } else { "" }
+$CurrentPromptPath = if ($MetaObj -and $MetaObj.current_prompt_path) { [string]$MetaObj.current_prompt_path } else { "" }
+$RunStatus = if ($MetaObj -and $MetaObj.status) { [string]$MetaObj.status } else { "" }
+$RunResult = if ($MetaObj -and $MetaObj.result) { [string]$MetaObj.result } else { "" }
+$RunTimestamp = if ($MetaObj -and $MetaObj.timestamp_local) { [string]$MetaObj.timestamp_local } else { "" }
 
 $UploadFileNames = @()
 if ($UploadPacketRoot -and (Test-Path $UploadPacketRoot)) {
@@ -61,7 +48,7 @@ if ($UploadPacketRoot -and (Test-Path $UploadPacketRoot)) {
 $UploadFileListText = if ($UploadFileNames.Count -gt 0) {
     ($UploadFileNames | ForEach-Object { "- $_" }) -join [Environment]::NewLine
 } else {
-    "- [UPLOAD FILE LIST UNAVAILABLE]"
+    ""
 }
 
 $LedgerPreview = ""
@@ -72,6 +59,91 @@ if (Test-Path $LedgerPath) {
 $ArtifactPreview = ""
 if (Test-Path $ArtifactPath) {
     $ArtifactPreview = (Get-Content $ArtifactPath | Select-Object -First 10) -join [Environment]::NewLine
+}
+
+$TargetInstruction = switch ($TransportCondition) {
+    "PROMPT_ATTACHMENT" {
+@"
+Open a fresh GPT target chat.
+
+Go to:
+$CommandRoot
+
+Upload all files from:
+$UploadPacketRoot
+
+$UploadFileListText
+
+Open locally:
+$CurrentPromptPath
+
+Copy the full contents exactly.
+
+Paste into the fresh target chat.
+
+Send the message.
+
+Copy the full raw response.
+"@
+    }
+    "GITHUB_CONNECTOR_ONLY" {
+@"
+Open a fresh GPT target chat.
+
+Enable the GitHub connector for:
+TheRealDataBoss/contextkeeper-site
+
+Do not upload prompt-box files for this run.
+
+Open locally:
+$CurrentPromptPath
+
+Copy the full contents exactly.
+
+Paste into the fresh target chat.
+
+Send the message.
+
+Copy the full raw response.
+"@
+    }
+    "HYBRID" {
+@"
+Open a fresh GPT target chat.
+
+Enable the GitHub connector for:
+TheRealDataBoss/contextkeeper-site
+
+Do not upload prompt-box files unless the prompt explicitly requires it.
+
+Open locally:
+$CurrentPromptPath
+
+Copy the full contents exactly.
+
+Paste into the fresh target chat.
+
+Send the message.
+
+Copy the full raw response.
+"@
+    }
+    default {
+@"
+Open a fresh GPT target chat.
+
+Open locally:
+$CurrentPromptPath
+
+Copy the full contents exactly.
+
+Paste into the fresh target chat.
+
+Send the message.
+
+Copy the full raw response.
+"@
+    }
 }
 
 $Instructions = @"
@@ -90,8 +162,10 @@ START NEW CHAT
 7. Constraints and risks
 
 ## Controller Standard
-The controller must provide exact absolute paths when they are present in the uploaded files.
-Do not replace exact paths with placeholders, ellipses, or summaries.
+Use exact absolute paths when present.
+Do not replace exact paths with ellipses, placeholders, or summaries.
+Use the current active run dynamically.
+Use the operator command `finish-chat` for post-response logging instructions.
 "@
 Set-Content -Path $InstructionsPath -Value $Instructions -Encoding UTF8
 
@@ -105,6 +179,12 @@ A fresh controller chat must receive:
 - START-NEW-CHAT-PACKET.md
 - START-NEW-CHAT-CONTINUITY.md
 - START-NEW-CHAT-INSTRUCTIONS.md
+
+Controller replacement command:
+start-new-chat
+
+Target run completion command:
+finish-chat
 "@
 Set-Content -Path $ContinuityPath -Value $Continuity -Encoding UTF8
 
@@ -120,16 +200,17 @@ $Packet = @"
 - Ledger: $LedgerPath
 - Artifact versions: $ArtifactPath
 
-## Latest Active Run
+## Current Active Run
 - Run ID: $LatestRunName
 - Run folder: $LatestRunRoot
+- Transport condition: $TransportCondition
+- Status: $RunStatus
+- Result: $RunResult
+- Timestamp local: $RunTimestamp
 - Command root: $CommandRoot
 - Upload packet root: $UploadPacketRoot
-- Current bootstrap prompt: $CurrentBootstrapPrompt
+- Current prompt path: $CurrentPromptPath
 - Response target file: $LatestRunResponsePath
-
-## Latest Run Metadata
-$LatestRunMetaText
 
 ## Ledger Tail
 $LedgerPreview
@@ -137,65 +218,41 @@ $LedgerPreview
 ## Artifact Version Preview
 $ArtifactPreview
 
-## OPERATOR-READY NEXT ACTION
-Use these exact paths and files.
+## Operator-Ready Next Action
+$TargetInstruction
 
-### Open this target-chat command folder
-$CommandRoot
+## Exact Post-Response Logging Instruction
+Copy the full raw target-chat response to your clipboard.
 
-### Upload these files from this upload packet folder
-$UploadPacketRoot
+Open PowerShell.
 
-$UploadFileListText
+Run exactly:
 
-### Open this local file and copy its full contents exactly
-$CurrentBootstrapPrompt
-
-### After the target chat replies, copy the full raw response and run exactly one of:
-$FinishScriptPath -RunId $LatestRunName -Result PASS
-$FinishScriptPath -RunId $LatestRunName -Result FAIL
-
-## Exact Next Target-Chat Instruction
-If the latest run is still STARTED and PENDING:
-1. Open a fresh GPT target chat.
-2. Go to:
-   $CommandRoot
-3. Upload all bundled files from:
-   $UploadPacketRoot
-4. Open this file locally:
-   $CurrentBootstrapPrompt
-5. Copy the CONTENTS of that file.
-6. Paste those CONTENTS into the fresh target chat exactly.
-7. Send it.
-8. Copy the full raw target-chat response.
-9. Return to the controller chat.
-10. Run:
-    $FinishScriptPath -RunId $LatestRunName -Result PASS
-    or
-    $FinishScriptPath -RunId $LatestRunName -Result FAIL
+$FinishChatCommand
 
 ## Controller Re-Handoff Instruction
-1. Run:
-   $ControllerScriptPath
-2. Open a fresh GPT controller chat.
-3. Go to:
-   $OutRoot
-4. Upload:
-   START-NEW-CHAT-PACKET.md
-   START-NEW-CHAT-CONTINUITY.md
-   START-NEW-CHAT-INSTRUCTIONS.md
-5. Paste:
+Open PowerShell.
+
+Run exactly:
+
+start-new-chat
+
+Open a fresh GPT controller chat.
+
+Go to:
+$OutRoot
+
+Upload:
+START-NEW-CHAT-PACKET.md
+START-NEW-CHAT-CONTINUITY.md
+START-NEW-CHAT-INSTRUCTIONS.md
+
+Paste exactly:
 
 START NEW CHAT
-
-## Trigger Summary
-- To replace the controller, use:
-  $ControllerScriptPath
-- To start the next target run, use:
-  $RunScriptPath
 "@
 
 $PacketPath = Join-Path $OutRoot "START-NEW-CHAT-PACKET.md"
 Set-Content -Path $PacketPath -Value $Packet -Encoding UTF8
 
-Get-Item $PacketPath, $ContinuityPath, $InstructionsPath | Select-Object Name, Length, LastWriteTime
+Get-ChildItem $OutRoot | Select-Object Name, Length, LastWriteTime | Sort-Object Name

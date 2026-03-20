@@ -1,0 +1,16 @@
+﻿You are starting as a fresh GPT chat for a controlled GPT-to-GPT handoff run.
+
+Use the GitHub connector against repository TheRealDataBoss/contextkeeper-site as the source of truth for this run.
+Do not rely on prior chat history, external memory, or unstated assumptions.
+Do not use prompt-box file attachments for this run.
+
+Read the required experiment materials from the repository and return exactly these sections:
+
+1. Confirmed state
+2. Active task
+3. Constraints
+4. Unknowns
+5. First action you will take
+
+If a required artifact cannot be found in the repository, say so explicitly.
+

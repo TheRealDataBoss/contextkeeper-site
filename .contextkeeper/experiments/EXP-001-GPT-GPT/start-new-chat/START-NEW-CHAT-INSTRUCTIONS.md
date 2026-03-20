@@ -13,5 +13,7 @@ START NEW CHAT
 7. Constraints and risks
 
 ## Controller Standard
-The controller must provide exact absolute paths when they are present in the uploaded files.
-Do not replace exact paths with placeholders, ellipses, or summaries.
+Use exact absolute paths when present.
+Do not replace exact paths with ellipses, placeholders, or summaries.
+Use the current active run dynamically.
+Use the operator command inish-chat for post-response logging instructions.
