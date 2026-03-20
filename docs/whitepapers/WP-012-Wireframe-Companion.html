@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContextKeeper — UX Wireframe Specification Companion to WP-012</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
+  :root {
+    --navy: #1B2A4A;
+    --accent: #2E75B6;
+    --accent-light: #4A9FDE;
+    --dark: #0D1117;
+    --surface: #161B22;
+    --surface2: #21262D;
+    --border: #30363D;
+    --text: #E6EDF3;
+    --text-muted: #8B949E;
+    --text-dim: #484F58;
+    --green: #3FB950;
+    --amber: #D29922;
+    --red: #F85149;
+    --purple: #8B5CF6;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ──────────────────────────────────────────── */
+  .doc-header {
+    background: var(--navy);
+    border-bottom: 2px solid var(--accent);
+    padding: 32px 48px;
+  }
+  .doc-header .series { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 8px; font-family: var(--mono); }
+  .doc-header h1 { font-size: 26px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .doc-header .subtitle { font-size: 14px; color: var(--text-muted); }
+  .doc-header .meta { margin-top: 16px; display: flex; gap: 24px; font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
+  .doc-header .meta span { background: var(--surface); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); }
+
+  .toc { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 48px; }
+  .toc h2 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; font-family: var(--mono); }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 4px; }
+  .toc-item { font-size: 12px; color: var(--text-muted); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .toc-item:hover { background: var(--surface2); color: var(--accent-light); }
+  .toc-item .num { color: var(--accent); margin-right: 6px; font-family: var(--mono); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 40px 48px; }
+
+  /* ── SECTION ─────────────────────────────────────────── */
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .section-title { font-size: 20px; font-weight: 700; color: white; }
+  .section-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.7; }
+
+  /* ── WIREFRAME FRAME ─────────────────────────────────── */
+  .wf-frame {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .wf-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .wf-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .wf-dot.r { background: var(--red); opacity: 0.6; }
+  .wf-dot.a { background: var(--amber); opacity: 0.6; }
+  .wf-dot.g { background: var(--green); opacity: 0.6; }
+  .wf-url { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-left: 8px; }
+  .wf-label { font-size: 10px; font-family: var(--mono); color: var(--accent); margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── SPEC TABLE ──────────────────────────────────────── */
+  .spec-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+  .spec-table th { background: var(--navy); color: var(--accent-light); font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+  .spec-table td { padding: 8px 12px; border: 1px solid var(--border); color: var(--text); vertical-align: top; line-height: 1.5; }
+  .spec-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .spec-table .field-name { font-family: var(--mono); color: var(--accent-light); font-size: 11px; }
+  .spec-table .field-type { font-family: var(--mono); color: var(--amber); font-size: 11px; }
+  .spec-table .required { color: var(--red); font-family: var(--mono); font-size: 10px; }
+  .spec-table .optional { color: var(--text-dim); font-family: var(--mono); font-size: 10px; }
+
+  /* ── WIREFRAME SCREENS ───────────────────────────────── */
+
+  /* Registration */
+  .reg-screen { padding: 0; }
+  .reg-split { display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+  .reg-left { background: var(--navy); padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+  .reg-left .brand { font-size: 22px; font-weight: 700; color: white; margin-bottom: 32px; }
+  .reg-left .brand span { color: var(--accent); }
+  .reg-left h2 { font-size: 20px; font-weight: 700; color: white; margin-bottom: 12px; line-height: 1.3; }
+  .reg-left p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+  .reg-left .proof-items { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .reg-left .proof-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7); }
+  .reg-left .proof-item .check { color: var(--green); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .reg-right { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+  .reg-right h3 { font-size: 18px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .reg-right .sub { font-size: 12px; color: var(--text-muted); margin-bottom: 28px; }
+  .wf-field { margin-bottom: 14px; }
+  .wf-field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .wf-input { width: 100%; background: var(--dark); border: 1px solid var(--border); border-radius: 6px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: var(--sans); }
+  .wf-input.placeholder { color: var(--text-dim); }
+  .wf-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: 6px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 6px; }
+  .wf-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; margin-top: 0; }
+  .wf-divider { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--text-dim); font-size: 11px; }
+  .wf-divider::before, .wf-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Profiling */
+  .profile-screen { padding: 40px; }
+  .profile-screen .progress { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
+  .profile-screen .progress .step { width: 28px; height: 28px; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--mono); }
+  .profile-screen .progress .step.active { background: var(--accent); color: white; }
+  .profile-screen .progress .step.done { background: var(--green); color: white; }
+  .profile-screen .progress .step.pending { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+  .profile-screen .progress .connector { flex: 1; height: 1px; background: var(--border); }
+  .profile-screen .progress .connector.done { background: var(--green); }
+  .profile-screen h2 { font-size: 20px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .profile-screen .q-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .card-option { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.15s; }
+  .card-option:hover { border-color: var(--accent); background: rgba(46,117,182,0.08); }
+  .card-option.selected { border-color: var(--accent); background: rgba(46,117,182,0.12); }
+  .card-option .card-icon { font-size: 22px; margin-bottom: 8px; }
+  .card-option .card-title { font-size: 13px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .card-option .card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .card-option.muted { opacity: 0.5; border-style: dashed; }
+
+  /* Checkbox multi-select */
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+  .check-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 6px; cursor: pointer; }
+  .check-item.selected { border-color: var(--accent); background: rgba(46,117,182,0.08); }
+  .check-box { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+  .check-box.checked { background: var(--accent); border-color: var(--accent); color: white; }
+  .check-label { font-size: 13px; color: var(--text); }
+  .check-sub { font-size: 10px; color: var(--text-muted); }
+
+  /* Bootstrap interview */
+  .interview-screen { padding: 40px; }
+  .interview-screen .interview-header { margin-bottom: 28px; }
+  .interview-screen .interview-header .back { font-size: 12px; color: var(--accent); cursor: pointer; margin-bottom: 12px; }
+  .interview-screen .interview-header h2 { font-size: 20px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .interview-screen .interview-header p { font-size: 13px; color: var(--text-muted); }
+  .interview-q { margin-bottom: 20px; }
+  .interview-q label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block; }
+  .interview-q .q-hint { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-style: italic; }
+  .wf-textarea { width: 100%; background: var(--dark); border: 1px solid var(--border); border-radius: 6px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: var(--sans); resize: vertical; min-height: 60px; }
+  .wf-select { width: 100%; background: var(--dark); border: 1px solid var(--border); border-radius: 6px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: var(--sans); appearance: none; }
+  .char-counter { text-align: right; font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--mono); }
+  .char-counter.warning { color: var(--amber); }
+  .high-risk-flag { display: none; background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.3); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--red); margin-top: 8px; }
+  .high-risk-flag.visible { display: flex; align-items: flex-start; gap: 8px; }
+  .check-multi { display: flex; flex-wrap: wrap; gap: 8px; }
+  .check-tag { display: flex; align-items: center; gap: 6px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; cursor: pointer; font-size: 12px; color: var(--text); }
+  .check-tag.selected { border-color: var(--accent); background: rgba(46,117,182,0.12); color: var(--accent-light); }
+
+  /* Scaffold confirmation */
+  .scaffold-screen { padding: 40px; }
+  .scaffold-screen h2 { font-size: 20px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .scaffold-screen .sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .scaffold-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .scaffold-card .sc-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-family: var(--mono); margin-bottom: 8px; }
+  .scaffold-card .sc-title { font-size: 15px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .scaffold-card .sc-desc { font-size: 12px; color: var(--text-muted); }
+  .invariant-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .inv-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--dark); border: 1px solid var(--border); border-radius: 6px; }
+  .inv-check { flex-shrink: 0; width: 16px; height: 16px; border-radius: 3px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 9px; color: white; margin-top: 2px; }
+  .inv-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+  .governance-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(59,245,80,0.1); border: 1px solid rgba(59,245,80,0.2); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--green); font-family: var(--mono); }
+  .governance-badge.standard { background: rgba(46,117,182,0.1); border-color: rgba(46,117,182,0.2); color: var(--accent-light); }
+  .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-row .wf-btn { flex: 2; }
+  .btn-row .wf-btn.secondary { flex: 1; }
+
+  /* Dashboard - first session */
+  .dashboard-screen { display: grid; grid-template-columns: 220px 1fr; min-height: 480px; }
+  .dash-sidebar { background: var(--surface2); border-right: 1px solid var(--border); padding: 20px 0; }
+  .dash-sidebar .ds-brand { padding: 0 16px 16px; font-size: 15px; font-weight: 700; color: white; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .dash-sidebar .ds-brand span { color: var(--accent); }
+  .ds-nav-item { padding: 8px 16px; font-size: 12px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .ds-nav-item.active { background: rgba(46,117,182,0.1); color: var(--accent-light); border-left: 2px solid var(--accent); }
+  .ds-nav-item .nav-icon { width: 14px; text-align: center; font-size: 13px; }
+  .ds-project { margin: 12px 0; border-top: 1px solid var(--border); padding-top: 12px; }
+  .ds-project-label { padding: 0 16px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; font-family: var(--mono); }
+  .ds-project-item { padding: 6px 16px; font-size: 12px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .ds-project-item.active { color: var(--accent-light); }
+  .ds-project-item .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .dash-main { padding: 28px; overflow: hidden; }
+  .dash-banner { background: rgba(46,117,182,0.08); border: 1px solid rgba(46,117,182,0.2); border-radius: 8px; padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 14px; }
+  .dash-banner .banner-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .dash-banner .banner-text h3 { font-size: 14px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .dash-banner .banner-text p { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  .copy-box { display: flex; align-items: center; gap: 8px; background: var(--dark); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; }
+  .copy-box .copy-preview { font-family: var(--mono); font-size: 10px; color: var(--text-dim); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy-btn { background: var(--accent); color: white; border: none; border-radius: 4px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .stat-card .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); font-family: var(--mono); margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 22px; font-weight: 700; color: white; font-family: var(--mono); }
+  .stat-card .stat-value.accent { color: var(--accent-light); }
+  .stat-card .stat-value.green { color: var(--green); }
+  .stat-card .stat-sub { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+  .decision-list { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .dl-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .dl-header h4 { font-size: 12px; font-weight: 600; color: var(--text); }
+  .dl-header .dl-count { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  .dl-empty { padding: 40px; text-align: center; }
+  .dl-empty .dl-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.3; }
+  .dl-empty h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .dl-empty p { font-size: 12px; color: var(--text-muted); }
+  .dl-item { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+  .dl-item:last-child { border-bottom: none; }
+  .dl-item .dl-time { font-family: var(--mono); font-size: 10px; color: var(--text-dim); white-space: nowrap; margin-top: 2px; }
+  .dl-item .dl-content { flex: 1; }
+  .dl-item .dl-chosen { font-size: 12px; font-weight: 600; color: white; margin-bottom: 2px; }
+  .dl-item .dl-context { font-size: 11px; color: var(--text-muted); }
+
+  /* Wow moment confirmation */
+  .wow-screen { padding: 40px; text-align: center; }
+  .wow-icon { font-size: 48px; margin-bottom: 16px; }
+  .wow-screen h2 { font-size: 22px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .wow-screen p { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; max-width: 400px; margin-left: auto; margin-right: auto; }
+  .wow-stats { display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .wow-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 24px; min-width: 100px; }
+  .wow-stat .ws-value { font-size: 24px; font-weight: 700; color: var(--accent-light); font-family: var(--mono); }
+  .wow-stat .ws-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 4px; font-family: var(--mono); }
+  .wow-stat .ws-tooltip { font-size: 10px; color: var(--text-dim); margin-top: 4px; font-style: italic; }
+
+  /* Mobile screen */
+  .mobile-frame { width: 320px; margin: 0 auto; background: var(--surface); border: 6px solid var(--surface2); border-radius: 24px; overflow: hidden; box-shadow: 0 0 0 1px var(--border); }
+  .mobile-notch { background: var(--surface2); height: 28px; display: flex; align-items: center; justify-content: center; }
+  .mobile-notch .notch { width: 80px; height: 14px; background: var(--dark); border-radius: 8px; }
+  .mobile-content { padding: 20px 16px; }
+
+  /* Annotation callouts */
+  .annotation { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 4px; }
+  .ann-num { background: var(--accent); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-family: var(--mono); }
+  .ann-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .ann-text strong { color: var(--text); }
+
+  .annotations-block { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; }
+  .annotations-block h4 { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-family: var(--mono); margin-bottom: 12px; }
+
+  /* State specs */
+  .state-spec { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 8px; }
+  .state-spec .state-name { font-family: var(--mono); font-size: 11px; color: var(--amber); margin-bottom: 4px; }
+  .state-spec .state-desc { font-size: 12px; color: var(--text); margin-bottom: 6px; }
+  .state-spec .state-trigger { font-size: 11px; color: var(--text-muted); }
+  .state-spec .state-trigger strong { color: var(--accent-light); }
+
+  /* Error state */
+  .error-demo { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 8px; }
+  .err-inline { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.2); border-radius: 4px; padding: 8px 12px; font-size: 12px; color: #FF9492; margin-top: 6px; display: flex; align-items: flex-start; gap: 6px; }
+  .err-breach { background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.2); border-radius: 8px; padding: 16px; }
+  .err-breach .breach-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .err-breach .breach-title { font-size: 14px; font-weight: 700; color: var(--amber); }
+  .err-breach .breach-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .err-breach .breach-actions { margin-top: 12px; display: flex; gap: 8px; }
+  .breach-btn { padding: 6px 14px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; }
+  .breach-btn.primary { background: var(--amber); color: var(--dark); }
+  .breach-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+
+  /* Responsive layout for print/narrow */
+  @media (max-width: 768px) {
+    main { padding: 24px 20px; }
+    .reg-split { grid-template-columns: 1fr; }
+    .reg-left { display: none; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .dashboard-screen { grid-template-columns: 1fr; }
+    .dash-sidebar { display: none; }
+    .check-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #1a1a1a; }
+    .doc-header { background: #1B2A4A; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="series">ContextKeeper Enterprise Engineering White Paper Series</div>
+  <h1>UX Wireframe Specification</h1>
+  <div class="subtitle">Companion to WP-012: User Experience Architecture and Onboarding Design — Screen-by-Screen Implementation Blueprint</div>
+  <div class="meta">
+    <span>WP-012-COMPANION v1.0</span>
+    <span>March 18, 2026</span>
+    <span>Author: Steven Wazlavek</span>
+    <span>Classification: Internal Product Reference</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>Screens Specified in This Document</h2>
+  <div class="toc-grid">
+    <div class="toc-item"><span class="num">S-01</span> Registration and Landing</div>
+    <div class="toc-item"><span class="num">S-02</span> Profiling Q1: What Are You Here to Do</div>
+    <div class="toc-item"><span class="num">S-03</span> Profiling Q2: AI Tools Selection</div>
+    <div class="toc-item"><span class="num">S-04</span> Profiling Q3: Experience Level</div>
+    <div class="toc-item"><span class="num">S-05</span> Bootstrap Interview (All 6 Questions)</div>
+    <div class="toc-item"><span class="num">S-06</span> Scaffold Confirmation</div>
+    <div class="toc-item"><span class="num">S-07</span> First Session Dashboard (Guided Mode)</div>
+    <div class="toc-item"><span class="num">S-08</span> Wow Moment Confirmation Card</div>
+    <div class="toc-item"><span class="num">S-09</span> Second Session Continuity Banner</div>
+    <div class="toc-item"><span class="num">S-10</span> Empty State Designs (All 7 Screens)</div>
+    <div class="toc-item"><span class="num">S-11</span> Error State Designs (3 Categories)</div>
+    <div class="toc-item"><span class="num">S-12</span> Mobile Onboarding Adaptation</div>
+    <div class="toc-item"><span class="num">S-13</span> Onboarding State Machine Diagram</div>
+    <div class="toc-item"><span class="num">S-14</span> Progressive Disclosure Toggle</div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════ S-01: REGISTRATION ══════ -->
+<div class="section" id="s01">
+  <div class="section-header">
+    <span class="section-num">S-01</span>
+    <span class="section-title">Registration and Landing Screen</span>
+  </div>
+  <p class="section-desc">The registration screen is the first thing a new user sees. The left panel establishes the value proposition in three proof points. The right panel is a minimal registration form. Google OAuth is offered as the primary path; email/password is secondary. The screen must load in under 1.5 seconds; no animation or asset that delays this.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/register</span>
+      <span class="wf-label">S-01</span>
+    </div>
+    <div class="reg-screen">
+      <div class="reg-split">
+        <div class="reg-left">
+          <div class="brand">Context<span>Keeper</span></div>
+          <h2>Your AI sessions should build on each other, not start from scratch.</h2>
+          <p>ContextKeeper keeps every decision, every rule, and every insight from every AI session — and brings it forward into the next one.</p>
+          <div class="proof-items">
+            <div class="proof-item"><span class="check">✓</span><span>Works with Claude, ChatGPT, Gemini, Cursor, and any AI tool</span></div>
+            <div class="proof-item"><span class="check">✓</span><span>First governed session in under 5 minutes — no configuration required</span></div>
+            <div class="proof-item"><span class="check">✓</span><span>Free tier includes 3 projects and 50 sessions per month</span></div>
+          </div>
+        </div>
+        <div class="reg-right">
+          <h3>Create your free account</h3>
+          <div class="sub">No credit card required</div>
+          <button class="wf-btn secondary">🔵 &nbsp; Continue with Google</button>
+          <div class="wf-divider">or sign up with email</div>
+          <div class="wf-field">
+            <label>Full Name</label>
+            <div class="wf-input placeholder">Steven Wazlavek</div>
+          </div>
+          <div class="wf-field">
+            <label>Email Address</label>
+            <div class="wf-input placeholder">you@example.com</div>
+          </div>
+          <div class="wf-field">
+            <label>Password</label>
+            <div class="wf-input placeholder">Create a password (min 8 characters)</div>
+          </div>
+          <button class="wf-btn">Create Free Account →</button>
+          <div style="text-align:center; margin-top:14px; font-size:11px; color:var(--text-dim)">
+            Already have an account? <span style="color:var(--accent-light); cursor:pointer">Sign in</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>Google OAuth button</strong> is styled as secondary (ghost button) but positioned first. Research shows conversion is higher when OAuth is the first option but not the most visually dominant, reducing pressure for users who prefer email.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Left panel is hidden on mobile</strong> (viewport under 768px). The value proposition moves to a 3-line summary above the form on mobile, not a separate panel.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>No password strength meter</strong> on registration — it adds visual noise and the bcrypt requirement is minimum 8 characters. The error state appears only after submission attempt with a too-short password.</div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-text"><strong>On successful registration</strong>, the page does NOT redirect to a dashboard. It advances to S-02 (Profiling Q1) without a page reload, using a slide-in animation on the right panel only.</div></div>
+  </div>
+
+  <table class="spec-table">
+    <tr><th>Field</th><th>Type</th><th>Validation</th><th>Error Message</th></tr>
+    <tr><td class="field-name">full_name</td><td class="field-type">text input</td><td>Required, min 2 chars, max 100 chars</td><td>"Please enter your name"</td></tr>
+    <tr><td class="field-name">email</td><td class="field-type">email input</td><td>Required, valid email format, unique in users table</td><td>"That email is already registered — <span style='color:var(--accent-light)'>sign in instead</span>"</td></tr>
+    <tr><td class="field-name">password</td><td class="field-type">password input</td><td>Required, min 8 characters</td><td>"Password must be at least 8 characters"</td></tr>
+  </table>
+</div>
+
+<!-- ══════ S-02: PROFILING Q1 ══════ -->
+<div class="section" id="s02">
+  <div class="section-header">
+    <span class="section-num">S-02</span>
+    <span class="section-title">Profiling Interview — Question 1: What Are You Here to Do?</span>
+  </div>
+  <p class="section-desc">Presented immediately after account creation, before any dashboard. Five card options on a single screen. No back button (they just registered). Progress indicator shows 1 of 3 steps. The fifth option (evaluate for team) is visually de-emphasized.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/welcome</span>
+      <span class="wf-label">S-02</span>
+    </div>
+    <div class="profile-screen">
+      <div class="progress">
+        <div class="step active">1</div>
+        <div class="connector"></div>
+        <div class="step pending">2</div>
+        <div class="connector"></div>
+        <div class="step pending">3</div>
+      </div>
+      <h2>What are you here to do?</h2>
+      <div class="q-sub">Pick the one that fits best — you can always change direction later.</div>
+      <div class="card-grid">
+        <div class="card-option selected">
+          <div class="card-icon">🏗️</div>
+          <div class="card-title">Build something new with AI</div>
+          <div class="card-desc">I have an idea and want to start building</div>
+        </div>
+        <div class="card-option">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Add AI to an existing project</div>
+          <div class="card-desc">I have code and want to make it smarter</div>
+        </div>
+        <div class="card-option">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">Fix sessions that lose context</div>
+          <div class="card-desc">My AI sessions drift and forget things</div>
+        </div>
+        <div class="card-option">
+          <div class="card-icon">🤖</div>
+          <div class="card-title">Manage multiple AI agents</div>
+          <div class="card-desc">I run agents and need governance and audit trails</div>
+        </div>
+      </div>
+      <div class="card-option muted" style="max-width:300px">
+        <div class="card-title" style="font-size:12px">Evaluating for my team or company</div>
+        <div class="card-desc">I need to assess capabilities before committing</div>
+      </div>
+      <div style="margin-top:24px">
+        <button class="wf-btn" style="max-width:200px">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>Card selection is immediate</strong> — clicking a card selects it and highlights it; no separate confirmation step. The Continue button is disabled until a card is selected.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Fifth option (evaluate for team)</strong> is rendered below the 2x2 grid, full width but with muted styling and dashed border. This placement acknowledges the option exists without giving it equal visual weight.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>On mobile</strong>, cards stack in a single column. Each card is a full-width touchable row with icon on left and text on right; minimum touch target 48px height.</div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-text"><strong>Routing on Continue</strong>: options 1-4 advance to S-03. Option 5 (evaluate) skips to the Architect path: a technical overview page with links to white papers, sandbox environment link, and a team setup prompt.</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-03: PROFILING Q2 ══════ -->
+<div class="section" id="s03">
+  <div class="section-header">
+    <span class="section-num">S-03</span>
+    <span class="section-title">Profiling Interview — Question 2: AI Tools Selection</span>
+  </div>
+  <p class="section-desc">Multi-select checkboxes. Progress shows 2 of 3. The 'I use the API directly' option triggers a different visual treatment — it is the practitioner signal. At least one selection required to continue.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/welcome</span>
+      <span class="wf-label">S-03</span>
+    </div>
+    <div class="profile-screen">
+      <div class="progress">
+        <div class="step done">✓</div>
+        <div class="connector done"></div>
+        <div class="step active">2</div>
+        <div class="connector"></div>
+        <div class="step pending">3</div>
+      </div>
+      <h2>Which AI tools do you use today?</h2>
+      <div class="q-sub">Select all that apply — this helps us set up your model tracking automatically.</div>
+      <div class="check-grid">
+        <div class="check-item selected">
+          <div class="check-box checked">✓</div>
+          <div><div class="check-label">Claude (Anthropic)</div><div class="check-sub">claude.ai or API</div></div>
+        </div>
+        <div class="check-item selected">
+          <div class="check-box checked">✓</div>
+          <div><div class="check-label">ChatGPT / GPT-4o (OpenAI)</div><div class="check-sub">chat.openai.com or API</div></div>
+        </div>
+        <div class="check-item">
+          <div class="check-box"></div>
+          <div><div class="check-label">Gemini (Google)</div><div class="check-sub">gemini.google.com or API</div></div>
+        </div>
+        <div class="check-item">
+          <div class="check-box"></div>
+          <div><div class="check-label">Cursor (AI IDE)</div><div class="check-sub">cursor.com</div></div>
+        </div>
+        <div class="check-item">
+          <div class="check-box"></div>
+          <div><div class="check-label">GitHub Copilot</div><div class="check-sub">VS Code / JetBrains</div></div>
+        </div>
+        <div class="check-item" style="border-color:var(--purple); background:rgba(139,92,246,0.05)">
+          <div class="check-box" style="border-color:var(--purple)"></div>
+          <div><div class="check-label">I use the API directly</div><div class="check-sub" style="color:var(--purple)">No chat interface — just code</div></div>
+        </div>
+      </div>
+      <div style="margin-top:4px; margin-bottom: 20px">
+        <div class="check-item" style="max-width:280px">
+          <div class="check-box"></div>
+          <div><div class="check-label">Other / Multiple / Not sure yet</div></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px">
+        <button class="wf-btn secondary" style="max-width:100px">← Back</button>
+        <button class="wf-btn" style="max-width:200px">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>'I use the API directly'</strong> has a distinct purple border treatment to signal that it is a different category (practitioner signal) from the tool options above it. When selected, Q3 pre-selects "I build software and use AI as a tool" as the default but leaves the choice editable.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Minimum one selection required.</strong> If the user clicks Continue with nothing selected, a gentle inline message appears: "Select at least one tool so we can configure your model tracking — choose 'Not sure yet' if you are unsure."</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>Selected tools are stored</strong> in user_onboarding.profiling_q2_answers as a JSON array of canonical tool identifiers, not display labels: ["anthropic_claude", "openai_gpt4o", "api_direct"].</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-04: PROFILING Q3 ══════ -->
+<div class="section" id="s04">
+  <div class="section-header">
+    <span class="section-num">S-04</span>
+    <span class="section-title">Profiling Interview — Question 3: Experience Level</span>
+  </div>
+  <p class="section-desc">Single-select radio list. Progress shows 3 of 3. Includes the reassurance note about changing the setting later. This is the final profiling question; Continue advances to the Bootstrap Interview or directly to the dashboard depending on the routing from Q1.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/welcome</span>
+      <span class="wf-label">S-04</span>
+    </div>
+    <div class="profile-screen">
+      <div class="progress">
+        <div class="step done">✓</div>
+        <div class="connector done"></div>
+        <div class="step done">✓</div>
+        <div class="connector done"></div>
+        <div class="step active">3</div>
+      </div>
+      <h2>How would you describe yourself?</h2>
+      <div class="q-sub">This sets how we explain things to you — you can change it anytime in Settings.</div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:24px">
+        <div class="check-item" style="padding:14px 16px">
+          <div class="check-box" style="border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="check-label" style="font-size:13px; font-weight:600">Just getting started with AI tools</div>
+            <div class="check-sub" style="font-size:12px">I use AI assistants but I'm not a software developer</div>
+          </div>
+        </div>
+        <div class="check-item selected" style="padding:14px 16px">
+          <div class="check-box checked" style="border-radius:50%">●</div>
+          <div style="flex:1">
+            <div class="check-label" style="font-size:13px; font-weight:600">I build software and use AI as a tool</div>
+            <div class="check-sub" style="font-size:12px">Developer or engineer; comfortable with code and APIs</div>
+          </div>
+        </div>
+        <div class="check-item" style="padding:14px 16px">
+          <div class="check-box" style="border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="check-label" style="font-size:13px; font-weight:600">I build AI-powered products professionally</div>
+            <div class="check-sub" style="font-size:12px">AI/ML engineer, agent developer, or LLM application architect</div>
+          </div>
+        </div>
+        <div class="check-item" style="padding:14px 16px">
+          <div class="check-box" style="border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="check-label" style="font-size:13px; font-weight:600">I'm evaluating this for my team or company</div>
+            <div class="check-sub" style="font-size:12px">Technical decision-maker assessing platform capabilities</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px">
+        <button class="wf-btn secondary" style="max-width:100px">← Back</button>
+        <button class="wf-btn" style="max-width:240px">Set Up My Project →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ S-05: BOOTSTRAP INTERVIEW ══════ -->
+<div class="section" id="s05">
+  <div class="section-header">
+    <span class="section-num">S-05</span>
+    <span class="section-title">Bootstrap Interview — All 6 Questions</span>
+  </div>
+  <p class="section-desc">A single scrollable page with all 6 questions. Not a multi-step wizard — all questions visible at once so the user can see the scope before starting. The high-risk keyword flag appears dynamically on Q5. Character counters appear on Q1 and Q2 near the limit.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/welcome/project</span>
+      <span class="wf-label">S-05</span>
+    </div>
+    <div class="interview-screen">
+      <div class="interview-header">
+        <div class="back">← Change my path</div>
+        <h2>Tell us about what you're building</h2>
+        <p>Six quick questions and we'll set everything up for you. Takes about 2 minutes.</p>
+      </div>
+
+      <div class="interview-q">
+        <label>1. What is the name of what you are building?</label>
+        <div class="wf-input" style="display:block">Customer Support Bot for Acme Store</div>
+        <div class="char-counter">38 / 60</div>
+      </div>
+
+      <div class="interview-q">
+        <label>2. Describe what it should do in one or two sentences.</label>
+        <div class="q-hint">Example: Answer customer questions about our product pricing and return policy, and escalate complex issues to a human agent.</div>
+        <div class="wf-textarea" style="display:block; min-height:70px">Answer customer questions about product pricing, shipping times, and return policy. Escalate billing disputes to human support staff.</div>
+        <div class="char-counter">155 / 300</div>
+      </div>
+
+      <div class="interview-q">
+        <label>3. Who will use it?</label>
+        <select class="wf-select">
+          <option>My customers</option>
+        </select>
+      </div>
+
+      <div class="interview-q">
+        <label>4. What data will it work with?</label>
+        <div class="check-multi">
+          <div class="check-tag selected">✓ Customer messages</div>
+          <div class="check-tag selected">✓ Documents and PDFs</div>
+          <div class="check-tag">Code and files</div>
+          <div class="check-tag">Database records</div>
+          <div class="check-tag">Web content</div>
+          <div class="check-tag">Internal knowledge base</div>
+          <div class="check-tag">I'm not sure yet</div>
+        </div>
+      </div>
+
+      <div class="interview-q">
+        <label>5. What would be a serious mistake for this to make?</label>
+        <div class="q-hint">For example: give wrong medical advice, delete data without confirmation, promise things I cannot deliver</div>
+        <div class="wf-textarea" style="display:block; min-height:60px">Promise a refund or guarantee a delivery date without checking with our team first</div>
+        <div class="high-risk-flag visible">⚠️ &nbsp; We detected words that suggest consequential actions. We'll automatically add a <strong>human confirmation gate</strong> and a <strong>commitment invariant</strong> to your project — review them in the next step.</div>
+      </div>
+
+      <div class="interview-q">
+        <label>6. How important is it that every action is documented for review?</label>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px">
+          <div class="check-item"><div class="check-box" style="border-radius:50%"></div><div><div class="check-label">Not very — I just need it to work</div></div></div>
+          <div class="check-item selected"><div class="check-box checked" style="border-radius:50%">●</div><div><div class="check-label">Yes — I want to be able to check what it did</div></div></div>
+          <div class="check-item"><div class="check-box" style="border-radius:50%"></div><div><div class="check-label">Very — I might need to prove it to someone else</div></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; display:flex; gap:10px">
+        <button class="wf-btn" style="max-width:280px">Build My Project →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>High-risk flag (Q5)</strong> appears via JavaScript as the user types, triggered by keyword matching against the detection list (promise, refund, delete, medical, financial, guarantee, irreversible). The flag disappears if the high-risk words are removed. The flag text references exactly what will be added so there are no surprises on the confirmation screen.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Q4 checkboxes</strong> use tag-style pills rather than a grid to conserve vertical space. Selecting 'Customer messages' triggers a visual note below the tags: "We'll add a privacy rule to protect customer personal information."</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>Q6 plain-English options</strong> map to governance modes in the backend (not very = light, check what it did = standard, prove to someone = audited) but this mapping is NEVER shown on this screen. It is internal only.</div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-text"><strong>Placeholder text in Q2</strong> is dynamically set based on the use case routing from Q1: a user who selected 'Build something new' sees a customer support example; a user who selected 'Fix sessions that lose context' sees a development session example.</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-06: SCAFFOLD CONFIRMATION ══════ -->
+<div class="section" id="s06">
+  <div class="section-header">
+    <span class="section-num">S-06</span>
+    <span class="section-title">Scaffold Confirmation Screen</span>
+  </div>
+  <p class="section-desc">Shows the user exactly what will be created. Every invariant has a checkbox — they can uncheck ones they do not want. The governance mode is shown in plain English. The bootstrap prompt is shown as a preview (not the full text). Two CTAs: accept or go back and change something.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/welcome/confirm</span>
+      <span class="wf-label">S-06</span>
+    </div>
+    <div class="scaffold-screen">
+      <h2>Here's what we set up for you</h2>
+      <div class="sub">Review and uncheck anything you don't want. You can always change these later.</div>
+
+      <div class="scaffold-card">
+        <div class="sc-label">Your Project</div>
+        <div class="sc-title">Customer Support Bot for Acme Store</div>
+        <div class="sc-desc">Answer customer questions about product pricing, shipping times, and return policy. Escalate billing disputes to human support staff.</div>
+      </div>
+
+      <div class="scaffold-card">
+        <div class="sc-label">Strictness Level &nbsp; <span style="font-size:10px; color:var(--text-muted); font-family:var(--mono); font-weight:400">(governance mode)</span></div>
+        <div style="margin-top:8px"><span class="governance-badge standard">⚙ Standard — I want to be able to check what it did</span></div>
+        <div style="margin-top:8px; font-size:12px; color:var(--text-muted)">Every action is logged. You can review what your AI did and why at any time.</div>
+      </div>
+
+      <div class="scaffold-card">
+        <div class="sc-label">Rules &nbsp; <span style="font-size:10px; color:var(--text-muted); font-family:var(--mono); font-weight:400">(invariants — your AI must follow these)</span></div>
+        <div class="invariant-list">
+          <div class="inv-item"><div class="inv-check">✓</div><div class="inv-text">Responses must not make promises about refunds or delivery dates without explicit authorization from your team.</div></div>
+          <div class="inv-item"><div class="inv-check">✓</div><div class="inv-text">Responses must not reveal internal process documentation to end users.</div></div>
+          <div class="inv-item"><div class="inv-check">✓</div><div class="inv-text">Every response to a complaint must acknowledge the issue before offering a solution.</div></div>
+          <div class="inv-item"><div class="inv-check">✓</div><div class="inv-text" style="color:var(--amber)">⚠ Human confirmation required before making any commitment, promise, or guarantee. <em>(Added because of your answer to Q5)</em></div></div>
+          <div class="inv-item"><div class="inv-check">✓</div><div class="inv-text">Customer messages may contain personal information. Never store or reference specific personal details outside the current conversation.</div></div>
+        </div>
+      </div>
+
+      <div class="scaffold-card">
+        <div class="sc-label">Your First Session Starter &nbsp; <span style="font-size:10px; color:var(--text-muted); font-family:var(--mono); font-weight:400">(bootstrap prompt)</span></div>
+        <div style="font-family:var(--mono); font-size:11px; color:var(--text-muted); background:var(--dark); border:1px solid var(--border); border-radius:4px; padding:10px; line-height:1.6; margin-top:8px">
+          You are working on: <strong style="color:var(--text)">Customer Support Bot for Acme Store</strong><br>
+          This session is governed by ContextKeeper...<br>
+          <span style="color:var(--text-dim)">[ full prompt generated — click to preview ]</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="wf-btn">This Looks Right — Let's Start ✓</button>
+        <button class="wf-btn secondary">← Change Something</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>Invariant checkboxes are checked by default.</strong> Unchecking a box marks that invariant as excluded from the scaffold; it is not created. The user is not warned or asked to confirm unchecking — their choice is respected without friction.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>The amber-highlighted invariant</strong> (Q5-triggered human confirmation gate) is visually distinguished because it was triggered by the user's own words, not by the category template. The "(Added because of your answer to Q5)" note makes the origin transparent.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>Bootstrap prompt preview</strong> is truncated with a "click to preview" affordance. The full prompt opens in a modal. This prevents the confirmation screen from being overwhelming while giving curious users access to the full content.</div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-text"><strong>On "This Looks Right"</strong>: all records are created in a single transaction; the user sees a 300ms spinner; then they land on S-07 (first session dashboard). No intermediate "success" screen.</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-07: FIRST SESSION DASHBOARD ══════ -->
+<div class="section" id="s07">
+  <div class="section-header">
+    <span class="section-num">S-07</span>
+    <span class="section-title">First Session Dashboard — Guided Mode</span>
+  </div>
+  <p class="section-desc">The first dashboard view a new user sees after onboarding. The banner is the primary call to action — it takes up the top third of the content area. The stats grid shows zeros but with labels that explain what will fill them. The decision log is empty with a supportive empty state.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/app/dashboard</span>
+      <span class="wf-label">S-07 — Guided Mode</span>
+    </div>
+    <div class="dashboard-screen">
+      <div class="dash-sidebar">
+        <div class="ds-brand">Context<span>Keeper</span></div>
+        <div class="ds-nav-item active"><span class="nav-icon">🏠</span> Dashboard</div>
+        <div class="ds-nav-item"><span class="nav-icon">📋</span> Activity History</div>
+        <div class="ds-nav-item"><span class="nav-icon">🔗</span> Connected Apps</div>
+        <div class="ds-nav-item"><span class="nav-icon">📊</span> Usage</div>
+        <div class="ds-project">
+          <div class="ds-project-label">My Projects</div>
+          <div class="ds-project-item active"><span class="status-dot"></span> Support Bot</div>
+          <div class="ds-project-item" style="color:var(--accent-light); font-size:11px">+ New Project</div>
+        </div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-banner">
+          <div class="banner-icon">🚀</div>
+          <div class="banner-text" style="flex:1">
+            <h3>Your project is ready — start your first session</h3>
+            <p>Copy this starter and paste it into Claude or ChatGPT. When you get a response, come back and paste it in the 'Log This Response' box below.</p>
+            <div class="copy-box">
+              <div class="copy-preview">You are working on: Customer Support Bot for Acme Store. This session is governed by ContextKeeper. Your rules for this session: 1. Do not promise...</div>
+              <button class="copy-btn">Copy Starter</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Decisions Logged</div>
+            <div class="stat-value accent">0</div>
+            <div class="stat-sub">choices your AI has logged</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tokens Used</div>
+            <div class="stat-value">—</div>
+            <div class="stat-sub">appears after first session</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Session Cost</div>
+            <div class="stat-value">$0.00</div>
+            <div class="stat-sub">estimated spend today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Rules Active</div>
+            <div class="stat-value green">5</div>
+            <div class="stat-sub">things your AI must follow</div>
+          </div>
+        </div>
+
+        <div class="decision-list">
+          <div class="dl-header">
+            <h4>Activity History</h4>
+            <div class="dl-count">0 logged</div>
+          </div>
+          <div class="dl-empty">
+            <div class="dl-icon">📝</div>
+            <h4>No activity yet</h4>
+            <p>Copy the starter above, use it with your AI, then log the response here. Your decisions will appear in this list.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>Sidebar vocabulary in Guided mode</strong>: "Activity History" (not "Decision Log"), "Connected Apps" (not "Connectors"), "Usage" (not "Token Tracking"). The Novice vocabulary table from WP-012 Section 8 drives all sidebar labels.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Copy button behavior</strong>: on click, the button text changes to "✓ Copied" for 2 seconds, then reverts. No modal, no download, no new window — clipboard only. If the clipboard API is unavailable (some mobile browsers), a modal appears with the full prompt in a select-all textarea.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>"Log This Response" is not shown on this screen</strong> — it appears only after the user has clicked "Copy Starter" at least once. This prevents first-time confusion from a field they do not yet understand they need. After the copy click, the "Log This Response" textarea slides in below the copy box with a label: "Paste your AI's response here to log it."</div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-text"><strong>Stats grid in Guided mode</strong> shows plain-English sublabels under every number. In Standard mode these sublabels are hidden (assumed understood). In Expert mode the stat cards show the database field name on hover.</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-08: WOW MOMENT ══════ -->
+<div class="section" id="s08">
+  <div class="section-header">
+    <span class="section-num">S-08</span>
+    <span class="section-title">Wow Moment Confirmation Card</span>
+  </div>
+  <p class="section-desc">Appears inline in the dashboard immediately after the first decision is logged. Replaces the empty state in the decision log section. Must appear within 500ms of the decision being saved. Contains four stat panels with plain-English tooltip on each number.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/app/dashboard — after first decision logged</span>
+      <span class="wf-label">S-08</span>
+    </div>
+    <div class="wow-screen">
+      <div class="wow-icon">🎯</div>
+      <h2>You just logged your first governed session.</h2>
+      <p>Here's what ContextKeeper captured. Every future session with this project will build on this.</p>
+      <div class="wow-stats">
+        <div class="wow-stat">
+          <div class="ws-value">1</div>
+          <div class="ws-label">Decision</div>
+          <div class="ws-tooltip">a choice your AI made, logged permanently</div>
+        </div>
+        <div class="wow-stat">
+          <div class="ws-value">1,247</div>
+          <div class="ws-label">Tokens Used</div>
+          <div class="ws-tooltip">words processed in this exchange</div>
+        </div>
+        <div class="wow-stat">
+          <div class="ws-value">$0.004</div>
+          <div class="ws-label">Session Cost</div>
+          <div class="ws-tooltip">estimated cost of this exchange at GPT-4o pricing</div>
+        </div>
+        <div class="wow-stat">
+          <div class="ws-value" style="color:var(--green)">12%</div>
+          <div class="ws-label">Context Used</div>
+          <div class="ws-tooltip">how much of the available memory this session consumed</div>
+        </div>
+      </div>
+      <button class="wf-btn" style="max-width:280px; margin:0 auto">See My Session 2 Starter →</button>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>The wow moment card replaces the empty state</strong> in the decision log section — it does not appear as a separate modal or overlay. The transition is a fade-in: the empty state fades out (150ms) and the wow card fades in (300ms).</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>Tooltip on each stat</strong> appears on hover (desktop) or tap (mobile). The tooltip is the plain-English explanation of the number. In Standard mode, tooltips are still present but shorter. In Expert mode, the tooltip shows the database field name and table instead.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>wow_moment_reached flag</strong> is set to true in user_onboarding as a background API call when this card renders. This triggers the abandonment email suppression (no re-engagement email if wow moment was reached) and starts the 48-hour countdown for the second-session prompt.</div></div>
+  </div>
+</div>
+
+<!-- ══════ S-09: SECOND SESSION BANNER ══════ -->
+<div class="section" id="s09">
+  <div class="section-header">
+    <span class="section-num">S-09</span>
+    <span class="section-title">Second Session Continuity Banner</span>
+  </div>
+  <p class="section-desc">Appears at the top of the project dashboard on any return visit within 48 hours of the first session where a second session has not yet started. Replaces the first-session banner. Shows the decision count from the previous session and a ready-to-copy Session 2 starter.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/app/dashboard — return visit</span>
+      <span class="wf-label">S-09</span>
+    </div>
+    <div class="dash-main" style="padding:28px">
+      <div style="background:rgba(63,185,80,0.06); border:1px solid rgba(63,185,80,0.2); border-radius:8px; padding:18px 20px; margin-bottom:20px; display:flex; align-items:flex-start; gap:14px">
+        <div style="font-size:20px; flex-shrink:0; margin-top:2px">↗️</div>
+        <div style="flex:1">
+          <h3 style="font-size:14px; font-weight:700; color:white; margin-bottom:4px">Ready for Session 2? Your last session logged 1 decision.</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px">This starter is shorter than your first one because it only includes what changed — your full project context is always stored and available.</p>
+          <div class="copy-box">
+            <div class="copy-preview">Continuing work on: Customer Support Bot. Since last session: 1 new decision logged — [chosen: use formal tone for complaint responses]...</div>
+            <button class="copy-btn" style="background:var(--green)">Copy Session 2 Starter</button>
+          </div>
+        </div>
+      </div>
+      <div class="decision-list">
+        <div class="dl-header"><h4>Activity History</h4><div class="dl-count">1 logged</div></div>
+        <div class="dl-item">
+          <div class="dl-time">2m ago</div>
+          <div class="dl-content">
+            <div class="dl-chosen">Use formal tone for complaint responses</div>
+            <div class="dl-context">Context: Choosing response style for escalated customer complaints</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ S-10: EMPTY STATES ══════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">S-10</span>
+    <span class="section-title">Empty State Designs</span>
+  </div>
+  <p class="section-desc">All seven primary empty states. Each follows the same pattern: accent-blue icon, bold headline, two-line description, single CTA. The tone is forward-looking, not apologetic. No sad faces, no broken elements.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+    <div class="wf-frame">
+      <div class="wf-bar"><div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div><span class="wf-url">Projects List</span></div>
+      <div class="dl-empty" style="padding:32px">
+        <div class="dl-icon" style="font-size:36px; opacity:0.7; color:var(--accent)">🏗️</div>
+        <h4 style="font-size:14px; margin-bottom:6px">Start your first governed project</h4>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px">Tell us what you're building and we'll set everything up for you.</p>
+        <button class="wf-btn" style="max-width:160px">Start a Project</button>
+      </div>
+    </div>
+
+    <div class="wf-frame">
+      <div class="wf-bar"><div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div><span class="wf-url">Activity History</span></div>
+      <div class="dl-empty" style="padding:32px">
+        <div class="dl-icon" style="font-size:36px; opacity:0.7; color:var(--accent)">📝</div>
+        <h4 style="font-size:14px; margin-bottom:6px">No activity logged yet</h4>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px">Your session starter is ready above. Use it with your AI, then paste the response here.</p>
+        <button class="wf-btn" style="max-width:160px">Log a Decision</button>
+      </div>
+    </div>
+
+    <div class="wf-frame">
+      <div class="wf-bar"><div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div><span class="wf-url">Connected Apps</span></div>
+      <div class="dl-empty" style="padding:32px">
+        <div class="dl-icon" style="font-size:36px; opacity:0.7; color:var(--accent)">🔗</div>
+        <h4 style="font-size:14px; margin-bottom:6px">Connect your first data source</h4>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px">Connect GitHub, a database, Google Drive, or a local folder so your AI can access your files.</p>
+        <button class="wf-btn" style="max-width:160px">Add a Connection</button>
+      </div>
+    </div>
+
+    <div class="wf-frame">
+      <div class="wf-bar"><div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div><span class="wf-url">Agents (Pro+)</span></div>
+      <div class="dl-empty" style="padding:32px">
+        <div class="dl-icon" style="font-size:36px; opacity:0.7; color:var(--accent)">🤖</div>
+        <h4 style="font-size:14px; margin-bottom:6px">Build your first governed agent</h4>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px">An agent is an AI that runs automatically. Define what it does, what data it can access, and what rules it must follow.</p>
+        <button class="wf-btn" style="max-width:160px">Create an Agent</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ S-11: ERROR STATES ══════ -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <span class="section-num">S-11</span>
+    <span class="section-title">Error State Designs — Three Categories</span>
+  </div>
+  <p class="section-desc">Category 1: inline field validation (red, adjacent to field). Category 2: system error (surface2 card with retry). Category 3: governance breach (amber, NEVER red, headline frames it as a safety catch not a failure).</p>
+
+  <div class="error-demo">
+    <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); font-family:var(--mono); margin-bottom:12px">Category 1 — Field Validation Error</div>
+    <div class="wf-field">
+      <label>AI Model</label>
+      <div class="wf-input" style="border-color:var(--red)">claude 3.5 sonnet</div>
+      <div class="err-inline">⚠ Model name not recognized. Try selecting from the dropdown, or use the canonical name: <strong>claude-sonnet-4-5</strong></div>
+    </div>
+    <div style="font-size:11px; color:var(--text-dim); margin-top:8px">Error appears inline, adjacent to the field. No modal. No error code. Suggests the correct value.</div>
+  </div>
+
+  <div class="error-demo" style="margin-top:12px">
+    <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); font-family:var(--mono); margin-bottom:12px">Category 2 — System Error</div>
+    <div style="background:var(--dark); border:1px solid rgba(248,81,73,0.2); border-radius:8px; padding:16px">
+      <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px">Couldn't save your project</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px">We had trouble saving your project setup. Your answers are saved — tap Retry and we'll try again. If the problem continues, contact support.</div>
+      <div style="display:flex; gap:8px">
+        <button class="breach-btn primary" style="background:var(--accent)">Retry</button>
+        <button class="breach-btn secondary">Contact Support</button>
+        <span style="font-family:var(--mono); font-size:10px; color:var(--text-dim); margin-left:auto; margin-top:6px">ref: req_a1b2c3d4</span>
+      </div>
+    </div>
+    <div style="font-size:11px; color:var(--text-dim); margin-top:8px">request_id shown for support staff. No stack trace, no HTTP status code, no PHP error string.</div>
+  </div>
+
+  <div class="error-demo" style="margin-top:12px">
+    <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); font-family:var(--mono); margin-bottom:12px">Category 3 — Governance Breach (NEVER red)</div>
+    <div class="err-breach">
+      <div class="breach-header">
+        <span style="font-size:20px">🛡</span>
+        <span class="breach-title">Governance check stopped this run</span>
+      </div>
+      <div class="breach-body">
+        Your agent tried to execute a database write operation, but the rule <em>"No write operations to production systems without explicit operator confirmation"</em> requires your approval first.
+        <br><br>
+        This is the system working correctly — not a failure. Review the attempted action below and choose how to proceed.
+      </div>
+      <div class="breach-actions">
+        <button class="breach-btn primary">Approve This Action</button>
+        <button class="breach-btn secondary">Cancel the Run</button>
+        <button class="breach-btn secondary">View Full Details</button>
+      </div>
+    </div>
+    <div style="font-size:11px; color:var(--text-dim); margin-top:8px">Amber, not red. Headline is "stopped" not "failed." Body explicitly states "This is the system working correctly." Three recovery paths presented as buttons.</div>
+  </div>
+</div>
+
+<!-- ══════ S-12: MOBILE ══════ -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <span class="section-num">S-12</span>
+    <span class="section-title">Mobile Onboarding Adaptation</span>
+  </div>
+  <p class="section-desc">The profiling interview Q1 in mobile layout. Single-column card stack. Minimum 48px touch targets. The left panel from the registration screen is removed; the value proposition compresses to a 3-line headline.</p>
+
+  <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap">
+    <div>
+      <div style="text-align:center; font-size:11px; color:var(--text-dim); margin-bottom:8px; font-family:var(--mono)">PROFILING Q1 — MOBILE</div>
+      <div class="mobile-frame">
+        <div class="mobile-notch"><div class="notch"></div></div>
+        <div class="mobile-content">
+          <div style="font-size:13px; font-weight:700; color:white; margin-bottom:4px">ContextKeeper</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-bottom:20px">Step 1 of 3</div>
+          <div style="font-size:15px; font-weight:700; color:white; margin-bottom:4px">What are you here to do?</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-bottom:16px">Pick the one that fits best</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px">
+            <div style="background:rgba(46,117,182,0.12); border:1.5px solid var(--accent); border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px">
+              <span style="font-size:18px">🏗️</span>
+              <div>
+                <div style="font-size:12px; font-weight:600; color:white">Build something new</div>
+                <div style="font-size:10px; color:var(--text-muted)">I have an idea, no code yet</div>
+              </div>
+            </div>
+            <div style="background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px">
+              <span style="font-size:18px">⚡</span>
+              <div>
+                <div style="font-size:12px; font-weight:600; color:white">Add AI to existing project</div>
+                <div style="font-size:10px; color:var(--text-muted)">I have code, want it smarter</div>
+              </div>
+            </div>
+            <div style="background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px">
+              <span style="font-size:18px">🔄</span>
+              <div>
+                <div style="font-size:12px; font-weight:600; color:white">Fix sessions losing context</div>
+                <div style="font-size:10px; color:var(--text-muted)">AI sessions drift and forget</div>
+              </div>
+            </div>
+            <div style="background:var(--surface2); border:1.5px solid var(--border); border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px">
+              <span style="font-size:18px">🤖</span>
+              <div>
+                <div style="font-size:12px; font-weight:600; color:white">Manage AI agents</div>
+                <div style="font-size:10px; color:var(--text-muted)">Need governance and audit trails</div>
+              </div>
+            </div>
+          </div>
+          <button class="wf-btn" style="font-size:13px; padding:12px">Continue →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ S-13: STATE MACHINE ══════ -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <span class="section-num">S-13</span>
+    <span class="section-title">Onboarding State Machine — All States and Transitions</span>
+  </div>
+  <p class="section-desc">The complete state machine for the user_onboarding.current_step field. Each state has a defined entry condition, exit condition, and timeout behavior.</p>
+
+  <div class="state-spec"><div class="state-name">STATE: profiling</div><div class="state-desc">User has registered but not completed the 3 profiling questions. Dashboard is blocked — any attempt to navigate to the main dashboard redirects to the profiling flow.</div><div class="state-trigger"><strong>Entry:</strong> User_onboarding row created on registration. <strong>Exit:</strong> All 3 profiling questions answered and Continue clicked on Q3. <strong>Timeout:</strong> After 24 hours in this state, send re-engagement email with a "Continue your setup" CTA.</div></div>
+
+  <div class="state-spec"><div class="state-name">STATE: bootstrap_interview</div><div class="state-desc">Profiling complete. User is on the 6-question bootstrap interview. Dashboard still blocked. The Back button on the interview returns to profiling Q3 (not Q1).</div><div class="state-trigger"><strong>Entry:</strong> Q3 submitted; routing from Q1 is "Build something new." Other Q1 options skip this state. <strong>Exit:</strong> All 6 interview questions answered and "Build My Project" clicked. <strong>Timeout:</strong> After 24 hours, send re-engagement email with the interview answers pre-populated and a "Finish setting up" CTA. Include the answers they already gave so they do not need to re-enter them.</div></div>
+
+  <div class="state-spec"><div class="state-name">STATE: model_setup</div><div class="state-desc">Bootstrap interview complete; scaffold generated. User is on the scaffold confirmation screen. This is the only step where the user can modify what was generated before it is saved.</div><div class="state-trigger"><strong>Entry:</strong> Scaffold generator completes successfully. <strong>Exit:</strong> User clicks "This Looks Right" and the transaction commits. <strong>Timeout:</strong> After 48 hours in this state (most common abandonment point), send email with the scaffold summary and a "Your project setup is waiting" CTA; include a direct link that resumes from the confirmation screen.</div></div>
+
+  <div class="state-spec"><div class="state-name">STATE: first_session</div><div class="state-desc">Scaffold saved. User has landed on the dashboard for the first time. The first-session banner is visible. Dashboard is fully accessible in Guided mode. wow_moment_reached is false.</div><div class="state-trigger"><strong>Entry:</strong> Scaffold confirmation transaction commits. <strong>Exit:</strong> wow_moment_reached = true (first decision is logged). <strong>Timeout:</strong> After 48 hours without a logged decision, send email with the bootstrap prompt embedded directly in the email body and a single CTA: "Paste this into Claude or ChatGPT to get started."</div></div>
+
+  <div class="state-spec" style="border-color:var(--green)"><div class="state-name" style="color:var(--green)">STATE: complete</div><div class="state-desc">Onboarding finished. wow_moment_reached = true. Dashboard shows full Guided mode UI. Second-session prompt will appear on next login within 48 hours. All re-engagement emails suppressed.</div><div class="state-trigger"><strong>Entry:</strong> First decision logged; wow_moment_reached set to true. <strong>Exit:</strong> This is a terminal state — no exit. <strong>Post-completion:</strong> onboarding_completed_at timestamp set; Day 7 retention measurement starts.</div></div>
+</div>
+
+<!-- ══════ S-14: PROGRESSIVE DISCLOSURE TOGGLE ══════ -->
+<div class="section" id="s14">
+  <div class="section-header">
+    <span class="section-num">S-14</span>
+    <span class="section-title">Progressive Disclosure Settings Toggle</span>
+  </div>
+  <p class="section-desc">The Settings screen where users can change their UI mode at any time. The current mode is highlighted. Changing mode takes effect immediately on the current page without a reload.</p>
+
+  <div class="wf-frame">
+    <div class="wf-bar">
+      <div class="wf-dot r"></div><div class="wf-dot a"></div><div class="wf-dot g"></div>
+      <span class="wf-url">contextkeeper.org/app/settings</span>
+      <span class="wf-label">S-14</span>
+    </div>
+    <div style="padding:28px">
+      <h3 style="font-size:16px; font-weight:700; color:white; margin-bottom:4px">Interface Mode</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px">Choose how technical the platform's language should be. This affects labels, tooltips, and which advanced settings are visible. Your data and capabilities are the same at every level.</p>
+      <div style="display:flex; flex-direction:column; gap:8px">
+        <div class="check-item" style="padding:14px 16px; align-items:flex-start">
+          <div class="check-box" style="border-radius:50%; margin-top:2px"></div>
+          <div style="flex:1">
+            <div style="display:flex; align-items:center; gap:8px"><div class="check-label" style="font-size:13px; font-weight:600">Guided</div><span style="font-size:10px; color:var(--text-dim); font-family:var(--mono)">for new users</span></div>
+            <div class="check-sub" style="font-size:12px">Plain English throughout. "Rules" instead of "Invariants." Step-by-step guidance on first use of every feature.</div>
+          </div>
+        </div>
+        <div class="check-item selected" style="padding:14px 16px; align-items:flex-start">
+          <div class="check-box checked" style="border-radius:50%; margin-top:2px">●</div>
+          <div style="flex:1">
+            <div style="display:flex; align-items:center; gap:8px"><div class="check-label" style="font-size:13px; font-weight:600">Standard</div><span style="font-size:10px; color:var(--accent-light); font-family:var(--mono)">current</span></div>
+            <div class="check-sub" style="font-size:12px">Technical terms with brief definitions on first use. Full feature set visible. Suitable for developers and engineers.</div>
+          </div>
+        </div>
+        <div class="check-item" style="padding:14px 16px; align-items:flex-start">
+          <div class="check-box" style="border-radius:50%; margin-top:2px"></div>
+          <div style="flex:1">
+            <div style="display:flex; align-items:center; gap:8px"><div class="check-label" style="font-size:13px; font-weight:600">Expert</div><span style="font-size:10px; color:var(--text-dim); font-family:var(--mono)">for engineers</span></div>
+            <div class="check-sub" style="font-size:12px">Full technical vocabulary. Database field names on hover. Raw governance_config JSON editor. Links to white paper sections for every concept.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px; font-size:11px; color:var(--text-dim)">Changes take effect immediately. No page reload required.</div>
+    </div>
+  </div>
+
+  <div class="annotations-block">
+    <h4>Implementation Notes</h4>
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-text"><strong>Mode change is instant</strong> via a JavaScript event that updates a data-ui-mode attribute on the document body and triggers a CSS class swap. All label elements have data-novice, data-standard, and data-expert attributes; the active mode determines which is displayed. No page reload.</div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-text"><strong>The "current" badge</strong> appears next to the active mode. When the user selects a different mode, the badge moves immediately on selection (before save) to provide immediate visual feedback that the change was registered.</div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-text"><strong>Architect / Evaluation mode</strong> is not listed here — it is only available to Enterprise accounts and is activated automatically for the Enterprise onboarding path. It can be deactivated by setting to Expert mode from this screen.</div></div>
+  </div>
+</div>
+
+</main>
+
+<div style="background:var(--surface); border-top:1px solid var(--border); padding:24px 48px; margin-top:40px; font-size:11px; color:var(--text-dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px">
+  <span>ContextKeeper Enterprise Engineering White Paper Series — WP-012 Wireframe Companion v1.0</span>
+  <span>Copyright (c) 2026 Steven Wazlavek — Confidential — contextkeeper.org</span>
+</div>
+
+</body>
+</html>

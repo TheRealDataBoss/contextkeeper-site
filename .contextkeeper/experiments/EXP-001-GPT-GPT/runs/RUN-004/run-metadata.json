@@ -1,0 +1,14 @@
+﻿{
+    "run_id":  "RUN-004",
+    "timestamp_local":  "2026-03-19 20:24:50",
+    "transport_condition":  "ATTACHMENT_DIRECT_MINIMAL_BUNDLED",
+    "repo_commit_sha":  "d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7",
+    "prompt_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-004\\bootstrap-prompt.txt",
+    "current_bootstrap_prompt":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\start-new-chat-experiment\\CURRENT-BOOTSTRAP-PROMPT.txt",
+    "response_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-004\\fresh-chat-response.txt",
+    "upload_list_file":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\runs\\RUN-004\\upload-list.txt",
+    "upload_packet_root":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\start-new-chat-experiment\\CURRENT-PACKET",
+    "command_root":  "C:\\Users\\Steven\\contextkeeper-site\\.contextkeeper\\experiments\\EXP-001-GPT-GPT\\start-new-chat-experiment",
+    "result":  "PENDING",
+    "status":  "STARTED"
+}

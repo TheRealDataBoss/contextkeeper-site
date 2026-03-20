@@ -1,0 +1,5 @@
+﻿C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\attachment-bundles\00-BOOTSTRAP-PROMPT.txt
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\attachment-bundles\01-CONTROL-PLANE.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\attachment-bundles\02-DOCS-AND-SCHEMA.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\attachment-bundles\03-SOURCE-CODE.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\attachment-bundles\04-EXPERIMENT-CONTEXT.md

@@ -1,1 +1,5 @@
-﻿run_id,experiment_id,timestamp_local,phase,transport_condition,source_chat_family,target_chat_family,target_model,fresh_chat,artifact_set_version,prompt_version,repo_ref,result,status,rule_failures,notes
+﻿"run_id","experiment_id","timestamp_local","phase","transport_condition","source_chat_family","target_chat_family","target_model","fresh_chat","artifact_set_version","prompt_version","repo_ref","result","status","rule_failures","notes"
+"RUN-001","EXP-001-GPT-GPT","2026-03-19 17:23:46","INITIALIZATION","ATTACHMENT_DIRECT","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
+"RUN-002","EXP-001-GPT-GPT","2026-03-19 18:33:02","INITIALIZATION","ATTACHMENT_DIRECT","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
+"RUN-003","EXP-001-GPT-GPT","2026-03-19 18:58:02","INITIALIZATION","ATTACHMENT_DIRECT_MINIMAL_BUNDLED","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
+"RUN-004","EXP-001-GPT-GPT","2026-03-19 20:24:50","INITIALIZATION","ATTACHMENT_DIRECT_MINIMAL_BUNDLED","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
