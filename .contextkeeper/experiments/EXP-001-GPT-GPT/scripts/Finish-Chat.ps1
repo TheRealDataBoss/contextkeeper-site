@@ -846,3 +846,76 @@ Write-Host "PREFERRED MODEL:" \
 Write-Host "GPT TASK SCORE:" \
 Write-Host "CLAUDE TASK SCORE:" \
 
+
+# ==========================================
+# TIER 8: META-CONTROLLER + SEMANTIC ROUTING
+# ==========================================
+
+# -------------------------
+# META-CONTROLLER (CORE)
+# -------------------------
+function Get-Strategy(\) {
+
+    # Difficulty estimation (proxy)
+    \ = \.Length
+    \ = \ -match "Confirmed controller state"
+
+    if (\ -lt 200) { \ = "LOW" }
+    elseif (\ -lt 800) { \ = "MEDIUM" }
+    else { \ = "HIGH" }
+
+    # Task classification (improved)
+    if (\ -match "python|code|script|function") { \ = "CODE" }
+    elseif (\ -match "math|equation|theorem") { \ = "MATH" }
+    elseif (\ -match "experiment|controller|run") { \ = "SYSTEM" }
+    else { \ = "GENERAL" }
+
+    # Strategy selection (CRITICAL)
+    if (\ -eq "LOW") {
+        return "SINGLE_MODEL_FAST"
+    }
+    elseif (\ -eq "MEDIUM") {
+        return "DUAL_MODEL_COMPARE"
+    }
+    else {
+        return "MULTI_MODEL_CONSENSUS"
+    }
+}
+
+\ = Get-Strategy \
+
+# -------------------------
+# EXECUTION POLICY
+# -------------------------
+switch (\) {
+
+    "SINGLE_MODEL_FAST" {
+        \ = "Use preferred model only"
+    }
+
+    "DUAL_MODEL_COMPARE" {
+        \ = "Run GPT + Claude, compare outputs"
+    }
+
+    "MULTI_MODEL_CONSENSUS" {
+        \ = "Run both models + enforce full Tier 5 validation"
+    }
+}
+
+# -------------------------
+# META OUTPUT
+# -------------------------
+Write-Host "STRATEGY:" \ -ForegroundColor Cyan
+Write-Host "POLICY:" \
+
+# -------------------------
+# STRATEGY LOGGING
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "meta-controller-log.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,strategy" | Out-File \
+}
+
+Add-Content \ "\03/20/2026 04:39:37,\"
+
