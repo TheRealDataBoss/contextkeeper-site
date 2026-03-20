@@ -182,3 +182,19 @@ Write-Host "Ledger updated: $LedgerPath"
 if (\.Length -lt 50) {
     throw "Response too short → auto FAIL"
 }
+
+# -----------------------------
+# AUTO INGEST LLM OUTPUT (SAFE)
+# -----------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site" ".contextkeeper\llm-ingestion\raw"
+\ = Get-Date -Format "yyyyMMdd-HHmmss"
+\ = Join-Path \ "run-\-\.txt"
+
+\ = Get-Clipboard -Raw
+
+if (-not \ -or \.Length -lt 10) {
+    Write-Host "WARNING: Empty or invalid clipboard"
+} else {
+    Set-Content -Path \ -Value \ -Encoding UTF8
+    Write-Host "RAW LLM OUTPUT STORED:" \ -ForegroundColor Cyan
+}
