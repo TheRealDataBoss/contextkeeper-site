@@ -450,3 +450,121 @@ if (-not (Test-Path \)) {
 if (\ -eq "FAIL") {
     Add-Content \ "\03/20/2026 03:50:30,LOW_SCORE_OR_DISAGREEMENT"
 }
+
+# ==========================================
+# TIER 4: MANUAL MULTI-MODEL CONSENSUS ENGINE
+# ==========================================
+
+# EXPECTATION:
+# Clipboard must contain BOTH model outputs:
+# --- GPT ---
+# (text)
+# --- CLAUDE ---
+# (text)
+
+\ = Get-Clipboard -Raw
+
+# -------------------------
+# SPLIT MODELS
+# -------------------------
+if (\ -match "--- GPT ---" -and \ -match "--- CLAUDE ---") {
+
+    \ = \ -split "--- CLAUDE ---"
+    \ = (\[0] -replace "--- GPT ---","").Trim()
+    \ = \[1].Trim()
+
+} else {
+    Write-Host "ERROR: Missing model delimiters" -ForegroundColor Red
+    return
+}
+
+# -------------------------
+# LENGTH CHECK
+# -------------------------
+\ = \.Length
+\ = \.Length
+
+# -------------------------
+# STRUCTURE CHECK
+# -------------------------
+\ = @(
+"Confirmed controller state",
+"Current experiment status",
+"Latest completed action",
+"Exact next target-chat instruction",
+"Exact post-response logging instruction",
+"Controller re-handoff instruction",
+"Constraints and risks"
+)
+
+function Test-Structure(\) {
+    \ = 0
+    foreach (\ in \) {
+        if (\ -notmatch [regex]::Escape(\)) {
+            \++
+        }
+    }
+    return \
+}
+
+\ = Test-Structure \
+\ = Test-Structure \
+
+# -------------------------
+# AGREEMENT SCORE
+# -------------------------
+\ = 0
+
+if (\ -eq \) { \ += 0.3 }
+if ([math]::Abs(\ - \) -lt 200) { \ += 0.3 }
+
+# crude semantic overlap proxy
+if (\ -match "RUN-" -and \ -match "RUN-") { \ += 0.4 }
+
+# -------------------------
+# DECISION LOGIC (CRITICAL)
+# -------------------------
+if (\ -lt \) {
+    \ = "GPT"
+}
+elseif (\ -lt \) {
+    \ = "CLAUDE"
+}
+else {
+    if (\ -gt \) {
+        \ = "GPT"
+    } else {
+        \ = "CLAUDE"
+    }
+}
+
+# -------------------------
+# FINAL RESULT
+# -------------------------
+if (\ -eq 0 -or \ -eq 0) {
+    \ = "PASS"
+} else {
+    \ = "FAIL"
+}
+
+# -------------------------
+# OUTPUT
+# -------------------------
+Write-Host "WINNER:" \ -ForegroundColor Cyan
+Write-Host "RESULT:" \ -ForegroundColor Green
+Write-Host "AGREEMENT SCORE:" \
+
+Write-Host "GPT MISSING:" \
+Write-Host "CLAUDE MISSING:" \
+
+# -------------------------
+# STORE CONSENSUS
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "consensus-log.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,winner,result,agreement" | Out-File \
+}
+
+Add-Content \ "\03/20/2026 04:16:43,\,\,\"
+
