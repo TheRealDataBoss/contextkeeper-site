@@ -198,3 +198,101 @@ if (-not \ -or \.Length -lt 10) {
     Set-Content -Path \ -Value \ -Encoding UTF8
     Write-Host "RAW LLM OUTPUT STORED:" \ -ForegroundColor Cyan
 }
+
+# ==========================================
+# TIER 2 VALIDATION ENGINE (ENTERPRISE)
+# ==========================================
+
+\ = Get-Clipboard -Raw
+\ = Get-Date -Format "yyyyMMdd-HHmmss"
+
+# -------------------------
+# LAYER 1: FORMAT
+# -------------------------
+if (-not \ -or \.Length -lt 50) {
+    \ = "FAIL"
+} else {
+    \ = "PASS"
+}
+
+# -------------------------
+# LAYER 2: STRUCTURE
+# -------------------------
+\ = @(
+"Confirmed controller state",
+"Current experiment status",
+"Latest completed action",
+"Exact next target-chat instruction",
+"Exact post-response logging instruction",
+"Controller re-handoff instruction",
+"Constraints and risks"
+)
+
+\ = @()
+foreach (\ in \) {
+    if (\ -notmatch [regex]::Escape(\)) {
+        \ += \
+    }
+}
+
+if (\.Count -gt 0) {
+    \ = "FAIL"
+} else {
+    \ = "PASS"
+}
+
+# -------------------------
+# LAYER 3: SEMANTIC HEURISTICS
+# -------------------------
+\ = 0
+
+if (\ -match "RUN-[0-9]+") { \ += 0.25 }
+if (\ -match "C:\\\\Users\\\\Steven") { \ += 0.25 }
+if (\ -match "finish-chat") { \ += 0.25 }
+if (\.Length -gt 500) { \ += 0.25 }
+
+# -------------------------
+# LAYER 4: AUTO-RETRY
+# -------------------------
+if (\ -eq "FAIL") {
+    Write-Host "AUTO-RETRY: Missing sections → injecting correction hint" -ForegroundColor Yellow
+    \ += "
+[RETRY: Ensure all required sections are present]"
+}
+
+# -------------------------
+# FINAL DECISION
+# -------------------------
+if (\ -eq "PASS" -and \ -eq "PASS" -and \ -ge 0.5) {
+    \ = "PASS"
+} else {
+    \ = "FAIL"
+}
+
+# -------------------------
+# RELIABILITY SCORE
+# -------------------------
+\ = 0
+if (\ -eq "PASS") { \ += 0.3 }
+if (\ -eq "PASS") { \ += 0.4 }
+\ += (0.3 * \)
+
+\ = [math]::Round(\, 2)
+
+Write-Host "AUTO RESULT:" \ -ForegroundColor Cyan
+Write-Host "FORMAT:" \
+Write-Host "STRUCTURE:" \
+Write-Host "SEMANTIC SCORE:" \
+Write-Host "FINAL SCORE:" \
+
+# -------------------------
+# STORE HISTORY (CRITICAL)
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "reliability-history.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,score,result" | Out-File \
+}
+
+Add-Content \ "\,\,\"
+
