@@ -568,3 +568,134 @@ if (-not (Test-Path \)) {
 
 Add-Content \ "\03/20/2026 04:16:43,\,\,\"
 
+
+# ==========================================
+# TIER 5: DISAGREEMENT + SELF-HEALING ENGINE
+# ==========================================
+
+\ = Get-Clipboard -Raw
+
+if (\ -notmatch "--- GPT ---" -or \ -notmatch "--- CLAUDE ---") {
+    Write-Host "ERROR: Missing model delimiters" -ForegroundColor Red
+    return
+}
+
+# -------------------------
+# SPLIT OUTPUTS
+# -------------------------
+\ = \ -split "--- CLAUDE ---"
+\ = (\[0] -replace "--- GPT ---","").Trim()
+\ = \[1].Trim()
+
+# -------------------------
+# STRUCTURE FUNCTION
+# -------------------------
+\ = @(
+"Confirmed controller state",
+"Current experiment status",
+"Latest completed action",
+"Exact next target-chat instruction",
+"Exact post-response logging instruction",
+"Controller re-handoff instruction",
+"Constraints and risks"
+)
+
+function Get-MissingCount(\) {
+    \ = 0
+    foreach (\ in \) {
+        if (\ -notmatch [regex]::Escape(\)) {
+            \++
+        }
+    }
+    return \
+}
+
+\ = Get-MissingCount \
+\ = Get-MissingCount \
+
+# -------------------------
+# SIMILARITY (LIGHTWEIGHT)
+# -------------------------
+function Get-OverlapScore(\, \) {
+    \ = \.Split() | Select-Object -Unique
+    \ = \.Split() | Select-Object -Unique
+    \ = \ | Where-Object { \ -contains \ }
+    return [math]::Round((\.Count / [math]::Max(\.Count,1)),2)
+}
+
+\ = Get-OverlapScore \ \
+
+# -------------------------
+# DISAGREEMENT CLASSIFICATION
+# -------------------------
+if (\ -eq 0 -and \ -eq 0 -and \ -gt 0.7) {
+    \ = "HIGH_CONSENSUS"
+}
+elseif (\ -gt 0.4) {
+    \ = "MODERATE_DISAGREEMENT"
+}
+else {
+    \ = "HIGH_DISAGREEMENT"
+}
+
+# -------------------------
+# SELF-HEALING ROUTER
+# -------------------------
+switch (\) {
+
+    "HIGH_CONSENSUS" {
+        \ = "PASS"
+        \ = "ACCEPT"
+    }
+
+    "MODERATE_DISAGREEMENT" {
+        \ = "PASS"
+        \ = "SELECT_BEST"
+
+        if (\ -lt \) {
+            \ = "GPT"
+        } else {
+            \ = "CLAUDE"
+        }
+    }
+
+    "HIGH_DISAGREEMENT" {
+        \ = "FAIL"
+        \ = "RETRY_REQUIRED"
+
+        Write-Host "RETRY REQUIRED: models disagree strongly" -ForegroundColor Yellow
+        Write-Host "→ Re-run BOTH models with stricter prompt"
+    }
+}
+
+# -------------------------
+# CONFIDENCE SCORE
+# -------------------------
+\ = 1 - (\ + \)/14
+\ += \ * 0.5
+\ = [math]::Round([math]::Min(\,1),2)
+
+# -------------------------
+# OUTPUT
+# -------------------------
+Write-Host "STATE:" \ -ForegroundColor Cyan
+Write-Host "ACTION:" \
+Write-Host "FINAL:" \ -ForegroundColor Green
+Write-Host "SIMILARITY:" \
+Write-Host "CONFIDENCE:" \
+
+if (\) {
+    Write-Host "WINNER:" \
+}
+
+# -------------------------
+# STORE HISTORY
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "tier5-history.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,state,confidence,result" | Out-File \
+}
+
+Add-Content \ "\03/20/2026 04:26:00,\,\,\"
+
