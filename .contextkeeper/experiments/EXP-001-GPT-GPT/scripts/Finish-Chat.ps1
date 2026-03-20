@@ -764,3 +764,85 @@ Write-Host "CLAUDE:" \
 
 Write-Host "WEIGHTED WINNER:" \ -ForegroundColor Cyan
 
+
+# ==========================================
+# TIER 7: CONTEXT-AWARE ROUTING + SPECIALIZATION
+# ==========================================
+
+# -------------------------
+# TASK CLASSIFIER (LIGHTWEIGHT NLP)
+# -------------------------
+function Get-TaskType(\) {
+
+    if (\ -match "python|code|script|function") { return "CODE" }
+    elseif (\ -match "math|equation|theorem") { return "MATH" }
+    elseif (\ -match "architecture|system|design") { return "SYSTEM" }
+    elseif (\ -match "analysis|model|data") { return "DATA" }
+    else { return "GENERAL" }
+}
+
+\ = Get-TaskType \
+
+# -------------------------
+# LOAD SPECIALIZATION HISTORY
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "model-specialization.csv"
+
+if (-not (Test-Path \)) {
+    "task,model,score,count" | Out-File \
+}
+
+\ = Import-Csv \
+
+# -------------------------
+# GET MODEL PERFORMANCE FOR TASK
+# -------------------------
+function Get-ModelScore(\, \) {
+    \ = \ | Where-Object { \ .model -eq \ -and \ .task -eq \ }
+
+    if (\) {
+        return [double]\.score / [double]\.count
+    } else {
+        return 0.5
+    }
+}
+
+\ = Get-ModelScore "GPT" \
+\ = Get-ModelScore "CLAUDE" \
+
+# -------------------------
+# ROUTING DECISION (CRITICAL)
+# -------------------------
+if (\ -gt \) {
+    \ = "GPT"
+} else {
+    \ = "CLAUDE"
+}
+
+# -------------------------
+# UPDATE SPECIALIZATION (ONLINE LEARNING)
+# -------------------------
+function Update-Spec(\, \, \) {
+
+    \ = \ | Where-Object { \ .model -eq \ -and \ .task -eq \ }
+
+    if (\) {
+        \.score = [double]\.score + \
+        \.count = [int]\.count + 1
+    } else {
+        Add-Content \ "\,\,\,1"
+    }
+}
+
+# use Tier 5 scores
+Update-Spec "GPT" \ \
+Update-Spec "CLAUDE" \ \
+
+# -------------------------
+# OUTPUT
+# -------------------------
+Write-Host "TASK TYPE:" \ -ForegroundColor Cyan
+Write-Host "PREFERRED MODEL:" \
+Write-Host "GPT TASK SCORE:" \
+Write-Host "CLAUDE TASK SCORE:" \
+
