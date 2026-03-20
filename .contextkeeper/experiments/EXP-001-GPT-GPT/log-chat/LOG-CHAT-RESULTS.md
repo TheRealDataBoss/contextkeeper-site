@@ -1,0 +1,2 @@
+﻿# LOG-CHAT-RESULTS
+
