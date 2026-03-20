@@ -2,26 +2,63 @@
 
 ## Current Experiment
 - Experiment ID: EXP-001-GPT-GPT
-- Repo commit: c0b8f086c11e453446abab5ec540f5aeb2c436a7
+- Repo commit: d3adf28601a2da54d3e3fe7ccfc6355ee7a0f482
 
 ## Current Authority
 - Whitepaper: C:\Users\Steven\contextkeeper-site\docs\whitepapers\EXP-001-GPT-GPT-Handoff-Reliability-v2.0a.docx
 - Ledger: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\RUN-LEDGER.csv
 - Artifact versions: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\ARTIFACT-VERSIONS.csv
 
-## Current Active Run
-- Run ID: RUN-006
-- Run folder: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\runs\RUN-006
-- Transport condition: GITHUB_CONNECTOR_ONLY
-- Status: COMPLETED
-- Result: FAIL
-- Timestamp local: 2026-03-19 22:12:57
-- Command root: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\github-connector
-- Upload packet root: 
-- Current prompt path: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\github-connector\CURRENT-GITHUB-CONNECTOR-PROMPT.txt
-- Response target file: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\runs\RUN-006\fresh-chat-response.txt
+## Run State Summary
+- Latest run ID: RUN-006
+- Latest pending run ID: RUN-004
+- Latest completed run ID: RUN-006
+- Pending run exists: True
+
+## Selected Controller Focus
+- Run ID: RUN-004
+- Run folder: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\runs\RUN-004
+- Transport condition: ATTACHMENT_DIRECT_MINIMAL_BUNDLED
+- Status: STARTED
+- Result: PENDING
+- Timestamp local: 2026-03-19 20:24:50
+- Command root: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment
+- Upload packet root: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET
+- Current prompt path: 
+- Response target file: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\runs\RUN-004\fresh-chat-response.txt
+
+## Current Experiment Status
+A pending run exists and is ready for execution.
+
+Pending run ID: RUN-004
+Transport condition: ATTACHMENT_DIRECT_MINIMAL_BUNDLED
+Status: STARTED
+Result: PENDING
+
+The next controller action is to execute the pending target-chat run.
+
+## Latest Completed Action
+Latest completed run: RUN-006
+
+Completed run folder:
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\runs\RUN-006
+
+Result: FAIL
+Status: COMPLETED
+Completed timestamp: 2026-03-19 22:34:21
+
+Rule failures:
+Target response was empty or too short to evaluate
+
+Notes:
+Response text too short for controlled bootstrap validation.
+
+Classification confidence:
+HIGH
 
 ## Ledger Tail
+"run_id","experiment_id","timestamp_local","phase","transport_condition","source_chat_family","target_chat_family","target_model","fresh_chat","artifact_set_version","prompt_version","repo_ref","result","status","rule_failures","notes"
+"RUN-001","EXP-001-GPT-GPT","2026-03-19 17:23:46","INITIALIZATION","ATTACHMENT_DIRECT","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
 "RUN-002","EXP-001-GPT-GPT","2026-03-19 18:33:02","INITIALIZATION","ATTACHMENT_DIRECT","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
 "RUN-003","EXP-001-GPT-GPT","2026-03-19 18:58:02","INITIALIZATION","ATTACHMENT_DIRECT_MINIMAL_BUNDLED","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
 "RUN-004","EXP-001-GPT-GPT","2026-03-19 20:24:50","INITIALIZATION","ATTACHMENT_DIRECT_MINIMAL_BUNDLED","GPT","GPT","GPT-5.4 Thinking","TRUE","EXP001-SET-001","BOOTSTRAP-v1","d0c5beb46fbc6cb33c6a6ef16ff9a01ec1c4f1c7","PENDING","STARTED","",""
@@ -33,15 +70,12 @@ artifact_set_version,timestamp_local,description,repo_ref,whitepaper_version,con
 EXP001-SET-001,"","Initial GPT-to-GPT experiment baseline","","EXP-001 v2.0a","CP-v1.2","ACTIVE"
 
 ## Operator-Ready Next Action
+A pending run exists: RUN-004
+
 Open a fresh GPT target chat.
 
-Enable the GitHub connector for:
-TheRealDataBoss/contextkeeper-site
-
-Do not upload prompt-box files for this run.
-
 Open locally:
-C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\github-connector\CURRENT-GITHUB-CONNECTOR-PROMPT.txt
+
 
 Copy the full contents exactly.
 

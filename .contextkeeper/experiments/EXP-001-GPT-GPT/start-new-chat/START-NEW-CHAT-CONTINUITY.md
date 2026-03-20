@@ -13,3 +13,5 @@ start-new-chat
 
 Target run completion command:
 finish-chat
+
+If no pending run exists, the controller must instruct the operator to create a new run first.
