@@ -20,6 +20,23 @@ $GitHubPromptPath = Join-Path $GitHubRoot "CURRENT-GITHUB-CONNECTOR-PROMPT.txt"
 $HybridRoot = Join-Path $ExpRoot "start-new-chat-experiment\hybrid"
 $HybridPromptPath = Join-Path $HybridRoot "CURRENT-HYBRID-PROMPT.txt"
 
+$RequiredPaths = @(
+    $LedgerPath,
+    $AttachmentPromptPath,
+    $GitHubPromptPath,
+    $HybridPromptPath
+)
+
+if (-not (Test-Path $AttachmentPromptPath)) {
+    throw "Missing required prompt attachment prompt: $AttachmentPromptPath"
+}
+if (-not (Test-Path $GitHubPromptPath)) {
+    throw "Missing required GitHub connector prompt: $GitHubPromptPath"
+}
+if (-not (Test-Path $HybridPromptPath)) {
+    throw "Missing required hybrid prompt: $HybridPromptPath"
+}
+
 $ExistingRows = @()
 if (Test-Path $LedgerPath) {
     try {
@@ -85,6 +102,10 @@ switch ($Mode) {
         $CurrentPromptPath = $HybridPromptPath
         $UploadFiles = @()
     }
+}
+
+if (-not (Test-Path $CurrentPromptPath)) {
+    throw "Missing mode-specific prompt: $CurrentPromptPath"
 }
 
 $PromptText = Get-Content $CurrentPromptPath -Raw
