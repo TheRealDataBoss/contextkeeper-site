@@ -296,3 +296,90 @@ if (-not (Test-Path \)) {
 
 Add-Content \ "\,\,\"
 
+
+# ==========================================
+# TIER 4: MULTI-JUDGE CONSENSUS ENGINE
+# ==========================================
+
+# -------------------------
+# JUDGE A (existing result reuse)
+# -------------------------
+\ = \
+\  = \
+
+# -------------------------
+# JUDGE B (independent logic)
+# -------------------------
+function JudgeB {
+    param([string]\)
+
+    \ = 0
+
+    # Different signals than Judge A
+    if (\ -match "RUN-[0-9]+") { \ += 0.2 }
+    if (\ -match "START") { \ += 0.2 }
+    if (\ -match "finish-chat") { \ += 0.2 }
+    if (\ -match "C:\\\\Users\\\\Steven") { \ += 0.2 }
+    if (\.Length -gt 400) { \ += 0.2 }
+
+    if (\ -ge 0.6) {
+        return @{ Result="PASS"; Score=\ }
+    } else {
+        return @{ Result="FAIL"; Score=\ }
+    }
+}
+
+\ = JudgeB \
+\ = \.Result
+\  = \.Score
+
+# -------------------------
+# DISAGREEMENT DETECTION
+# -------------------------
+if (\ -ne \) {
+    \ = \True
+} else {
+    \ = \False
+}
+
+# -------------------------
+# CONSENSUS DECISION
+# -------------------------
+if (-not \ -and \ -eq "PASS") {
+    \ = "PASS"
+}
+elseif (-not \ -and \ -eq "FAIL") {
+    \ = "FAIL"
+}
+else {
+    \ = "FAIL"
+}
+
+# -------------------------
+# AGREEMENT METRICS
+# -------------------------
+if (\) {
+    \ = 0
+} else {
+    \ = 1
+}
+
+# -------------------------
+# FINAL OUTPUT
+# -------------------------
+Write-Host "JUDGE A:" \ "Score:" \
+Write-Host "JUDGE B:" \ "Score:" \
+Write-Host "DISAGREEMENT:" \
+Write-Host "FINAL RESULT:" \ -ForegroundColor Green
+
+# -------------------------
+# STORE CONSENSUS METRICS
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "consensus-history.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,judgeA,judgeB,agreement,result" | Out-File \
+}
+
+Add-Content \ "\03/20/2026 03:45:42,\,\,\,\"
+
