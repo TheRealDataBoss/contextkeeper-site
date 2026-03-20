@@ -18,4 +18,5 @@ Do not replace exact paths with ellipses, placeholders, or summaries.
 Prefer the latest pending run for operator instructions.
 If no pending run exists, explicitly instruct the operator to create a new run first.
 Do not describe a completed run as active or executable.
+Do not add conclusions, recommendations, or interpretive commentary.
 Use the operator command inish-chat for post-response logging instructions.

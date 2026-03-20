@@ -18,12 +18,6 @@ $WhitepaperPath = Join-Path $RepoRoot "docs\whitepapers\EXP-001-GPT-GPT-Handoff-
 
 $ContinuityPath = Join-Path $OutRoot "START-NEW-CHAT-CONTINUITY.md"
 $InstructionsPath = Join-Path $OutRoot "START-NEW-CHAT-INSTRUCTIONS.md"
-$ControllerScriptPath = Join-Path $ScriptsRoot "Start-New-Chat.ps1"
-
-$FinishChatCommand = "finish-chat"
-$NewAttachmentRunCommand = "start-new-chat-experiment-attachment"
-$NewGitHubRunCommand = "start-new-chat-experiment-github"
-$NewHybridRunCommand = "start-new-chat-experiment-hybrid"
 
 $AllRuns = @()
 if (Test-Path $RunsRoot) {
@@ -32,7 +26,6 @@ if (Test-Path $RunsRoot) {
 
 $LatestRun = if ($AllRuns.Count -gt 0) { $AllRuns[-1] } else { $null }
 $LatestRunName = if ($LatestRun) { $LatestRun.Name } else { "NONE" }
-$LatestRunRoot = if ($LatestRun) { $LatestRun.FullName } else { "" }
 
 $PendingRuns = @()
 $CompletedRuns = @()
@@ -44,10 +37,12 @@ foreach ($RunDir in $AllRuns) {
             $Meta = Get-Content $MetaPath -Raw | ConvertFrom-Json
             $Status = [string]$Meta.status
             $Result = [string]$Meta.result
+
             $Obj = [PSCustomObject]@{
                 RunDir = $RunDir
                 Meta = $Meta
             }
+
             if ($Status -eq "STARTED" -and $Result -eq "PENDING") {
                 $PendingRuns += $Obj
             }
@@ -79,9 +74,7 @@ $ResponseTargetFile = if ($SelectedRun) { Join-Path $SelectedRun.RunDir.FullName
 
 $LatestPendingRunId = if ($LatestPending) { $LatestPending.RunDir.Name } else { "" }
 $LatestCompletedRunId = if ($LatestCompleted) { $LatestCompleted.RunDir.Name } else { "" }
-
-$HasPendingRun = $false
-if ($LatestPending) { $HasPendingRun = $true }
+$HasPendingRun = [bool]$LatestPending
 
 $UploadFileNames = @()
 if ($UploadPacketRoot -and (Test-Path $UploadPacketRoot)) {
@@ -109,9 +102,9 @@ No pending run currently exists.
 
 Start a new run first in PowerShell using exactly one of:
 
-$NewAttachmentRunCommand
-$NewGitHubRunCommand
-$NewHybridRunCommand
+start-new-chat-experiment-attachment
+start-new-chat-experiment-github
+start-new-chat-experiment-hybrid
 
 After the new run is created, use start-new-chat again so the controller packet refreshes to that new pending run.
 "@
@@ -223,24 +216,20 @@ Pending run ID: $SelectedRunName
 Transport condition: $TransportCondition
 Status: $RunStatus
 Result: $RunResult
-
-The next controller action is to execute the pending target-chat run.
 "@
 } else {
     $CurrentExperimentStatus = @"
 No pending run currently exists.
 
 Latest completed run: $LatestCompletedRunId
-
-The next controller action is to create a new run before any target-chat execution begins.
 "@
 }
 
 $LatestCompletedAction = ""
 if ($LatestCompleted) {
     $CompletedMeta = $LatestCompleted.Meta
-    $CompletedNotes = if ($CompletedMeta.notes) { [string]$CompletedMeta.notes } else { "" }
     $CompletedRuleFailures = if ($CompletedMeta.rule_failures) { [string]$CompletedMeta.rule_failures } else { "" }
+    $CompletedNotes = if ($CompletedMeta.notes) { [string]$CompletedMeta.notes } else { "" }
     $CompletedConfidence = if ($CompletedMeta.classification_confidence) { [string]$CompletedMeta.classification_confidence } else { "" }
 
     $LatestCompletedAction = @"
@@ -287,6 +276,7 @@ Do not replace exact paths with ellipses, placeholders, or summaries.
 Prefer the latest pending run for operator instructions.
 If no pending run exists, explicitly instruct the operator to create a new run first.
 Do not describe a completed run as active or executable.
+Do not add conclusions, recommendations, or interpretive commentary.
 Use the operator command `finish-chat` for post-response logging instructions.
 "@
 Set-Content -Path $InstructionsPath -Value $Instructions -Encoding UTF8
@@ -320,7 +310,7 @@ Open PowerShell.
 
 Run exactly:
 
-$FinishChatCommand
+finish-chat
 "@
 } else {
 @"
@@ -330,9 +320,9 @@ There is no pending run to close.
 
 First create a new run in PowerShell using one of:
 
-$NewAttachmentRunCommand
-$NewGitHubRunCommand
-$NewHybridRunCommand
+start-new-chat-experiment-attachment
+start-new-chat-experiment-github
+start-new-chat-experiment-hybrid
 "@
 }
 
