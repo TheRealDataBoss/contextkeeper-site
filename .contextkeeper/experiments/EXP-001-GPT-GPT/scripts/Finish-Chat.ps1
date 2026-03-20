@@ -176,3 +176,9 @@ if ($RuleFailures) { Write-Host "RULE FAILURES: $RuleFailures" }
 Write-Host "CONFIDENCE: $Confidence"
 Write-Host "Response saved to: $ResponseFile"
 Write-Host "Ledger updated: $LedgerPath"
+
+
+# VALIDATE RESPONSE LENGTH
+if (\.Length -lt 50) {
+    throw "Response too short → auto FAIL"
+}

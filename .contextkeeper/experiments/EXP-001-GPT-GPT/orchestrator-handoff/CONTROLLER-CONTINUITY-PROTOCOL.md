@@ -65,3 +65,4 @@ C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\sc
 ## Operator Rule
 If controller quality degrades, do not rescue the controller with conversation.
 Generate a new controller handoff packet and move to a fresh GPT chat.
+

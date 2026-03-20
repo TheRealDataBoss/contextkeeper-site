@@ -26,3 +26,4 @@ Return a short instruction that says:
 
 ## Required Safety Rule
 Do not claim the run is finished unless the operator has actually run the PowerShell command and returned the terminal output.
+

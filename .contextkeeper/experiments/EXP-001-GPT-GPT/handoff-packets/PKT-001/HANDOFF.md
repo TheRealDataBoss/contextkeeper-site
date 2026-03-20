@@ -1,4 +1,4 @@
-# HANDOFF.md
+﻿# HANDOFF.md
 
 > ContextKeeper project handoff document
 > This file must be read by any new agent, model, or session entering the project.
@@ -139,7 +139,7 @@ contextkeeper-site/
 6. Do not infer missing context from memory
 7. Do not plan future work unless explicitly asked
 
-## G1.6 � Invariant Repair Patch (COMPLETE)
+## G1.6 — Invariant Repair Patch (COMPLETE)
 
 - Removed reverse linkage write from contracts.php:
   - Eliminated UPDATE governed_tasks SET delivery_contract_id
@@ -167,3 +167,4 @@ executor session bundle.
 
 These artifacts were introduced to prevent unsupported runtime claims
 from passing undetected in fresh-chat handoff.
+

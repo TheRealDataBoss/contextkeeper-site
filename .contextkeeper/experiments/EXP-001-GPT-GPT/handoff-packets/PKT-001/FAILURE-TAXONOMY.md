@@ -33,3 +33,4 @@ class and may optionally list secondary contributing classes.
 3. Do not invent new class names mid-series.
 4. If a new class is truly required, revise this file and increment the
    artifact set version before continuing the series.
+

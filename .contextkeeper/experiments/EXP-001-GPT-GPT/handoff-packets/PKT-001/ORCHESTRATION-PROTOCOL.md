@@ -1,4 +1,4 @@
-# GPT-Claude Orchestration Protocol
+﻿# GPT-Claude Orchestration Protocol
 # contextkeeper.org development workflow
 # Version: 2.1
 # Last updated: 2026-03-17
@@ -256,3 +256,4 @@ a GPT execution prompt, Claude should:
 3. Execute and produce HANDBACK as normal
 
 This prevents Claude from silently burning tokens on the wrong task.
+

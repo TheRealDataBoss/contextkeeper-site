@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * contextkeeper Governance API Router
  *
@@ -41,3 +41,4 @@ switch ($subResource) {
     default:
         jsonError('Unknown governance endpoint: /api/v1/governance/' . htmlspecialchars($subResource), 404);
 }
+

@@ -15,7 +15,7 @@ It must allow the fresh controller chat to continue supervision immediately.
 - Ledger: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\RUN-LEDGER.csv
 - Artifact versions: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\ARTIFACT-VERSIONS.csv
 - Continuity protocol: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\CONTROLLER-CONTINUITY-PROTOCOL.md
-- Start-new-chat instructions: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\START-NEW-CHAT-INSTRUCTIONS.md
+- start-chat instructions: C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\start-chat-INSTRUCTIONS.md
 
 ## Latest Active Run
 - Run ID: RUN-003
@@ -95,18 +95,19 @@ If the latest run is still STARTED and PENDING:
 ## Controller Re-Handoff Instruction
 If this controller chat needs replacement at any time:
 1. Run:
-   C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\Start-New-Chat.ps1
+   C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\start-chat.ps1
 2. Open a fresh GPT controller chat.
 3. Upload these three files only:
    C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\CONTROLLER-HANDOFF-PACKET.md
    C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\CONTROLLER-CONTINUITY-PROTOCOL.md
-   C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\START-NEW-CHAT-INSTRUCTIONS.md
+   C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\orchestrator-handoff\start-chat-INSTRUCTIONS.md
 4. Paste exactly:
 
-START NEW CHAT
+START CHAT
 
 ## Trigger Summary
 - To replace the controller, use:
-  C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\Start-New-Chat.ps1
+  C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\start-chat.ps1
 - To start the next target run, use:
-  C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\Start-New-Chat-Experiment.ps1
+  C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\scripts\start-chat-experiment.ps1
+

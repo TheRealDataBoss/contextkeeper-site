@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * contextkeeper API v1 Router
  * 
@@ -158,3 +158,4 @@ try {
     error_log('contextkeeper API error: ' . $e->getMessage());
     jsonError('Internal server error.', 500);
 }
+

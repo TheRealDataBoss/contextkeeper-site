@@ -148,3 +148,4 @@ accepting. A single FAIL is grounds for rejection with exact reason.
 - [ ] OV-02: No readiness language appears outside the four sections.
 
 - [ ] OV-03: No code, no proposed changes, no simulated execution.
+

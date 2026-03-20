@@ -134,3 +134,4 @@ Do not use interpretive phrases such as "authored", "implemented",
 "crafted", "built", or similar words that assert intent, quality, or
 verified completion beyond what is directly provable from the attached
 file content.
+

@@ -2,7 +2,7 @@
 
 $RepoRoot = "C:\Users\Steven\contextkeeper-site"
 $ExpRoot = Join-Path $RepoRoot ".contextkeeper\experiments\EXP-001-GPT-GPT"
-$OutRoot = Join-Path $ExpRoot "start-new-chat"
+$OutRoot = Join-Path $ExpRoot "start-chat"
 $RunsRoot = Join-Path $ExpRoot "runs"
 $ScriptsRoot = Join-Path $ExpRoot "scripts"
 
@@ -16,8 +16,8 @@ $LedgerPath = Join-Path $ExpRoot "RUN-LEDGER.csv"
 $ArtifactPath = Join-Path $ExpRoot "ARTIFACT-VERSIONS.csv"
 $WhitepaperPath = Join-Path $RepoRoot "docs\whitepapers\EXP-001-GPT-GPT-Handoff-Reliability-v2.0a.docx"
 
-$ContinuityPath = Join-Path $OutRoot "START-NEW-CHAT-CONTINUITY.md"
-$InstructionsPath = Join-Path $OutRoot "START-NEW-CHAT-INSTRUCTIONS.md"
+$ContinuityPath = Join-Path $OutRoot "start-chat-CONTINUITY.md"
+$InstructionsPath = Join-Path $OutRoot "start-chat-INSTRUCTIONS.md"
 
 $AllRuns = @()
 if (Test-Path $RunsRoot) {
@@ -102,11 +102,11 @@ No pending run currently exists.
 
 Start a new run first in PowerShell using exactly one of:
 
-start-new-chat-experiment-attachment
-start-new-chat-experiment-github
-start-new-chat-experiment-hybrid
+start-chat-experiment-attachment
+start-chat-experiment-github
+start-chat-experiment-hybrid
 
-After the new run is created, use start-new-chat again so the controller packet refreshes to that new pending run.
+After the new run is created, use start-chat again so the controller packet refreshes to that new pending run.
 "@
 
 $TargetInstruction = ""
@@ -256,10 +256,10 @@ $CompletedConfidence
 }
 
 $Instructions = @"
-# START-NEW-CHAT-INSTRUCTIONS.md
+# start-chat-INSTRUCTIONS.md
 
 ## Trigger Phrase
-START NEW CHAT
+START CHAT
 
 ## Required Response Sections
 1. Confirmed controller state
@@ -282,18 +282,18 @@ Use the operator command `finish-chat` for post-response logging instructions.
 Set-Content -Path $InstructionsPath -Value $Instructions -Encoding UTF8
 
 $Continuity = @"
-# START-NEW-CHAT-CONTINUITY.md
+# start-chat-CONTINUITY.md
 
 Controller handoff files for this command live in:
 $OutRoot
 
 A fresh controller chat must receive:
-- START-NEW-CHAT-PACKET.md
-- START-NEW-CHAT-CONTINUITY.md
-- START-NEW-CHAT-INSTRUCTIONS.md
+- start-chat-PACKET.md
+- start-chat-CONTINUITY.md
+- start-chat-INSTRUCTIONS.md
 
 Controller replacement command:
-start-new-chat
+start-chat
 
 Target run completion command:
 finish-chat
@@ -320,14 +320,14 @@ There is no pending run to close.
 
 First create a new run in PowerShell using one of:
 
-start-new-chat-experiment-attachment
-start-new-chat-experiment-github
-start-new-chat-experiment-hybrid
+start-chat-experiment-attachment
+start-chat-experiment-github
+start-chat-experiment-hybrid
 "@
 }
 
 $Packet = @"
-# START-NEW-CHAT-PACKET.md
+# start-chat-PACKET.md
 
 ## Current Experiment
 - Experiment ID: EXP-001-GPT-GPT
@@ -379,7 +379,7 @@ Open PowerShell.
 
 Run exactly:
 
-start-new-chat
+start-chat
 
 Open a fresh GPT controller chat.
 
@@ -387,16 +387,17 @@ Go to:
 $OutRoot
 
 Upload:
-START-NEW-CHAT-PACKET.md
-START-NEW-CHAT-CONTINUITY.md
-START-NEW-CHAT-INSTRUCTIONS.md
+start-chat-PACKET.md
+start-chat-CONTINUITY.md
+start-chat-INSTRUCTIONS.md
 
 Paste exactly:
 
-START NEW CHAT
+START CHAT
 "@
 
-$PacketPath = Join-Path $OutRoot "START-NEW-CHAT-PACKET.md"
+$PacketPath = Join-Path $OutRoot "start-chat-PACKET.md"
 Set-Content -Path $PacketPath -Value $Packet -Encoding UTF8
 
 Get-ChildItem $OutRoot | Select-Object Name, Length, LastWriteTime | Sort-Object Name
+

@@ -1,4 +1,4 @@
-# Whitepaper Index
+﻿# Whitepaper Index
 
 > ContextKeeper Enterprise Engineering White Paper Series
 > Maintained by: Engineering Leadership
@@ -25,3 +25,4 @@
 ## Usage
 
 These documents serve as authoritative architectural references. Before implementing any governance, intelligence, or consensus feature, consult the relevant whitepaper to ensure the implementation aligns with the defined architecture. Before modifying any whitepaper, ensure the change is reviewed by engineering leadership and that all downstream system mappings are updated.
+

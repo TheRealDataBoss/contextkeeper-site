@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * /api/v1/governance/gates
  *
@@ -264,3 +264,4 @@ function fetchTaskForGates(PDO $db, array $user, string $taskId): array {
 
     return $task;
 }
+

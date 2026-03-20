@@ -6,3 +6,4 @@ Use only prompt-box uploaded files.
 Do not use connectors.
 Do not use project memory beyond uploaded files.
 Do not rely on prior chat history.
+

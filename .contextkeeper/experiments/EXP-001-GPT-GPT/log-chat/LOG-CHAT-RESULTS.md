@@ -18,3 +18,4 @@
 - ranking: R4>R1>R2>R3
 - notes: Controller connector ON outperformed OFF; main remaining defect is pending-vs-completed run ambiguity.
 
+

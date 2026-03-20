@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * /api/v1/governance/tasks
  *
@@ -498,3 +498,4 @@ function computeConsensusRequired(string $criticality, string $qualityTier): boo
     }
     return false;
 }
+

@@ -44,3 +44,4 @@ Set-Clipboard -Value $ConnectorInstruction
 Write-Host "Connector instructions written to: $OutFile"
 Write-Host "Connector instructions copied to clipboard."
 Write-Host "Pinned commit: $RepoCommit"
+

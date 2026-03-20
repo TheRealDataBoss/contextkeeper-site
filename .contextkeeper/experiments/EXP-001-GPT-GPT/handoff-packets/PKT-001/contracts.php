@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * /api/v1/governance/contracts
  *
@@ -342,4 +342,5 @@ function recordContractVersion(
         $changeReason,
     ]);
 }
+
 

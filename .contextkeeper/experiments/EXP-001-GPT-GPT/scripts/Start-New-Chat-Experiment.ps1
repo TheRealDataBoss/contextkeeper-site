@@ -10,14 +10,14 @@ $ExpRoot = Join-Path $RepoRoot ".contextkeeper\experiments\EXP-001-GPT-GPT"
 $RunsRoot = Join-Path $ExpRoot "runs"
 $LedgerPath = Join-Path $ExpRoot "RUN-LEDGER.csv"
 
-$AttachmentRoot = Join-Path $ExpRoot "start-new-chat-experiment\prompt-attachment"
+$AttachmentRoot = Join-Path $ExpRoot "start-chat-experiment\prompt-attachment"
 $AttachmentPacketRoot = Join-Path $AttachmentRoot "CURRENT-PACKET"
 $AttachmentPromptPath = Join-Path $AttachmentRoot "CURRENT-BOOTSTRAP-PROMPT.txt"
 
-$GitHubRoot = Join-Path $ExpRoot "start-new-chat-experiment\github-connector"
+$GitHubRoot = Join-Path $ExpRoot "start-chat-experiment\github-connector"
 $GitHubPromptPath = Join-Path $GitHubRoot "CURRENT-GITHUB-CONNECTOR-PROMPT.txt"
 
-$HybridRoot = Join-Path $ExpRoot "start-new-chat-experiment\hybrid"
+$HybridRoot = Join-Path $ExpRoot "start-chat-experiment\hybrid"
 $HybridPromptPath = Join-Path $HybridRoot "CURRENT-HYBRID-PROMPT.txt"
 
 $RequiredPaths = @(
@@ -186,3 +186,4 @@ switch ($Mode) {
 }
 
 Start-Process explorer.exe $RunRoot
+

@@ -1,4 +1,4 @@
-# Task Governance v2
+﻿# Task Governance v2
 
 > Process specification for governed task lifecycle
 > Derived from: Enterprise Delivery Governance Whitepaper v1.0, Section 3.4
@@ -177,3 +177,4 @@ For the ContextKeeper platform, the following defaults apply unless explicitly o
 | observability_required | true | For any task creating or modifying API endpoints |
 | security_review_required | true | For any task touching authentication, authorization, encryption, or user data |
 | future_rebuild_risk | (must be assessed) | No default. Assessment is mandatory for every core and architecture task. |
+

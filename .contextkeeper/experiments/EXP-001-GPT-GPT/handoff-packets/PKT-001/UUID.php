@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * contextkeeper UUID Helper
  *
@@ -31,3 +31,4 @@ class UUID {
         );
     }
 }
+

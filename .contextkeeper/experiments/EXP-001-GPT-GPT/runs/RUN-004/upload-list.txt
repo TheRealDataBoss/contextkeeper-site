@@ -1,5 +1,6 @@
-﻿C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET\00-BOOTSTRAP-PROMPT.txt
-C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET\01-CONTROL-PLANE.md
-C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET\02-DOCS-AND-SCHEMA.md
-C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET\03-SOURCE-CODE.md
-C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-new-chat-experiment\CURRENT-PACKET\04-EXPERIMENT-CONTEXT.md
+﻿C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-chat-experiment\CURRENT-PACKET\00-BOOTSTRAP-PROMPT.txt
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-chat-experiment\CURRENT-PACKET\01-CONTROL-PLANE.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-chat-experiment\CURRENT-PACKET\02-DOCS-AND-SCHEMA.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-chat-experiment\CURRENT-PACKET\03-SOURCE-CODE.md
+C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT\start-chat-experiment\CURRENT-PACKET\04-EXPERIMENT-CONTEXT.md
+

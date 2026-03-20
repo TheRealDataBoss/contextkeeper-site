@@ -1,4 +1,4 @@
-﻿# START-NEW-CHAT-INSTRUCTIONS.md
+﻿# start-chat-INSTRUCTIONS.md
 
 ## Purpose
 This file tells a fresh GPT controller chat how to take over orchestration for EXP-001-GPT-GPT.
@@ -6,7 +6,7 @@ This file tells a fresh GPT controller chat how to take over orchestration for E
 ## Trigger Phrase
 When the operator pastes:
 
-START NEW CHAT
+START CHAT
 
 the controller must execute the controller handoff behavior.
 
@@ -35,3 +35,4 @@ Return exactly these sections:
 - Do not rely on prior chat history.
 - Do not rely on unstated assumptions.
 - Do not redesign the experiment unless a logged failure justifies a versioned artifact update.
+

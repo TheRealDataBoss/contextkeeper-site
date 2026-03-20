@@ -15,3 +15,4 @@ Read the provided handoff artifacts in order, then return exactly:
 5. First action you will take
 
 If any required artifact is missing, say so explicitly.
+

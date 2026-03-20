@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * /api/v1/governance/source
  *
@@ -212,3 +212,4 @@ function fetchTaskForSource(PDO $db, array $user, string $taskId): array {
 
     return $task;
 }
+

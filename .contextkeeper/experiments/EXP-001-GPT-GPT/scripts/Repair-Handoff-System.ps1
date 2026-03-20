@@ -45,3 +45,4 @@ Write-Host ""
 Write-Host "Handoff system paths checked."
 Write-Host "Required file count expected: $($RequiredFiles.Count)"
 Write-Host ""
+

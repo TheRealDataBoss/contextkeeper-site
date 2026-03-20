@@ -91,3 +91,4 @@ Write-Host "MD:  $MdPath"
 Write-Host "TYPE: $LogType"
 Write-Host "BEST: $BestResponse"
 Write-Host "RANK: $Ranking"
+

@@ -20,3 +20,4 @@ Run in PowerShell:
 log-chat
 
 Do not claim logging is complete until terminal output confirms commit/push or no-op sync.
+

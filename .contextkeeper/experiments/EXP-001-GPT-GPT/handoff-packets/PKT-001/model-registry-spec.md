@@ -1,4 +1,4 @@
-# Model Registry Specification
+﻿# Model Registry Specification
 
 > Schema definition and selection logic for the Model Intelligence Layer
 > Derived from: Enterprise Delivery Governance Whitepaper v1.0, Section 5
@@ -187,3 +187,4 @@ The operator may override any recommendation. Overrides are recorded in the task
 - Operator identity
 
 Overrides are auditable and visible in the execution trace graph.
+
