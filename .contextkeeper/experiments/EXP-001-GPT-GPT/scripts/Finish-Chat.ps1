@@ -383,3 +383,70 @@ if (-not (Test-Path \)) {
 
 Add-Content \ "\03/20/2026 03:45:42,\,\,\,\"
 
+
+# ==========================================
+# TIER 5: ADAPTIVE SELF-HEALING SYSTEM
+# ==========================================
+
+# -------------------------
+# LOAD HISTORY
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "reliability-history.csv"
+
+\ = @()
+
+if (Test-Path \) {
+    \ = Import-Csv \ | Select-Object -Last 10
+}
+
+# -------------------------
+# ADAPTIVE THRESHOLD
+# -------------------------
+\ = 0.6
+
+if (\.Count -gt 5) {
+    \ = (\ | Measure-Object score -Average).Average
+    \ = [math]::Max(0.5, \ - 0.1)
+}
+
+Write-Host "DYNAMIC THRESHOLD:" \
+
+# -------------------------
+# DISAGREEMENT HANDLING (UPGRADE)
+# -------------------------
+if (\) {
+
+    Write-Host "TIER 5 RETRY TRIGGERED" -ForegroundColor Yellow
+
+    # Retry = enforce expansion
+    \ += "
+[RETRY: Expand response and ensure completeness]"
+
+    # re-evaluate Judge B only (simulate second pass)
+    \ = JudgeB \
+    \ = \.Result
+}
+
+# -------------------------
+# FINAL DECISION (ADAPTIVE)
+# -------------------------
+if (\ -ge \ -and -not \) {
+    \ = "PASS"
+} else {
+    \ = "FAIL"
+}
+
+Write-Host "ADAPTIVE FINAL RESULT:" \ -ForegroundColor Cyan
+
+# -------------------------
+# FAILURE PATTERN TRACKING
+# -------------------------
+\ = Join-Path "C:\Users\Steven\contextkeeper-site\.contextkeeper\experiments\EXP-001-GPT-GPT" "failure-patterns.csv"
+
+if (-not (Test-Path \)) {
+    "timestamp,reason" | Out-File \
+}
+
+if (\ -eq "FAIL") {
+    Add-Content \ "\03/20/2026 03:50:30,LOW_SCORE_OR_DISAGREEMENT"
+}
